@@ -1,0 +1,285 @@
+<?php
+
+class Model_pekerjaan_bulanan_pengguna extends CI_Model
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('fungsi');
+        // $this->load->library('lib_security');
+        $this->load->model('model_log_pekerjaan_pengguna');
+        $this->load->model('model_pengguna');
+        // $this->load->model('email_model');
+        //call function
+        // Your own constructor code
+    }
+    public function read_pekerjaan_pengguna_by_pekerjaan($dataInput)
+    {
+        $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan  from pekerjaan_bulanan_pengguna a
+        left join pengguna b on b.RecId=a.PenerimaPekerjaanId
+         where a.PekerjaanId=?
+		", array($dataInput['RecId']));
+        $data = array();
+
+        foreach ($query->result_array() as $row) {
+            $row['PemberiTugas'] = $this->model_pengguna->read_pengguna_by_id(array("RecId" => $row['PemberiPekerjaanId']));
+            $data[] = $row;
+        }
+
+        return array(
+            'sukses' => true,
+            'data' => $data
+        );
+    }
+    public function read_pekerjaan_pengguna_by_pengguna($dataInput)
+    {
+        $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan  ,
+        DATE(a.TanggalMulai) as TanggalMulai,DATE(a.TanggalSelesai) as TanggalSelesai,
+        d.Deskripsi
+         from pekerjaan_bulanan_pengguna a
+        left join pengguna b on b.RecId=a.PenerimaPekerjaanId
+        left join pengguna c on c.RecId=a.PemberiPekerjaanId
+        left join pekerjaan_bulan d on d.RecId=a.PekerjaanId        
+         where a.PenerimaPekerjaanId=?
+		", array($dataInput['PenerimaPekerjaanId']));
+        $data = array();
+
+        foreach ($query->result_array() as $row) {
+            $data[] = $row;
+        }
+
+        return array(
+            'sukses' => true,
+            'data' => $data
+        );
+    }
+    public function read_pekerjaan_bulanan_pengguna_by_id($dataInput)
+    {
+        $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan  ,
+        DATE(a.TanggalMulai) as TanggalMulai,DATE(a.TanggalSelesai) as TanggalSelesai,
+        d.Deskripsi
+         from pekerjaan_bulanan_pengguna a
+        left join pengguna b on b.RecId=a.PenerimaPekerjaanId
+        left join pengguna c on c.RecId=a.PemberiPekerjaanId
+        left join pekerjaan_bulanan d on d.RecId=a.PekerjaanId        
+         where a.RecId=?
+		", array($dataInput['RecId']));
+        $data = array();
+
+        foreach ($query->result_array() as $row) {
+            $data = $row;
+        }
+
+        return array(
+            'sukses' => true,
+            'data' => $data
+        );
+    }
+
+    public function update_penilaian_atasan_by_id($dataInput)
+    {
+        // print_r($dataInput);
+        // print_r($dataInput);
+        $this->db->query("update pekerjaan_bulanan_pengguna set PenilaianAtasan=? where RecId=?
+		", array($dataInput['PenilaianAtasan'], $dataInput['RecId']));
+
+
+        $afftectedRows = $this->db->affected_rows();
+        if ($afftectedRows == 1) {
+            // $this->model_log_pekerjaan_pengguna->create_log_pekerjaan_bulanan_pengguna($dataInput);
+            return array(
+                'sukses' => true,
+                'data' => $dataInput
+            );
+        } else {
+            return array(
+                'sukses' => false,
+                'data' => $dataInput
+            );
+        }
+    }
+    public function update_volume_realisasi_volume_by_id($dataInput)
+    {
+        // date("Y-m-d h:i:sa"),
+        // $this->session->userdata('RecId'),
+        // print_r($dataInput);
+        // print_r($this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']));
+        $this->db->query("update pekerjaan_bulanan_pengguna set VolumeRealisasi=?, TanggalRealisasi=?,ModifiedDate=?,ModifiedBy=? where RecId=?
+		", array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), date("Y-m-d h:i:sa"), $this->session->userdata('RecId'), $dataInput['RecId']));
+
+
+        $afftectedRows = $this->db->affected_rows();
+        if ($afftectedRows == 1) {
+            $this->model_log_pekerjaan_pengguna->create_log_pekerjaan_bulanan_pengguna($dataInput);
+            return array(
+                'sukses' => true,
+                'data' => $dataInput
+            );
+        } else {
+            return array(
+                'sukses' => false,
+                'data' => $dataInput
+            );
+        }
+    }
+
+    public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput)
+    {
+        $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan  ,
+        DATE(a.TanggalMulai) as TanggalMulai,DATE(a.TanggalSelesai) as TanggalSelesai,
+        d.Deskripsi,e.Satuan
+         from pekerjaan_bulanan_pengguna a
+        left join pengguna b on b.RecId=a.PenerimaPekerjaanId
+        left join pengguna c on c.RecId=a.PemberiPekerjaanId
+        left join pekerjaan_bulanan d on d.RecId=a.PekerjaanId     
+        left join satuan e on d.SatuanId=e.RecId   
+         where a.PenerimaPekerjaanId=?
+         and 
+(         MONTH(a.TanggalMulai)=?
+         or
+         MONTH(a.TanggalSelesai)=?
+       )
+       and YEAR(a.TanggalSelesai)=?
+       ;
+		", array($dataInput['PenerimaPekerjaanId'], $dataInput['Bulan'], $dataInput['Bulan'], $dataInput['Tahun']));
+        $dataPerBaris = array();
+
+        $jumPersentaseKetepatanWaktu = 0;
+
+        $jumPersentaseRealisasiVolume = 0;
+        $jumPersentasePenilaianAtasan = 0;
+        $urut = 0;
+        foreach ($query->result_array() as $row) {
+            $row['SelisihHari'] = (new DateTime($row['TanggalSelesai']))->diff(new DateTime($row['TanggalMulai']))->days + 1;
+
+            $row['SisaHari'] = (new DateTime(date("Y-m-d")))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
+            if ($row['SisaHari'] < 0)
+                $row['KalimatSisaHari'] =  " sudah lewat " . abs($row['SisaHari']) . " hari";
+
+            else
+                $row['KalimatSisaHari'] = abs($row['SisaHari']) . " hari lagi";
+
+
+            $row['SelisihRealisasiDanTarget'] = (new DateTime($row['TanggalRealisasi']))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
+
+            if ($row['SelisihRealisasiDanTarget'] < 0)
+                $row['KalimatSelisihRealisasiDanTarget'] = "Terlambat " . abs($row['SelisihRealisasiDanTarget']) . " hari";
+
+            else
+                $row['KalimatSelisihRealisasiDanTarget'] = abs($row['SelisihRealisasiDanTarget']) . " hari lebih cepat";
+
+            if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00')
+                $row['TanggalRealisasiFormatted'] = '';
+            else
+                $row['TanggalRealisasiFormatted'] = date('d F Y', strtotime($row['TanggalRealisasi']));
+
+            $row['TanggalSelesaiFormatted'] = date('d F Y', strtotime($row['TanggalSelesai']));
+            $row['PersentaseRealisasiVolume'] = number_format(100 * $row['VolumeRealisasi'] / $row['Volume'], 2);
+            $row['PersentaseKetepatanWaktu'] = $row['SelisihRealisasiDanTarget'];
+            // ,
+            $urut++;
+            $jumPersentaseRealisasiVolume = $jumPersentaseRealisasiVolume + $row['PersentaseRealisasiVolume'];
+            $jumPersentasePenilaianAtasan = $jumPersentasePenilaianAtasan + $row['PenilaianAtasan'];
+            $jumPersentaseKetepatanWaktu = $jumPersentaseKetepatanWaktu + $row['PersentaseKetepatanWaktu'];
+            if ($row['PenilaianAtasan'] == 0)
+                $row['PenilaianAtasan'] = 'Belum dinilai';
+
+
+            $dataPerBaris[] = $row;
+        }
+        if ($urut == 0) {
+            $rerataPersentaseRealisasiVolume = 0;
+            $rerataPersentasePenilaianAtasan = 0;
+            $rerataPersentaseKetepatanWaktu = 0;
+        } else {
+            $rerataPersentaseRealisasiVolume = number_format($jumPersentaseRealisasiVolume / $urut, 2, ".", "");
+            $rerataPersentasePenilaianAtasan = number_format($jumPersentasePenilaianAtasan / $urut, 2, ".", "");
+            $rerataPersentaseKetepatanWaktu = number_format($jumPersentaseKetepatanWaktu / $urut, 2, ".", "");
+        }
+
+        return array(
+            'sukses' => true,
+            'data' => array(
+                "detail" => $dataPerBaris,
+                "ringkasan" => array(
+                    "rerataPersentaseRealisasiVolume" => $rerataPersentaseRealisasiVolume,
+                    "rerataPersentasePenilaianAtasan" => $rerataPersentasePenilaianAtasan,
+                    "rerataPersentaseKetepatanWaktu" => $rerataPersentaseKetepatanWaktu,
+                    "rerataPersentaseKinerja" => $rerataPersentaseKetepatanWaktu+$rerataPersentaseRealisasiVolume
+                )
+            )
+        );
+    }
+    public function dashboard_kinerja($dataInput)
+    {
+        $array = [];
+        foreach ($this->model_pengguna->read_pengguna()['data'] as $row) {
+            $row['Ringkasan'] = $this->read_pekerjaan_pengguna_by_pengguna_tahun_bulan(array("PenerimaPekerjaanId" => $row['RecId'], "Tahun" => $dataInput['Tahun'], "Bulan" => $dataInput['Bulan']))['data']['ringkasan'];
+
+            $array[] = $row;
+        }
+        return $array;
+    }
+    public function cek_duplikat_pekerjaan_bulanan_pengguna($dataInput)
+    {
+        $array = array(
+            "PekerjaanId" => $dataInput['PekerjaanId'],
+            "PenerimaPekerjaanId" => $dataInput['PenerimaPekerjaanId']
+        );
+        $query = $this->db->query(
+            "select RecId from pekerjaan_bulanan_pengguna where PekerjaanId=? and PenerimaPekerjaanId=?",
+            $array
+
+        );
+
+
+        return array(
+            'sukses' => true,
+            'data' => ['JumlahRecord' => $query->num_rows()]
+        );
+    }
+    public function create_pekerjaan_pengguna($dataInput)
+    {
+        // print_r($dataInput);
+        $rangeTanggal = $dataInput['RangeTanggal'];
+        $rangeTanggal = str_replace(" ", "", $rangeTanggal);
+        $arrTanggal = explode("-", $rangeTanggal);
+
+        $dataInput['TanggalMulai'] = $this->fungsi->ubahFormatTanggal($arrTanggal[0]);
+        $dataInput['TanggalSelesai'] = $this->fungsi->ubahFormatTanggal($arrTanggal[1]);
+        $dataToSave = array(
+            $dataInput['PenerimaPekerjaanId'],
+            $this->session->userdata('RecId'),
+            $dataInput['PekerjaanId'],
+            $dataInput['Volume'],
+            date("Y-m-d h:i:sa"),
+            $this->session->userdata('RecId'),
+            $dataInput['TanggalMulai'],
+            $dataInput['TanggalSelesai']
+        );
+
+        $cekDuplikat = $this->cek_duplikat_pekerjaan_bulanan_pengguna($dataInput);
+
+        if ($cekDuplikat['data']['JumlahRecord'] == 0) {
+            $this->db->query(
+                "insert into pekerjaan_bulanan_pengguna (PenerimaPekerjaanId,PemberiPekerjaanId,PekerjaanId,Volume,CreatedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?)  ",
+                $dataToSave
+            );
+            $afftectedRows = $this->db->affected_rows();
+            if ($afftectedRows == 1) {
+                return array(
+                    'sukses' => true,
+                    'data' => $dataInput
+                );
+            } else
+                return array(
+                    'sukses' => false,
+                    'data' => $dataInput
+                );
+        } else
+            return array(
+                'sukses' => false,
+                'data' => ["Pesan" => "Terjadi Duplikat Data. Tidak Tersimpan"]
+            );
+    }
+}

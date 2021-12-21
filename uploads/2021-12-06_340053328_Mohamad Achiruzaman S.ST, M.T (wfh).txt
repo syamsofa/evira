@@ -1,0 +1,2 @@
+user:user_reader
+password:pwd@reader
