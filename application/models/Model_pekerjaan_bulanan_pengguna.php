@@ -2,6 +2,7 @@
 
 class Model_pekerjaan_bulanan_pengguna extends CI_Model
 {
+    public CONST kalimatBelumAdaPenyerahan='Belum Ada Penyerahan/Penyelesaian';
     public function __construct()
     {
         parent::__construct();
@@ -149,6 +150,9 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         $jumPersentaseRealisasiVolume = 0;
         $jumPersentasePenilaianAtasan = 0;
         $urut = 0;
+
+        // print_r($query->result_array());
+
         foreach ($query->result_array() as $row) {
             $row['SelisihHari'] = (new DateTime($row['TanggalSelesai']))->diff(new DateTime($row['TanggalMulai']))->days + 1;
 
@@ -162,14 +166,16 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
 
             $row['SelisihRealisasiDanTarget'] = (new DateTime($row['TanggalRealisasi']))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
 
-            if ($row['SelisihRealisasiDanTarget'] < 0)
+            if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null)
+                $row['KalimatSelisihRealisasiDanTarget'] = $this::kalimatBelumAdaPenyerahan;
+            else if ($row['SelisihRealisasiDanTarget'] )
                 $row['KalimatSelisihRealisasiDanTarget'] = "Terlambat " . abs($row['SelisihRealisasiDanTarget']) . " hari";
 
             else
                 $row['KalimatSelisihRealisasiDanTarget'] = abs($row['SelisihRealisasiDanTarget']) . " hari lebih cepat";
 
-            if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00')
-                $row['TanggalRealisasiFormatted'] = '';
+            if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null)
+                $row['TanggalRealisasiFormatted'] = $this::kalimatBelumAdaPenyerahan;
             else
                 $row['TanggalRealisasiFormatted'] = date('d F Y', strtotime($row['TanggalRealisasi']));
 
@@ -205,7 +211,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
                     "rerataPersentaseRealisasiVolume" => $rerataPersentaseRealisasiVolume,
                     "rerataPersentasePenilaianAtasan" => $rerataPersentasePenilaianAtasan,
                     "rerataPersentaseKetepatanWaktu" => $rerataPersentaseKetepatanWaktu,
-                    "rerataPersentaseKinerja" => $rerataPersentaseKetepatanWaktu+$rerataPersentaseRealisasiVolume
+                    "rerataPersentaseKinerja" => $rerataPersentaseKetepatanWaktu + $rerataPersentaseRealisasiVolume
                 )
             )
         );

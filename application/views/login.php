@@ -49,7 +49,7 @@ include APPPATH . 'third_party/glogin/config.php';
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <i class="fa fa-desktop fa-2x" aria-hidden="true"></i> <a href="<?php echo base_url(); ?>" class="h1"><b>Evira</b>Rembang</a>
+                <i class="fa fa-desktop fa-2x" aria-hidden="true"></i> <a href="<?php echo base_url(); ?>" class="h1"><b>Evaluasi</b> <br>BPS Rembang</a>
             </div>
             <div class="card-body">
 
@@ -135,6 +135,9 @@ include APPPATH . 'third_party/glogin/config.php';
                 console.log(output)
                 if (output.sukses == true)
                     location.reload();
+                else if (output.sukses == false)
+                    $("#buttonSubmit").html(" Login ");
+
 
 
             }

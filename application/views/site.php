@@ -40,7 +40,12 @@ if ($this->session->userdata('Email') == null)
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-  <!-- jQuery -->
+  
+  <style>
+        html {
+            font-size: 14px;
+        }
+    </style>
   <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
   <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -55,7 +60,7 @@ if ($this->session->userdata('Email') == null)
   <!-- AdminLTE App -->
   <script src="<?php echo base_url(); ?>AdminLTE-master/dist/js/adminlte.min.js"></script>
   <!-- AdminLTE for demo purposes -->
-  <script src="<?php echo base_url(); ?>AdminLTE-master/dist/js/demo.js"></script>
+  <!-- <script src="<?php echo base_url(); ?>AdminLTE-master/dist/js/demo.js"></script> -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script type="text/javascript" src="<?php echo base_url(); ?>framework/js/bootstrap-datepicker.min.js"></script>
@@ -288,7 +293,7 @@ if ($this->session->userdata('Email') == null)
 
             <li class="nav-item">
               <a href="<?php echo base_url(); ?>site/pekerjaan_bulanan" class="nav-link">
-                <i class="fas fa-bullhorn"></i>
+                <i class="fas fa-save"></i>
                 <p>
                   Master Pekerjaan Saya
 
@@ -308,7 +313,7 @@ if ($this->session->userdata('Email') == null)
               <a href="<?php echo base_url(); ?>site/pegawai_bawahan" class="nav-link">
                 <i class="fas fa-users"></i>
                 <p>
-                  Penilaian Bawahan Saya
+                  Nilai Untuk Bawahan
 
                 </p>
               </a>

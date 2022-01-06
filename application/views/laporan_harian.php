@@ -65,7 +65,7 @@
                         <tr>
                             <th>Tanggal</th>
                             <th>File</th>
-                            <th>View</th>
+                            
                             <th>Tipe WFO/WFH</th>
                             <th>Tanggal Upload</th>
 
@@ -243,11 +243,6 @@
 
                     className: "text-center"
                 },
-
-                {
-
-                    className: "text-center"
-                },
                 {
 
                     className: "text-center"
@@ -305,14 +300,15 @@
                             } else
                                 return '-'
                             // 
-                        }, () => {
-                            if (outputDataBaris.Upload.JumUpload > 0) {
+                        }, 
+                        // () => {
+                        //     if (outputDataBaris.Upload.JumUpload > 0) {
 
-                                return "<button class='btn-danger' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> Lihat</button>"
-                            } else
-                                return '-'
-                            // 
-                        },
+                        //         return "<button class='btn-danger' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> Lihat</button>"
+                        //     } else
+                        //         return '-'
+                        //     // 
+                        // },
                         () => {
                             if (outputDataBaris.Upload.JumUpload > 0) {
 
