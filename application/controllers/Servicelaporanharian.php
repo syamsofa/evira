@@ -4,6 +4,9 @@ use phpDocumentor\Reflection\DocBlock\Tags\Throws;
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Servicelaporanharian extends CI_Controller
 {
     public $upload_dir = 'uploads/';
@@ -16,6 +19,50 @@ class Servicelaporanharian extends CI_Controller
 
 
         // Your own constructor code
+    }
+    public function okokok()
+    {
+
+        $templateLaporan = "aset/template_laporan/laporan_ckpt.xlsx";
+
+
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($templateLaporan);
+
+        $array_sheet = $spreadsheet->getSheetNames();
+        ##  DISPLAY ALL SHEETS
+        echo "<pre>\n";
+        print_r($array_sheet);
+        echo "</pre>\n";
+
+        $worksheet = $spreadsheet->getActiveSheet();
+        $rows = [];
+
+        $jumBaris = 0;
+        $jumKolom = 0;
+        foreach ($worksheet->getRowIterator() as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+            $cells = [];
+
+            $kolomIter = 0;
+            foreach ($cellIterator as $cell) {
+                $cells[] = $cell->getValue();
+                $kolomIter++;
+                if ($jumKolom <= $kolomIter) $jumKolom = $kolomIter;
+            }
+            $rows[] = $cells;
+            $jumBaris++;
+        }
+
+        print_r([$jumBaris,$jumKolom]);
+
+        // echo "<table>";
+        foreach ($rows as $isi) {
+            echo "AD<br>";
+        }
+        // echo "</table>";
     }
     public function read_laporan_harian_by_pengguna_tahun_bulan()
     {
@@ -40,7 +87,7 @@ class Servicelaporanharian extends CI_Controller
         if ($_FILES) {
             if ($_FILES['file']['size'] > 1000000) {
                 $outputRespon = ["sukses" => false, "pesan" => "File tidak boleh lebih dari 1MB"];
-            } elseif ($this->fungsi->isFileExcel($_FILES['file']['type'])) {
+            } elseif ($this->fungsi->isFileAllowed($_FILES['file']['type'])) {
                 $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
                 $namaFileToUpload = $input['TanggalPekerjaan'] . "_" . $dataPenggunaRinci['NipLama'] . "_" . $dataPenggunaRinci['Nama'] . " (" . $input['JenisKehadiran'] . ")." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
                 $dataInput = [

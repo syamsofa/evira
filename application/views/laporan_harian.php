@@ -21,7 +21,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Tahun</label>
                 <div class="col-sm-10">
-                    <select id="tahunPekerjaan" required class="custom-select">
+                    <select id="tahunPekerjaan" onchange="tampilDaftarLaporanPerBulanTahun($('#bulanPekerjaan').val(),this.value, globalIdPengguna)" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($tahun['data'] as $rows) {
@@ -40,7 +40,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Bulan</label>
                 <div class="col-sm-10">
-                    <select onchange="tampilDaftarLaporanPerBulanTahun(this.value,globalTahun, globalIdPengguna)" id="bulanPekerjaan" required class="custom-select">
+                    <select onchange="tampilDaftarLaporanPerBulanTahun(this.value,$('#tahunPekerjaan').val(), globalIdPengguna)" id="bulanPekerjaan" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($bulan['data'] as $rows) {
@@ -65,7 +65,8 @@
                         <tr>
                             <th>Tanggal</th>
                             <th>File</th>
-                            
+                            <th>View</th>
+
                             <th>Tipe WFO/WFH</th>
                             <th>Tanggal Upload</th>
 
@@ -163,7 +164,7 @@
             </script>
 
             <div class="modal-body">
-                <iframe id="sss" width="100%"  title="W3Schools Free Online Web Tutorials"></iframe>
+                <iframe id="sss" width="100%" title="W3Schools Free Online Web Tutorials"></iframe>
             </div>
             <div class="modal-footer">
 
@@ -233,6 +234,7 @@
 </script>
 <script>
     function tampilDaftarLaporanPerBulanTahun(bulan, tahun, idPengguna) {
+        console.log(bulan, tahun, idPengguna)
         var TabelLaporanHarianSaya = $("#TabelLaporanHarianSaya").dataTable({
             columns: [{
 
@@ -250,7 +252,12 @@
                 {
 
                     className: "text-center"
+                },
+                {
+
+                    className: "text-center"
                 }
+
 
             ],
             paging: false,
@@ -300,15 +307,15 @@
                             } else
                                 return '-'
                             // 
-                        }, 
-                        // () => {
-                        //     if (outputDataBaris.Upload.JumUpload > 0) {
+                        },
+                        () => {
+                            if (outputDataBaris.Upload.JumUpload > 0) {
 
-                        //         return "<button class='btn-danger' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> Lihat</button>"
-                        //     } else
-                        //         return '-'
-                        //     // 
-                        // },
+                                return "<button class='btn-danger' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> Lihat</button>"
+                            } else
+                                return '-'
+                            // 
+                        },
                         () => {
                             if (outputDataBaris.Upload.JumUpload > 0) {
 
