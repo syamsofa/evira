@@ -65,7 +65,8 @@
                         <tr>
                             <th>Tanggal</th>
                             <th>File</th>
-                            
+                            <th>Lihat</th>
+
                             <th>Tipe WFO/WFH</th>
                             <th>Tanggal Upload</th>
 
@@ -163,7 +164,8 @@
             </script>
 
             <div class="modal-body">
-                <iframe id="sss" width="100%"  title="W3Schools Free Online Web Tutorials"></iframe>
+
+                <div id="htmllaporanharian"></div>
             </div>
             <div class="modal-footer">
 
@@ -250,6 +252,10 @@
                 {
 
                     className: "text-center"
+                },
+                {
+
+                    className: "text-center"
                 }
 
             ],
@@ -300,15 +306,15 @@
                             } else
                                 return '-'
                             // 
-                        }, 
-                        // () => {
-                        //     if (outputDataBaris.Upload.JumUpload > 0) {
+                        },
+                        () => {
+                            if (outputDataBaris.Upload.JumUpload > 0) {
 
-                        //         return "<button class='btn-danger' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> Lihat</button>"
-                        //     } else
-                        //         return '-'
-                        //     // 
-                        // },
+                                return "<button class='btn-danger' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> Lihat</button>"
+                            } else
+                                return '-'
+                            // 
+                        },
                         () => {
                             if (outputDataBaris.Upload.JumUpload > 0) {
 
@@ -324,7 +330,8 @@
                             } else
                                 return '-'
                             // 
-                        }
+                        },
+                        ""
                         // "" + outputDataBaris.CreatedDate + "",
                         // " Realisasi Volume Diubah dari " + outputDataBaris.VolumePraRealisasi + " MenJadi " + outputDataBaris.VolumeRealisasi + ""
 
@@ -358,8 +365,54 @@
     }
 </script>
 <script>
-    function bukaModalViewLaporanHarian(RecId) {
+    function bukaModalViewLaporanHarian(NamaFile) {
+        console.log(NamaFile)
         $('#modalViewLaporanHarian').modal('show');
+        let DataLaporan, JumBaris, JumKolom
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicelaporanharian/viewhtmllaporanharian',
+            dataType: 'json',
+            data: {
+                NamaFile: NamaFile
+            },
+            success: function(output) {
+                console.log(output.Data);
+                DataLaporan = output.Data
+                JumBaris = output.JumBaris
+                JumKolom = output.JumKolom
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+                setTimeout(() => {
+                    $('#loaderGif').hide();
+                }, 2000);
+
+            }
+        });
+        var t = $("#htmllaporanharian");
+        t.empty()
+        // Example
+        t.xtab("init", {
+            mainlabel: "DataExcel",
+            split: true,
+            rows: JumBaris,
+            cols: JumKolom,
+            rowlabels: true,
+            collabels: true,
+            // widths: [75, 50, 100, 200],
+            values: DataLaporan,
+            change: function(r, c, val, ref) {
+                console.log("CHANGE [" + r + ", " + c + "] = \"" + ref + "\": " + val);
+            },
+            focus: function(r, c, val, ref) {
+                console.log("FOCUS [" + r + ", " + c + "] = \"" + ref + "\": " + val);
+            }
+        });
+
     }
 </script>
 
@@ -437,4 +490,42 @@
     setTimeout(() => {
         tampilDaftarLaporanPerBulanTahun(globalBulan, globalTahun, globalIdPengguna)
     }, 1000);
+</script>
+
+
+<style type="text/css" media="screen">
+    html,
+    body {
+        background-color: white;
+        color: black;
+        font-family: Arial, Verdana, Helvetica;
+    }
+
+    p,
+    a,
+    ul,
+    li,
+    td,
+    th {
+        font-size: 12pt;
+    }
+
+    h1 {
+        font-size: 16pt;
+    }
+
+    h2 {
+        font-size: 14pt;
+    }
+
+    button {
+        margin: 5px;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+
+
+    });
 </script>

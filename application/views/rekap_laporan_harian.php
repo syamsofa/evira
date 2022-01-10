@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <button id="buttonTampilRekap" onclick="tampilRekapLaporan()" type="button" class="btn btn-success float-right"><i class="fa fa-filter" aria-hidden="true"></i> Tampilkan Rekap</button>
+            <!-- <button id="buttonTampilRekap" onclick="tampilRekapLaporan()" type="button" class="btn btn-success float-right"><i class="fa fa-filter" aria-hidden="true"></i> Tampilkan Rekap</button> -->
             <ibutton type="button" onclick="printDiv('TabelRekapLaporan')" type="button" class="btn btn-danger float-left" value="Cetak Rekap" /><i class="fa fa-file-text" aria-hidden="true"></i> Cetak Rekap</button>
         </div>
         <div class="card-body">
@@ -172,6 +172,24 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalViewLaporanHarian" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+            </div>
+        
+
+            <div class="modal-body">
+
+                <div id="htmllaporanharian"></div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var penggunaId = '<?php echo $this->session->userdata('RecId') ?>'
 </script>
@@ -222,11 +240,14 @@
 
                     output[i].DataLaporan.forEach(element => {
 
-                        if (element.Data.JumUpload == 1)
+                        if (element.Data.JumUpload == 1) {
                             var kett = 'V'
-                        else
+                            var NamaFile = element.Data.Data.NamaFile
+                        } else {
                             var kett = '-'
-                        toWrite = toWrite + '<td>' + kett + '</td>';
+                            var NamaFile = "-"
+                        }
+                        toWrite = toWrite + "<td align='center'>" + kett + " <button onClick='bukaModalViewLaporanHarian(\""+NamaFile+"\")'>View </button></td>";
                         // $('#TabelRekapLaporan tbody tr').append('<td>' + output[i].Nama + '</td>');
 
                     });
@@ -245,7 +266,7 @@
                             'pdfHtml5'
                         ]
                     })
-                    $("#buttonTampilRekap").html(" <i class='fa fa-filter' aria-hidden='true'></i> Tampilkan Laporan ");
+                    // $("#buttonTampilRekap").html(" <i class='fa fa-filter' aria-hidden='true'></i> Tampilkan Laporan ");
 
                 }, 2000);
 
@@ -292,54 +313,6 @@
         $("#keteranganUpload").html(fileupload.name + ', ' + fileupload.size + ' bytes' + ', ' + fileupload.type)
     }
 </script>
-<script>
-    $("#formTambahLaporanHarian").submit(function(event) {
-        $("#buttonSubmit").html(" <i class='fa fa-refresh fa-spin'></i> Sedang Proses Upload ");
-
-        const fileupload = $('#fileLaporan').prop('files')[0];
-        console.log(fileupload)
-        var form_data = new FormData();
-        form_data.append('file', fileupload);
-        form_data.append('TanggalPekerjaan', $("#tanggalPekerjaan").val());
-        form_data.append('IdPengguna', $("#idPengguna").val());
-        form_data.append('JenisKehadiran', $("#jenisKehadiran").val());
-        // console.log(form_data)
-
-
-
-        $.ajax({
-
-
-            type: "POST",
-            cache: false,
-            contentType: false,
-            processData: false,
-            url: '<?php echo base_url(); ?>/servicelaporanharian/create_laporan_harian',
-            dataType: 'json',
-            data: form_data,
-            success: function(output) {
-                if (output.sukses == true) {
-                    Swal.fire(output.pesan, '', 'success')
-                    $('#formTambahLaporanHarian')[0].reset();
-                    $('#modalTambahLaporanHarian').modal('hide');
-                    tampilRekapLaporan($("#bulanPekerjaan").val(), $("#tahunPekerjaan").val(), $("#idPengguna").val())
-                    $("#keteranganUpload").html('')
-                } else
-                    Swal.fire(output.pesan, '', 'error')
-                $("#buttonSubmit").html(" <i class='fa fa-paper-plane' aria-hidden='true'></i> Submit ");
-
-            }
-
-        })
-
-        event.preventDefault()
-
-
-
-
-    });
-</script>
-
 
 
 <script>
@@ -358,6 +331,10 @@
             var tanggalMulai = start.format('YYYY-MM-DD')
             var tanggalSelesai = end.format('YYYY-MM-DD')
 
+            setTimeout(() => {
+                tampilRekapLaporan()
+
+            }, 2000);
             console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
     });
@@ -374,5 +351,57 @@
         a.document.close();
         a.print();
         // w.close();
+    }
+</script>
+
+<script>
+    function bukaModalViewLaporanHarian(NamaFile) {
+        console.log(NamaFile)
+        $('#modalViewLaporanHarian').modal('show');
+        let DataLaporan, JumBaris, JumKolom
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicelaporanharian/viewhtmllaporanharian',
+            dataType: 'json',
+            data: {
+                NamaFile: NamaFile
+            },
+            success: function(output) {
+                console.log(output.Data);
+                DataLaporan = output.Data
+                JumBaris = output.JumBaris
+                JumKolom = output.JumKolom
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+                setTimeout(() => {
+                    $('#loaderGif').hide();
+                }, 2000);
+
+            }
+        });
+        var t = $("#htmllaporanharian");
+        t.empty()
+        // Example
+        t.xtab("init", {
+            mainlabel: "DataExcel",
+            split: true,
+            rows: JumBaris,
+            cols: JumKolom,
+            rowlabels: true,
+            collabels: true,
+            // widths: [75, 50, 100, 200],
+            values: DataLaporan,
+            change: function(r, c, val, ref) {
+                console.log("CHANGE [" + r + ", " + c + "] = \"" + ref + "\": " + val);
+            },
+            focus: function(r, c, val, ref) {
+                console.log("FOCUS [" + r + ", " + c + "] = \"" + ref + "\": " + val);
+            }
+        });
+
     }
 </script>

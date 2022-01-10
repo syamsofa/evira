@@ -1,6 +1,9 @@
 <?php
 
 use phpDocumentor\Reflection\DocBlock\Tags\Throws;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -40,7 +43,7 @@ class Servicelaporanharian extends CI_Controller
         if ($_FILES) {
             if ($_FILES['file']['size'] > 1000000) {
                 $outputRespon = ["sukses" => false, "pesan" => "File tidak boleh lebih dari 1MB"];
-            } elseif ($this->fungsi->isFileExcel($_FILES['file']['type'])) {
+            } elseif ($this->fungsi->isFileDiizinkan($_FILES['file']['type'])) {
                 $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
                 $namaFileToUpload = $input['TanggalPekerjaan'] . "_" . $dataPenggunaRinci['NipLama'] . "_" . $dataPenggunaRinci['Nama'] . " (" . $input['JenisKehadiran'] . ")." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
                 $dataInput = [
@@ -73,5 +76,71 @@ class Servicelaporanharian extends CI_Controller
 
         // print_r($outputRespon);
         echo json_encode($outputRespon);
+    }
+    public function viewhtmllaporanharian()
+    {
+        $NamaFile=$this->input->post('NamaFile');
+        $templateLaporan = "uploads/".$NamaFile;
+        // .$NamaFile;
+
+
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($templateLaporan);
+
+        $array_sheet = $spreadsheet->getSheetNames();
+        ##  DISPLAY ALL SHEETS
+        
+        $worksheet = $spreadsheet->getActiveSheet();
+        $rows = [];
+
+        $jumBaris = 0;
+        $jumKolom = 0;
+        foreach ($worksheet->getRowIterator() as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+            $cells = [];
+
+            $kolomIter = 0;
+            foreach ($cellIterator as $cell) {
+                $cells[] = $cell->getValue();
+                $kolomIter++;
+                if ($jumKolom <= $kolomIter) $jumKolom = $kolomIter;
+
+                
+            }
+            $rows[] = $cells;
+            $jumBaris++;
+            if ($jumBaris >= 100  ) 
+                break;
+        }
+
+
+        // echo "<table>";
+        
+        // echo "</table>";
+
+        // echo "<table>";
+        // foreach ($worksheet->getRowIterator() as $row) {
+
+        //     $cellIterator = $row->getCellIterator();
+        //     $cellIterator->setIterateOnlyExistingCells(false);
+
+        //     echo "<tr>";
+        //     foreach ($cellIterator as $cell) {
+        //         echo "<td>" . $cell->getValue() . "</td>";
+        //     }
+        //     echo "</tr>";
+        //     # code...
+        // }
+        // echo "<table>";
+
+        $output=[
+            "JumBaris"=>$jumBaris,
+            "JumKolom"=>$jumKolom,
+            "Data"=>$rows
+        ];
+
+        echo json_encode($output);
     }
 }

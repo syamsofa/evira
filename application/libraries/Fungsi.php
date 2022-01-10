@@ -2,9 +2,9 @@
 
 class Fungsi
 {
-    function isFileExcel($ekstensi)
+    function isFileDiizinkan($ekstensi)
     {
-        $ekstensiIzin = ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+        $ekstensiIzin = ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application/vnd.oasis.opendocument.spreadsheet"];
         // in_array()
         return in_array($ekstensi, $ekstensiIzin);
     }

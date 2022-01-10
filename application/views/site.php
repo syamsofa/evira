@@ -68,6 +68,11 @@ if ($this->session->userdata('Email') == null)
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+  <script type="text/javascript" src="<?php echo base_url(); ?>framework/js/xtab.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>framework/css/xtab.css"/>
+
+  
+
 
 </head>
 
@@ -257,7 +262,7 @@ if ($this->session->userdata('Email') == null)
               <a href="<?php echo base_url(); ?>site/rekap_laporan_harian" class="nav-link">
                 <i class="fas fa-save"></i>
                 <p>
-                  Rekap Laporan Pegawai
+                  Rekap Laporan Harian
 
                 </p>
               </a>
@@ -305,6 +310,15 @@ if ($this->session->userdata('Email') == null)
                 <i class="fas fa-save"></i>
                 <p>
                   Pekerjaan Yang Ditugaskan Ke Saya
+
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url(); ?>site/pekerjaan_semua" class="nav-link">
+                <i class="fas fa-save"></i>
+                <p>
+                  Pekerjaan Semua Pegawai
 
                 </p>
               </a>

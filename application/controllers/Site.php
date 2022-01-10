@@ -226,6 +226,25 @@ class Site extends CI_Controller
 		);
 		$this->load->view('site', $data);
 	}
+	public function pekerjaan_semua()
+	{
+		$data = array(
+			'menu' => $this->uri->segment(2),
+			'judul' => 'Pekerjaan Semua Pegawai',
+			'role_by_pengguna' => $this->roleByPengguna,
+			'detailPengguna' => $this->detailPengguna,
+			'satker' => $this->satker,
+			'organisasi' => $this->organisasi,
+			'satuan' => $this->satuan,
+			'pengguna' => $this->pengguna,
+			'pekerjaan' => $this->pekerjaan,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan,
+			'pekerjaanByPengguna' => $this->pekerjaanByPengguna
+
+		);
+		$this->load->view('site', $data);
+	}
 	public function satuan()
 	{
 		$data = array(
