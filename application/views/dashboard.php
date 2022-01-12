@@ -28,20 +28,6 @@
         </div>
       </div>
       </a> <!-- ./col -->
-      <a href="<?php echo base_url() . "site/pekerjaan_bulanan"; ?>">
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-success">
-            <div class="inner">
-              <h4>Master Pekerjaan Saya</h4>
-
-            </div>
-            <div class="icon">
-            </div>
-            <a href="<?php echo base_url() . "site/pekerjaan_bulanan"; ?>" class="small-box-footer">Buka Menu <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-      </a> <!-- ./col -->
       <a href="<?php echo base_url() . "site/pekerjaan_semua"; ?>">
         <div class="col-lg-3 col-6">
           <!-- small box -->
@@ -57,6 +43,21 @@
           </div>
         </div>
       </a>
+      <a href="<?php echo base_url() . "site/pekerjaan_bulanan"; ?>">
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h4>Master Pekerjaan Saya</h4>
+
+            </div>
+            <div class="icon">
+            </div>
+            <a href="<?php echo base_url() . "site/pekerjaan_bulanan"; ?>" class="small-box-footer">Buka Menu <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+      </a> <!-- ./col -->
+    
       <a href="<?php echo base_url() . "site/pekerjaan_saya"; ?>">
         <div class="col-lg-3 col-6">
           <!-- small box -->
