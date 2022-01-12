@@ -35,7 +35,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Bulan</label>
                 <div class="col-sm-10">
-                    <select onchange="tampilPekerjaan()" id="bulanPekerjaan" required class="custom-select">
+                    <select  id="bulanPekerjaan" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($bulan['data'] as $rows) {
@@ -53,14 +53,14 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Pegawai</label>
                 <div class="col-sm-10">
-                    <select onchange="tampilPekerjaan()" id="idPengguna" required class="custom-select">
+                    <select  id="idPengguna" required class="custom-select">
                         <option value=''>--PILIH--</option>
                     </select>
                 </div>
             </div>
             <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left">Tampilkan</button>
-            <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button>
-            <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button>
+            <!-- <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button> -->
+            <!-- <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button> -->
 
         </div>
         <div class="card-body">
@@ -496,7 +496,7 @@
         if ($("#bulanPekerjaan").val() == '' || $("#tahunPekerjaan").val() == '')
             alert('Mohon pilih tahun dan bulan dulu')
         else
-            window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpr?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + penggunaId, )
+            window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpr?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + $("#idPengguna").val(), )
 
     });
 </script>
@@ -505,7 +505,7 @@
         if ($("#bulanPekerjaan").val() == '' || $("#tahunPekerjaan").val() == '')
             alert('Mohon pilih tahun dan bulan dulu')
         else
-            window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpt?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + penggunaId, )
+            window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpt?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + $("#idPengguna").val(), )
 
     });
 </script>

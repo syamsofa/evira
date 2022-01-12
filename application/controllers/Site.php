@@ -269,11 +269,8 @@ class Site extends CI_Controller
 	{
 		$array_items = array('Nama', 'Email', 'UrlPicture');
 		$this->session->unset_userdata($array_items);
-		include APPPATH . 'third_party/glogin/config.php';
-
-		if ($this->session->userdata('OpsiLoginId') == 2)
-			$google_client->revokeToken();
-		else if ($this->session->userdata('OpsiLoginId') == 1) {
+		
+		if ($this->session->userdata('OpsiLoginId') == 1) {
 
 			redirect($this->session->userdata('UrlLogout'));
 		}

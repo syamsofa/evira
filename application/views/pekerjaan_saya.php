@@ -523,7 +523,7 @@
 
                 console.log(obj[index].RecId, index, val)
 
-                data = {
+               let data = {
                     RecId: obj[index].RecId,
                     VolumeRealisasi: val,
                     VolumePraRealisasi: praVal

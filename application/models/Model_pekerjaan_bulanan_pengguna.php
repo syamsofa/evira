@@ -101,13 +101,15 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     }
     public function update_volume_realisasi_volume_by_id($dataInput)
     {
+
         // date("Y-m-d h:i:sa"),
         // $this->session->userdata('RecId'),
         // print_r($dataInput);
         // print_r($this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']));
         $this->db->query("update pekerjaan_bulanan_pengguna set VolumeRealisasi=?, TanggalRealisasi=?,ModifiedDate=?,ModifiedBy=? where RecId=?
-		", array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), date("Y-m-d h:i:sa"), $this->session->userdata('RecId'), $dataInput['RecId']));
+		", array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), "2022-01-12 09:43:43", $this->session->userdata('RecId'), $dataInput['RecId']));
 
+        // print_r(array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), date("Y-m-d h:i:sa"), $this->session->userdata('RecId'), $dataInput['RecId']));
 
         $afftectedRows = $this->db->affected_rows();
         if ($afftectedRows == 1) {
@@ -168,11 +170,17 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
             if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null) {
                 $row['SelisihRealisasiDanTarget'] = 0;
                 $row['KalimatSelisihRealisasiDanTarget'] = $this::kalimatBelumAdaPenyerahan;
-            } else if ($row['SelisihRealisasiDanTarget']) {
+            } else {
                 $row['SelisihRealisasiDanTarget'] = (new DateTime($row['TanggalRealisasi']))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
-                $row['KalimatSelisihRealisasiDanTarget'] = "Terlambat " . abs($row['SelisihRealisasiDanTarget']) . " hari";
-            } else
-                $row['KalimatSelisihRealisasiDanTarget'] = abs($row['SelisihRealisasiDanTarget']) . " hari lebih cepat";
+
+                if ($row['SelisihRealisasiDanTarget'] < 0)
+                    $row['KalimatSelisihRealisasiDanTarget'] = "Terlambat " . abs($row['SelisihRealisasiDanTarget']) . " hari";
+                else if ($row['SelisihRealisasiDanTarget'] > 0)
+
+                    $row['KalimatSelisihRealisasiDanTarget'] = abs($row['SelisihRealisasiDanTarget']) . " hari lebih cepat";
+                else
+                    $row['KalimatSelisihRealisasiDanTarget'] = " Tepat waktu";
+            }
 
             if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null)
                 $row['TanggalRealisasiFormatted'] = $this::kalimatBelumAdaPenyerahan;
