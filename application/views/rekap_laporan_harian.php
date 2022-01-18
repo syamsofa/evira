@@ -178,7 +178,7 @@
             <div class="modal-header">
 
             </div>
-        
+
 
             <div class="modal-body">
 
@@ -243,11 +243,14 @@
                         if (element.Data.JumUpload == 1) {
                             var kett = 'V'
                             var NamaFile = element.Data.Data.NamaFile
+                            var ViewFile = " <button onClick='bukaModalViewLaporanHarian(\"" + NamaFile + "\")'>View </button>"
+
                         } else {
                             var kett = '-'
                             var NamaFile = "-"
+                            var ViewFile = ""
                         }
-                        toWrite = toWrite + "<td align='center'>" + kett + " <button onClick='bukaModalViewLaporanHarian(\""+NamaFile+"\")'>View </button></td>";
+                        toWrite = toWrite + "<td align='center'>" + kett + ViewFile + "</td>";
                         // $('#TabelRekapLaporan tbody tr').append('<td>' + output[i].Nama + '</td>');
 
                     });

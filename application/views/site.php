@@ -45,6 +45,10 @@ if ($this->session->userdata('Email') == null)
         html {
             font-size: 14px;
         }
+        .nav-item a p,.nav-item a,
+        table thead tr th,table tbody tr td  {
+            font-size: 14px;
+        }
     </style>
   <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->

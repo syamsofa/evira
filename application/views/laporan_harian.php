@@ -68,7 +68,8 @@
                             <th>Lihat</th>
 
                             <th>Tipe WFO/WFH</th>
-                            <th>Tanggal Upload</th>
+                            <th>Waktu Upload</th>
+                            <th></th>
 
                         </tr>
 
@@ -257,6 +258,11 @@
 
                     className: "text-center"
                 }
+                ,
+                {
+
+                    className: "text-center"
+                }
 
             ],
             paging: false,
@@ -310,7 +316,7 @@
                         () => {
                             if (outputDataBaris.Upload.JumUpload > 0) {
 
-                                return "<button class='btn-danger' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> Lihat</button>"
+                                return "<button class='btn-success' data-toggle='tooltipView' data-placement='top' title='Lihat Laporan Secara Live' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> </button>"
                             } else
                                 return '-'
                             // 
@@ -331,13 +337,24 @@
                                 return '-'
                             // 
                         },
-                        ""
+                        () => {
+                            if (outputDataBaris.Upload.JumUpload > 0) {
+
+                                return "<button class='btn-danger' data-toggle='tooltipHapus' data-placement='top' title='Hapus Laporan' onclick='hapusLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-trash' aria-hidden='true'></i> </button>"
+                            } else
+                                return '-'
+                            // 
+                        },
+ 
                         // "" + outputDataBaris.CreatedDate + "",
                         // " Realisasi Volume Diubah dari " + outputDataBaris.VolumePraRealisasi + " MenJadi " + outputDataBaris.VolumeRealisasi + ""
 
 
                     ]);
                 } // End For
+
+                $('[data-toggle="tooltipView"]').tooltip()
+                $('[data-toggle="tooltipHapus"]').tooltip()
 
                 $('#loaderGif').hide();
             },
@@ -382,6 +399,52 @@
                 DataLaporan = output.Data
                 JumBaris = output.JumBaris
                 JumKolom = output.JumKolom
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+                setTimeout(() => {
+                    $('#loaderGif').hide();
+                }, 2000);
+
+            }
+        });
+        var t = $("#htmllaporanharian");
+        t.empty()
+        // Example
+        t.xtab("init", {
+            mainlabel: "DataExcel",
+            split: true,
+            rows: JumBaris,
+            cols: JumKolom,
+            rowlabels: true,
+            collabels: true,
+            // widths: [75, 50, 100, 200],
+            values: DataLaporan,
+            change: function(r, c, val, ref) {
+                console.log("CHANGE [" + r + ", " + c + "] = \"" + ref + "\": " + val);
+            },
+            focus: function(r, c, val, ref) {
+                console.log("FOCUS [" + r + ", " + c + "] = \"" + ref + "\": " + val);
+            }
+        });
+
+    }
+</script>
+<script>
+    function hapusLaporanHarian(NamaFile) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicelaporanharian/hapushtmllaporanharian',
+            dataType: 'json',
+            data: {
+                NamaFile: NamaFile
+            },
+            success: function(output) {
+                console.log(output.Data);
+                tampilDaftarLaporanPerBulanTahun($("#bulanPekerjaan").val(), $("#tahunPekerjaan").val(), globalIdPengguna)
 
             },
 

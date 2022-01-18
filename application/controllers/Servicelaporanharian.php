@@ -77,10 +77,21 @@ class Servicelaporanharian extends CI_Controller
         // print_r($outputRespon);
         echo json_encode($outputRespon);
     }
+    public function hapushtmllaporanharian()
+    {
+        // $NamaFile=;
+        $dataInput = ["UploadDir" => $this->upload_dir, "NamaFile" => $this->input->post('NamaFile')];
+
+
+
+        $output = $this->model_laporan_harian->hapushtmllaporanharian($dataInput);
+
+        echo json_encode($output);
+    }
     public function viewhtmllaporanharian()
     {
-        $NamaFile=$this->input->post('NamaFile');
-        $templateLaporan = "uploads/".$NamaFile;
+        $NamaFile = $this->input->post('NamaFile');
+        $templateLaporan = "uploads/" . $NamaFile;
         // .$NamaFile;
 
 
@@ -90,7 +101,7 @@ class Servicelaporanharian extends CI_Controller
 
         $array_sheet = $spreadsheet->getSheetNames();
         ##  DISPLAY ALL SHEETS
-        
+
         $worksheet = $spreadsheet->getActiveSheet();
         $rows = [];
 
@@ -106,18 +117,16 @@ class Servicelaporanharian extends CI_Controller
                 $cells[] = $cell->getValue();
                 $kolomIter++;
                 if ($jumKolom <= $kolomIter) $jumKolom = $kolomIter;
-
-                
             }
             $rows[] = $cells;
             $jumBaris++;
-            if ($jumBaris >= 100  ) 
+            if ($jumBaris >= 100)
                 break;
         }
 
 
         // echo "<table>";
-        
+
         // echo "</table>";
 
         // echo "<table>";
@@ -135,10 +144,10 @@ class Servicelaporanharian extends CI_Controller
         // }
         // echo "<table>";
 
-        $output=[
-            "JumBaris"=>$jumBaris,
-            "JumKolom"=>$jumKolom,
-            "Data"=>$rows
+        $output = [
+            "JumBaris" => $jumBaris,
+            "JumKolom" => $jumKolom,
+            "Data" => $rows
         ];
 
         echo json_encode($output);
