@@ -456,25 +456,7 @@
 
             }
         });
-        var t = $("#htmllaporanharian");
-        t.empty()
-        // Example
-        t.xtab("init", {
-            mainlabel: "DataExcel",
-            split: true,
-            rows: JumBaris,
-            cols: JumKolom,
-            rowlabels: true,
-            collabels: true,
-            // widths: [75, 50, 100, 200],
-            values: DataLaporan,
-            change: function(r, c, val, ref) {
-                console.log("CHANGE [" + r + ", " + c + "] = \"" + ref + "\": " + val);
-            },
-            focus: function(r, c, val, ref) {
-                console.log("FOCUS [" + r + ", " + c + "] = \"" + ref + "\": " + val);
-            }
-        });
+        
 
     }
 </script>
