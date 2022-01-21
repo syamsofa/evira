@@ -14,12 +14,14 @@ class Model_log_realisasi extends CI_Model
     }
     public function create_log_realisasi($dataInput)
     {
+        date_default_timezone_set('Asia/Jakarta');
+        
         $dataToSave = array(
             $dataInput['Peer'],
             $this->session->userdata('RecId'),
             $dataInput['PekerjaanId'],
             $dataInput['Volume'],
-            date("Y-m-d h:i:sa"),
+            date("Y-m-d G:i:s"),
             $this->session->userdata('RecId'),
             $dataInput['TanggalMulai'],
             $dataInput['TanggalSelesai']

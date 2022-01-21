@@ -9,15 +9,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Servicelaporanharian extends CI_Controller
 {
+
     public $upload_dir = 'uploads/';
+    public $now;
     public function __construct()
     {
         parent::__construct();
         $this->load->model('model_laporan_harian');
         $this->load->model('model_pengguna');
         $this->load->library('fungsi');
-
-
+        date_default_timezone_set('Asia/Jakarta');
+        $this->now = date("Y-m-d G:i:s");
         // Your own constructor code
     }
     public function read_laporan_harian_by_pengguna_tahun_bulan()
@@ -38,6 +40,7 @@ class Servicelaporanharian extends CI_Controller
     }
     public function create_laporan_harian()
     {
+
         $outputRespon = [];
         $input = $this->input->post();
         if ($_FILES) {
@@ -46,10 +49,12 @@ class Servicelaporanharian extends CI_Controller
             } elseif ($this->fungsi->isFileDiizinkan($_FILES['file']['type'])) {
                 $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
                 $namaFileToUpload = $input['TanggalPekerjaan'] . "_" . $dataPenggunaRinci['NipLama'] . "_" . $dataPenggunaRinci['Nama'] . " (" . $input['JenisKehadiran'] . ")." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+                date_default_timezone_set('Asia/Jakarta');
+
                 $dataInput = [
                     "Tanggal" => $input['TanggalPekerjaan'],
                     "NamaFile" => $namaFileToUpload,
-                    "CreatedDate" => date("Y-m-d h:i:sa"),
+                    "CreatedDate" => $this->now,
                     "JenisKehadiran" => $input['JenisKehadiran'],
                     "Pengguna" => [
                         "IdPengguna" => $input['IdPengguna'],
@@ -74,7 +79,7 @@ class Servicelaporanharian extends CI_Controller
                 $outputRespon = ["sukses" => false, "pesan" => "Ekstensi tidak diizinkan. Harus Xls/Xlsx"];
         }
 
-        // print_r($outputRespon);
+        // print_r($dataInput);
         echo json_encode($outputRespon);
     }
     public function hapushtmllaporanharian()
