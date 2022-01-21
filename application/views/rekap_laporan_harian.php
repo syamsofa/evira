@@ -1,3 +1,5 @@
+
+
 <div id="loaderGif">
     <img src="../aset/image/loader.gif">
 </div>
@@ -12,10 +14,10 @@
     $('#loaderGif').hide();
 </script>
 <section class="content">
-
     <!-- Default box -->
     <div class="card">
         <div class="card-body">
+
 
             <div class="form-group row">
                 <label for="" class="col-sm-3 col-form-label">Tanggal Laporan </label>
