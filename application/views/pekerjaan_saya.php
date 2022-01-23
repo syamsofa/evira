@@ -62,6 +62,7 @@
                         <tr>
                             <th>Nama Kegiatan</th>
                             <th>Pemberi Tugas</th>
+                            <th>Satuan</th>
                             <th>Target</th>
                             <th>Realisasi</th>
                             <th>Persentase</th>
@@ -357,6 +358,10 @@
                 {
 
                     className: "text-center"
+                },
+                {
+
+                    className: "text-center"
                 }
 
             ],
@@ -378,6 +383,9 @@
                     className: "text-center"
                 },
                 {
+
+                    className: "text-center"
+                }, {
 
                     className: "text-center"
                 },
@@ -447,8 +455,10 @@
                     TabelPekerjaanSaya.fnAddData([
                         "" + outputDataBaris.Deskripsi + "",
                         "" + outputDataBaris.NamaPemberiPekerjaan + "",
-
+                        "" + outputDataBaris.Satuan+ "",
                         "" + outputDataBaris.Volume + "",
+                        
+                  
                         "" + outputDataBaris.VolumeRealisasi + "",
                         "" + outputDataBaris.PersentaseRealisasiVolume + "%",
 
@@ -523,7 +533,7 @@
 
                 console.log(obj[index].RecId, index, val)
 
-               let data = {
+                let data = {
                     RecId: obj[index].RecId,
                     VolumeRealisasi: val,
                     VolumePraRealisasi: praVal
@@ -821,11 +831,5 @@
         return false;
 
 
-    });
-</script>
-
-<script>
-    $(function() {
-        $("#modalRealisasi").draggable();
     });
 </script>

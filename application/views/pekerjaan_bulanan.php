@@ -23,7 +23,6 @@
                                 <thead>
                                     <tr>
                                         <th>Deskripsi</th>
-                                        <th>Status</th>
                                         <th>Volume</th>
                                         <th>Satuan</th>
                                         <th>CreatedBy</th>
@@ -538,7 +537,6 @@
 
                         TabelPekerjaan.fnAddData([
                             "" + outputDataBaris.Deskripsi + "",
-                            "" + outputDataBaris.Status + "",
                             "" + outputDataBaris.Volume + "",
                             "" + outputDataBaris.Satuan + "",
                             "" + outputDataBaris.Nama + "",

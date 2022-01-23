@@ -28,8 +28,8 @@ class Model_laporan_harian extends CI_Model
         // print_r($this->cek_laporan_harian($dataInput));
         if ($this->cek_laporan_harian($dataInput) > 0) {
             $this->db->query(
-                "update laporan_harian set NamaFile=?,JenisKehadiran=?,Ekstensi=?,Base64=? where Tanggal=? and IdPengguna=? ",
-                [$dataInput['NamaFile'], $dataInput['JenisKehadiran'], $dataInput['Ekstensi'], $dataInput['Base64'], $dataInput['Tanggal'], $dataInput['Pengguna']['IdPengguna']]
+                "update laporan_harian set NamaFile=?,JenisKehadiran=?,Ekstensi=?,Base64=?,CreatedDate=? where Tanggal=? and IdPengguna=? ",
+                [$dataInput['NamaFile'], $dataInput['JenisKehadiran'], $dataInput['Ekstensi'], $dataInput['Base64'],$dataInput['CreatedDate'], $dataInput['Tanggal'], $dataInput['Pengguna']['IdPengguna']]
             );
             return array(
                 'sukses' => true,

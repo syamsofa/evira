@@ -75,6 +75,8 @@ class Model_pekerjaan_bulanan extends CI_Model
     }
     public function create_pekerjaan($dataInput)
     {
+        date_default_timezone_set('Asia/Jakarta');
+        
         $rangeTanggal = $dataInput['RangeTanggal'];
         $rangeTanggal = str_replace(" ", "", $rangeTanggal);
         $arrTanggal = explode("-", $rangeTanggal);
@@ -86,7 +88,7 @@ class Model_pekerjaan_bulanan extends CI_Model
             $dataInput['Deskripsi'],
             $dataInput['Volume'],
             $dataInput['SatuanId'],
-            date("Y-m-d h:i:sa"),
+            date("Y-m-d G:i:s"),
             $this->session->userdata('RecId'),
             $dataInput['TanggalMulai'],
             $dataInput['TanggalSelesai']
@@ -110,6 +112,8 @@ class Model_pekerjaan_bulanan extends CI_Model
     }
     public function edit_pekerjaan($dataInput)
     {
+        date_default_timezone_set('Asia/Jakarta');
+        
         $rangeTanggal = $dataInput['RangeTanggal'];
         $rangeTanggal = str_replace(" ", "", $rangeTanggal);
         $arrTanggal = explode("-", $rangeTanggal);
@@ -121,7 +125,7 @@ class Model_pekerjaan_bulanan extends CI_Model
             $dataInput['Deskripsi'],
             $dataInput['Volume'],
             $dataInput['SatuanId'],
-            date("Y-m-d h:i:sa"),
+            date("Y-m-d G:i:s"),
             $this->session->userdata('RecId'),
             $dataInput['TanggalMulai'],
             $dataInput['TanggalSelesai'],

@@ -102,14 +102,9 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     public function update_volume_realisasi_volume_by_id($dataInput)
     {
 
-        // date("Y-m-d h:i:sa"),
-        // $this->session->userdata('RecId'),
-        // print_r($dataInput);
-        // print_r($this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']));
+     
         $this->db->query("update pekerjaan_bulanan_pengguna set VolumeRealisasi=?, TanggalRealisasi=?,ModifiedDate=?,ModifiedBy=? where RecId=?
 		", array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), "2022-01-12 09:43:43", $this->session->userdata('RecId'), $dataInput['RecId']));
-
-        // print_r(array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), date("Y-m-d h:i:sa"), $this->session->userdata('RecId'), $dataInput['RecId']));
 
         $afftectedRows = $this->db->affected_rows();
         if ($afftectedRows == 1) {
@@ -254,7 +249,8 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     }
     public function create_pekerjaan_pengguna($dataInput)
     {
-        // print_r($dataInput);
+        date_default_timezone_set('Asia/Jakarta');
+        
         $rangeTanggal = $dataInput['RangeTanggal'];
         $rangeTanggal = str_replace(" ", "", $rangeTanggal);
         $arrTanggal = explode("-", $rangeTanggal);
@@ -266,7 +262,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
             $this->session->userdata('RecId'),
             $dataInput['PekerjaanId'],
             $dataInput['Volume'],
-            date("Y-m-d h:i:sa"),
+            date("Y-m-d G:i:s"),
             $this->session->userdata('RecId'),
             $dataInput['TanggalMulai'],
             $dataInput['TanggalSelesai']
