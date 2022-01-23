@@ -111,4 +111,36 @@ class Model_laporan_harian extends CI_Model
         }
         return $outputArray;
     }
+    function hapushtmllaporanharian($dataInput)
+    {
+
+        $fileToDelete = $dataInput["UploadDir"] . $dataInput["NamaFile"];
+
+        if (file_exists($fileToDelete)) {
+
+            if (!unlink($fileToDelete)) {
+                return ["sukses" => false, "pesan" => "Tidak berhasil Hapus File"];
+            } else {
+                $this->db->query(
+                    "delete from laporan_harian where NamaFile=? ",
+                    [$dataInput["NamaFile"]]
+                );
+                if ($this->db->affected_rows() > 0)
+                    return ["sukses" => true, "pesan" => "Berhasil Hapus File dan Berhasil Mengubah Database"];
+                else
+                    return ["sukses" => true, "pesan" => "Berhasil Hapus File Tapi Tidak Berhasil Mengubah Database"];
+            }
+        } else {
+
+            $this->db->query(
+                "delete from laporan_harian where NamaFile=? ",
+                [$dataInput["NamaFile"]]
+            );
+            if ($this->db->affected_rows() > 0)
+                return ["sukses" => true, "pesan" => "Berhasil Mengubah Database"];
+            else
+                return ["sukses" => true, "pesan" => "Tidak Berhasil Mengubah Database"];
+
+        }
+    }
 }

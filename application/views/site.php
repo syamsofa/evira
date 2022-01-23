@@ -45,6 +45,10 @@ if ($this->session->userdata('Email') == null)
         html {
             font-size: 14px;
         }
+        .nav-item a p,.nav-item a,
+        table thead tr th,table tbody tr td  {
+            font-size: 14px;
+        }
     </style>
   <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
@@ -67,6 +71,11 @@ if ($this->session->userdata('Email') == null)
 
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script type="text/javascript" src="<?php echo base_url(); ?>framework/js/xtab.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>framework/css/xtab.css"/>
+
+  
 
 
 </head>
@@ -257,7 +266,7 @@ if ($this->session->userdata('Email') == null)
               <a href="<?php echo base_url(); ?>site/rekap_laporan_harian" class="nav-link">
                 <i class="fas fa-save"></i>
                 <p>
-                  Rekap Laporan Pegawai
+                  Rekap Laporan Harian
 
                 </p>
               </a>
@@ -305,6 +314,15 @@ if ($this->session->userdata('Email') == null)
                 <i class="fas fa-save"></i>
                 <p>
                   Pekerjaan Yang Ditugaskan Ke Saya
+
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url(); ?>site/pekerjaan_semua" class="nav-link">
+                <i class="fas fa-save"></i>
+                <p>
+                  Pekerjaan Semua Pegawai
 
                 </p>
               </a>

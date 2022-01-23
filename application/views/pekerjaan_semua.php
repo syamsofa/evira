@@ -35,7 +35,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Bulan</label>
                 <div class="col-sm-10">
-                    <select onchange="tampilPekerjaan()" id="bulanPekerjaan" required class="custom-select">
+                    <select  id="bulanPekerjaan" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($bulan['data'] as $rows) {
@@ -50,9 +50,17 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="" class="col-sm-2 col-form-label">Pegawai</label>
+                <div class="col-sm-10">
+                    <select  id="idPengguna" required class="custom-select">
+                        <option value=''>--PILIH--</option>
+                    </select>
+                </div>
+            </div>
             <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left">Tampilkan</button>
-            <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button>
-            <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button>
+            <!-- <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button> -->
+            <!-- <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button> -->
 
         </div>
         <div class="card-body">
@@ -425,7 +433,7 @@
         data = {
             Tahun: $("#tahunPekerjaan").val(),
             Bulan: $("#bulanPekerjaan").val(),
-            PenerimaPekerjaanId: penggunaId
+            PenerimaPekerjaanId: $("#idPengguna").val()
         }
         $.ajax({
             type: "POST",
@@ -459,8 +467,8 @@
                         "" + outputDataBaris.PenilaianAtasan + "",
 
 
-                        "<button type='button ' onclick='bukaModalLogPekerjaanPengguna(RecId=" + outputDataBaris.RecId + ")' class=' btn-sm btn btn-primary'>Log</button>" +
-                        "<button type='button' onclick='bukaModalRealisasi(outputData," + i + ")' class='btn btn-primary  btn-sm'>Realisasi </button>"
+                        "" +
+                        ""
 
 
 
@@ -488,7 +496,7 @@
         if ($("#bulanPekerjaan").val() == '' || $("#tahunPekerjaan").val() == '')
             alert('Mohon pilih tahun dan bulan dulu')
         else
-            window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpr?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + penggunaId, )
+            window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpr?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + $("#idPengguna").val(), )
 
     });
 </script>
@@ -497,7 +505,7 @@
         if ($("#bulanPekerjaan").val() == '' || $("#tahunPekerjaan").val() == '')
             alert('Mohon pilih tahun dan bulan dulu')
         else
-            window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpt?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + penggunaId, )
+            window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpt?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + $("#idPengguna").val(), )
 
     });
 </script>
@@ -523,7 +531,7 @@
 
                 console.log(obj[index].RecId, index, val)
 
-               let data = {
+                data = {
                     RecId: obj[index].RecId,
                     VolumeRealisasi: val,
                     VolumePraRealisasi: praVal
@@ -827,5 +835,29 @@
 <script>
     $(function() {
         $("#modalRealisasi").draggable();
+    });
+</script>
+
+<script>
+    $.ajax({
+        type: "POST",
+        async: false,
+        url: '<?php echo base_url(); ?>/servicepengguna/read_pengguna',
+        dataType: 'json',
+        
+        success: function(output) {
+            console.log(output.data)
+
+            output.data.forEach(element => {
+                $('#idPengguna').append("<option value='"+element.RecId+"'>"+element.Nama+"</option>")
+                
+            });
+           
+        },
+
+        error: function(e) {
+            console.log(e.responseText);
+
+        }
     });
 </script>

@@ -39,6 +39,16 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
+    
+    public function delete_pekerjaan_pengguna_by_id()
+    {
+        $dataInput = $this->input->post();
+
+        $output = $this->model_pekerjaan_bulanan_pengguna->delete_pekerjaan_pengguna_by_id($dataInput);
+
+        echo json_encode($output);
+    }
+    
     public function create_pekerjaan_pengguna()
     {
         $dataInput = $this->input->post();
@@ -78,7 +88,7 @@ class Servicepekerjaanpengguna extends CI_Controller
     public function testes()
     {
         // $templateLaporan = "./../../uploads/2021-11-01__Nia Aprillyana, S.ST, M.Si. (wfh).xlsx";
-        $templateLaporan='uploads/fdjfhdj.xlsx';
+        $templateLaporan='uploads/2022-01-06_340053328_Mohamad Achiruzaman S.ST, M.T (wfh).xlsx';
 
         $spreadsheet = new Spreadsheet();
 

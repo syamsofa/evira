@@ -2,7 +2,7 @@
 
 class Model_pekerjaan_bulanan_pengguna extends CI_Model
 {
-    public CONST kalimatBelumAdaPenyerahan='Belum Ada Penyerahan/Penyelesaian';
+    public const kalimatBelumAdaPenyerahan = 'Belum Ada Penyerahan/Penyelesaian';
     public function __construct()
     {
         parent::__construct();
@@ -101,13 +101,15 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     }
     public function update_volume_realisasi_volume_by_id($dataInput)
     {
+
         // date("Y-m-d h:i:sa"),
         // $this->session->userdata('RecId'),
         // print_r($dataInput);
         // print_r($this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']));
         $this->db->query("update pekerjaan_bulanan_pengguna set VolumeRealisasi=?, TanggalRealisasi=?,ModifiedDate=?,ModifiedBy=? where RecId=?
-		", array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), date("Y-m-d h:i:sa"), $this->session->userdata('RecId'), $dataInput['RecId']));
+		", array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), "2022-01-12 09:43:43", $this->session->userdata('RecId'), $dataInput['RecId']));
 
+        // print_r(array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), date("Y-m-d h:i:sa"), $this->session->userdata('RecId'), $dataInput['RecId']));
 
         $afftectedRows = $this->db->affected_rows();
         if ($afftectedRows == 1) {
@@ -164,15 +166,21 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
                 $row['KalimatSisaHari'] = abs($row['SisaHari']) . " hari lagi";
 
 
-            $row['SelisihRealisasiDanTarget'] = (new DateTime($row['TanggalRealisasi']))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
 
-            if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null)
+            if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null) {
+                $row['SelisihRealisasiDanTarget'] = 0;
                 $row['KalimatSelisihRealisasiDanTarget'] = $this::kalimatBelumAdaPenyerahan;
-            else if ($row['SelisihRealisasiDanTarget'] )
-                $row['KalimatSelisihRealisasiDanTarget'] = "Terlambat " . abs($row['SelisihRealisasiDanTarget']) . " hari";
+            } else {
+                $row['SelisihRealisasiDanTarget'] = (new DateTime($row['TanggalRealisasi']))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
 
-            else
-                $row['KalimatSelisihRealisasiDanTarget'] = abs($row['SelisihRealisasiDanTarget']) . " hari lebih cepat";
+                if ($row['SelisihRealisasiDanTarget'] < 0)
+                    $row['KalimatSelisihRealisasiDanTarget'] = "Terlambat " . abs($row['SelisihRealisasiDanTarget']) . " hari";
+                else if ($row['SelisihRealisasiDanTarget'] > 0)
+
+                    $row['KalimatSelisihRealisasiDanTarget'] = abs($row['SelisihRealisasiDanTarget']) . " hari lebih cepat";
+                else
+                    $row['KalimatSelisihRealisasiDanTarget'] = " Tepat waktu";
+            }
 
             if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null)
                 $row['TanggalRealisasiFormatted'] = $this::kalimatBelumAdaPenyerahan;
@@ -181,12 +189,12 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
 
             $row['TanggalSelesaiFormatted'] = date('d F Y', strtotime($row['TanggalSelesai']));
             $row['PersentaseRealisasiVolume'] = number_format(100 * $row['VolumeRealisasi'] / $row['Volume'], 2);
-            $row['PersentaseKetepatanWaktu'] = $row['SelisihRealisasiDanTarget'];
+            // $row['PersentaseKetepatanWaktu'] = $row['SelisihRealisasiDanTarget'];
             // ,
             $urut++;
             $jumPersentaseRealisasiVolume = $jumPersentaseRealisasiVolume + $row['PersentaseRealisasiVolume'];
             $jumPersentasePenilaianAtasan = $jumPersentasePenilaianAtasan + $row['PenilaianAtasan'];
-            $jumPersentaseKetepatanWaktu = $jumPersentaseKetepatanWaktu + $row['PersentaseKetepatanWaktu'];
+            $jumPersentaseKetepatanWaktu = $jumPersentaseKetepatanWaktu + $row['SelisihRealisasiDanTarget'];
             if ($row['PenilaianAtasan'] == 0)
                 $row['PenilaianAtasan'] = 'Belum dinilai';
 
@@ -287,5 +295,11 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
                 'sukses' => false,
                 'data' => ["Pesan" => "Terjadi Duplikat Data. Tidak Tersimpan"]
             );
+    }
+    public function delete_pekerjaan_pengguna_by_id($dataInput)
+    {
+        $this->db->query("delete from pekerjaan_bulanan_pengguna 
+         where RecId=?
+		", array($dataInput['RecId']));
     }
 }

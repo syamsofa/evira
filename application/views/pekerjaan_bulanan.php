@@ -222,6 +222,7 @@
                                         <th>Tanggal Penerimaan Tugas</th>
                                         <th>Pemberi Tugas</th>
                                         <th>Volume</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -339,7 +340,7 @@
                 $('#pekerjaanId').append(`<option value="">
                                        --Pilih--
                                   </option>`);
-                    
+
                 output.data.forEach(element => {
                     console.log(element)
                     $('#pekerjaanId').append(`<option value="${element.RecId}">
@@ -361,7 +362,29 @@
     function loadTabelPenugasanPekerjaan(RecId) {
 
         var TabelPenugasanPekerjaan = $("#TabelPenugasanPekerjaan").dataTable({
-            
+            columns: [{
+
+                    className: "text-center"
+                },
+
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                }
+
+            ],
             "responsive": true,
             destroy: true,
             "lengthChange": false,
@@ -398,7 +421,8 @@
                         "" + outputDataBaris.CreatedDate + "",
                         "" + outputDataBaris.PemberiTugas.data.Nama + "",
 
-                        "" + outputDataBaris.Volume + ""
+                        "" + outputDataBaris.Volume + "",
+                        "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + ","+RecId+")' class='btn btn-danger'>Hapus</button>"
                     ]);
                 } // End For
 
@@ -415,8 +439,8 @@
 <script>
     function bukaModalPenugasanPekerjaan(RecId) {
         $('#modalPenugasanPekerjaan').modal('show');
-
         loadTabelPenugasanPekerjaan(RecId)
+                   
 
         $.ajax({
             type: "POST",
@@ -475,7 +499,7 @@
 
             }
         });
-        // loadTabelPenugasanPekerjaan(RecId)
+        loadTabelPenugasanPekerjaan(RecId)
 
     }
 </script>
@@ -625,9 +649,6 @@
                 url: '<?php echo base_url(); ?>/servicepekerjaanpengguna/create_pekerjaan_pengguna',
                 dataType: 'json',
                 data: {
-                    //     $dataInput['PenerimaPekerjaanId'],
-                    // $dataInput['PekerjaanId'],
-                    // $dataInput['Volume'],
                     PenerimaPekerjaanId: PenerimaPekerjaanId,
                     PekerjaanId: PekerjaanId,
                     Volume: Volume,
@@ -679,5 +700,43 @@
 </script>
 
 <script>
+    function hapusPenugasan(RecId,PekerjaanId) {
 
+        Swal.fire({
+            title: 'Anda yakin menghapusnya?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Ya. Hapus',
+            denyButtonText: `Tidak`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: '<?php echo base_url(); ?>/Servicepekerjaanpengguna/delete_pekerjaan_pengguna_by_id',
+                    dataType: 'json',
+                    data: {
+                        RecId: RecId
+
+                    },
+                    success: function(output) {
+
+                        console.log(output);
+                        loadTabelPenugasanPekerjaan(PekerjaanId)
+                      
+
+                    },
+
+                    error: function(e) {
+                        console.log(e.responseText);
+
+                    }
+                });
+                Swal.fire('Saved!', '', 'success')
+            } else if (result.isDenied) {
+                Swal.fire('Tidak jadi dihapus', '', 'info')
+            }
+        })
+    }
 </script>

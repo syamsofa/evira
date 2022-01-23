@@ -103,7 +103,7 @@
           })
 
         });
-        console.log(nilai)
+      
 
 
         Highcharts.chart('container', {
