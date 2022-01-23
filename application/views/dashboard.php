@@ -4,7 +4,7 @@
       <div class="col-12">
         <div class="callout callout-info">
           <h5> Selamat Datang </h5>
-          Di website aplikasi Evira Rembang
+          Di website aplikasi Evaluasi BPS Kabupaten Rembang
         </div>
 
 
@@ -14,81 +14,62 @@
       </div><!-- /.col -->
     </div>
     <div class="row">
-    <a href="<?php echo base_url() . "site/laporan_harian"; ?>">
-     <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-info">
-          <div class="inner">
-            <h4>Input Laporan Harian</h4>
-
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Laporan Harian</h5>
+            <p class="card-text">Menyediakan fitur upload laporan harian dalam format excel.</p>
+            <a href="<?php echo base_url() . "site/laporan_harian"; ?>" class="btn btn-primary">Buka Menu ..</a>
           </div>
-          <div class="icon">
-          </div>
-          <a href="<?php echo base_url() . "site/laporan_harian"; ?>" class="small-box-footer">Buka Menu <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
-      </a> <!-- ./col -->
-      <a href="<?php echo base_url() . "site/pekerjaan_semua"; ?>">
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h4>Pekerjaan Semua Pegawai</h4>
-
-
-            </div>
-            <div class="icon">
-            </div>
-            <a href="<?php echo base_url() . "site/pekerjaan_semua"; ?>" class="small-box-footer">Buka Menu <i class="fas fa-arrow-circle-right"></i></a>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"> <i class="fa fa-database nav-icon"></i>
+              Buat master pekerjaan dan tugaskan</h5>
+            <p class="card-text">Menyediakan fitur membuat daftar pekerjaan yang akan ditugaskan baik untuk diri sendiri maupun pegawai lainnya. Pekerjaan ini periodenya bulanan maupun lintas bulan.</p>
+            <a href="<?php echo base_url() . "site/pekerjaan_bulanan"; ?>" class="btn btn-primary">Buka Menu ..</a>
           </div>
-        </div>
-      </a>
-      <a href="<?php echo base_url() . "site/pekerjaan_bulanan"; ?>">
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-success">
-            <div class="inner">
-              <h4>Master Pekerjaan Saya</h4>
-
-            </div>
-            <div class="icon">
-            </div>
-            <a href="<?php echo base_url() . "site/pekerjaan_bulanan"; ?>" class="small-box-footer">Buka Menu <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-      </a> <!-- ./col -->
-    
-      <a href="<?php echo base_url() . "site/pekerjaan_saya"; ?>">
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h4>Pekerjaan Bulanan Saya</h4>
-
-
-            </div>
-            <div class="icon">
-            </div>
-            <a href="<?php echo base_url() . "site/pekerjaan_saya"; ?>" class="small-box-footer">Buka Menu <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-      </a>
-      <!-- ./col -->
-      <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-danger">
-          <div class="inner">
-            <h4>Profil Saya</h4>
-
-
-          </div>
-          <div class="icon">
-            <i class="ion ion-person-add"></i>
-          </div>
-          <a href="<?php echo base_url() . "site/profil"; ?>" class="small-box-footer">Buka Menu <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
-      <!-- ./col -->
     </div>
-  </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"> <i class="nav-icon fa fa-moon-o"></i>
+
+              Realisasi pekerjaan bulanan</h5>
+            <p class="card-text">Realisasikan volume dan tanggal penyelesaian semua pekerjaan di menu ini. Tersedia fitur cetak CKPT-CKPR.</p>
+            <a href="<?php echo base_url() . "site/pekerjaan_saya"; ?>"  class="btn btn-primary">Buka Menu ..</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"> <i class="fa fa-smile" aria-hidden="true"></i>
+              Lihat pekerjaan teman</h5>
+            <p class="card-text">Lihat pekerjaan semua pegawai di sini.</p>
+            <a href="<?php echo base_url() . "site/pekerjaan_semua"; ?>" class="btn btn-primary">Buka Menu ..</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"> <i class="fa fa-bar-chart nav-icon" aria-hidden="true"></i></i>
+                
+
+              Dashboard kinerja</h5>
+            <p class="card-text">Menampilkan grafik kinerja semua pegawai.</p>
+            <a href="<?php echo base_url() . "site/dashboard_kinerja"; ?>" class="btn btn-primary">Buka Menu ..</a>
+          </div>
+        </div>
+      </div>
+    </div>
+   </div>
   </div>

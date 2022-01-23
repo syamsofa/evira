@@ -9,7 +9,7 @@
                         <div class="card-tools">
                             <ul class="nav nav-pills ml-auto">
                                 <li class="nav-item">
-                                    <button onclick="bukaModalTambahPekerjaan('aa')" type="button" class="btn btn-primary btn-block"><i class="fa fa-bell"></i> Tambah</button>
+                                    <button onclick="bukaModalTambahPekerjaan('aa')" type="button" class="btn btn-primary btn-block"><i class="fa fa-plus-circle" aria-hidden="true"></i> Tambah</button>
                                 </li>
 
                             </ul>
@@ -141,7 +141,7 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Satuan</label>
                             <div class="col-sm-10">
-                                <select id="satuanId" required class="custom-select">
+                                <select id="satuanId" required class="select2 custom-select">
                                     <option value=''>--PILIH--</option>
                                     <?php
                                     foreach ($satuan['data'] as $rows) {
@@ -207,7 +207,7 @@
                         <p id="volumePekerjaanDetail" class="text-muted">
                             TESTES
                         <p class="text-muted">
-                            <button onclick="bukaModalTambahPenugasanPekerjaan()" type="button" class="btn btn-primary btn-sm"><i class="fa fa-bell"></i> Tambah Penugasan</button>
+                            <button onclick="bukaModalTambahPenugasanPekerjaan()" type="button" class="btn btn-primary btn-sm"><i class="fa fa-address-card" aria-hidden="true"></i> Tambah Penugasan</button>
 
                         </p>
 
@@ -265,7 +265,7 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Untuk Siapa?</label>
                             <div class="col-sm-10">
-                                <select id="penerimaPekerjaanId" required class="custom-select">
+                                <select id="penerimaPekerjaanId" required class="select3 custom-select">
                                     <option value=''>--PILIH--</option>
                                     <?php
                                     foreach ($pengguna['data'] as $rows) {
@@ -421,7 +421,7 @@
                         "" + outputDataBaris.PemberiTugas.data.Nama + "",
 
                         "" + outputDataBaris.Volume + "",
-                        "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + ","+RecId+")' class='btn btn-danger'>Hapus</button>"
+                        "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + "," + RecId + ")' class='btn btn-danger'>Hapus</button>"
                     ]);
                 } // End For
 
@@ -439,7 +439,7 @@
     function bukaModalPenugasanPekerjaan(RecId) {
         $('#modalPenugasanPekerjaan').modal('show');
         loadTabelPenugasanPekerjaan(RecId)
-                   
+
 
         $.ajax({
             type: "POST",
@@ -541,8 +541,8 @@
                             "" + outputDataBaris.Satuan + "",
                             "" + outputDataBaris.Nama + "",
                             "" + outputDataBaris.CreatedDate + "",
-                            "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary'>Edit" +
-                            "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary'>Penugasan"
+                            "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
+                            "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-tasks'>"
                         ]);
                     } // End For
 
@@ -584,7 +584,7 @@
                     $("#modalTambahPekerjaan").modal("hide")
                     loadTabelPekerjaan()
                     formTambahPekerjaan.reset()
-
+                    $('#satuanId').val(null).trigger('change');
 
                     loadSelectPekerjaan()
                 }
@@ -656,6 +656,8 @@
                     console.log(output)
                     loadTabelPenugasanPekerjaan(PekerjaanId)
                     $("#modalTambahPenugasanPekerjaan").modal('hide')
+                    
+                    $('#penerimaPekerjaanId').val(null).trigger('change');
 
                 }
             })
@@ -698,7 +700,7 @@
 </script>
 
 <script>
-    function hapusPenugasan(RecId,PekerjaanId) {
+    function hapusPenugasan(RecId, PekerjaanId) {
 
         Swal.fire({
             title: 'Anda yakin menghapusnya?',
@@ -722,7 +724,7 @@
 
                         console.log(output);
                         loadTabelPenugasanPekerjaan(PekerjaanId)
-                      
+
 
                     },
 
@@ -737,4 +739,20 @@
             }
         })
     }
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            dropdownParent: $("#modalTambahPekerjaan")
+        })
+
+    });
+    $(document).ready(function() {
+        $('.select3').select2({
+            dropdownParent: $("#modalTambahPenugasanPekerjaan")
+        })
+
+    });
 </script>

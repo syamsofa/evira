@@ -40,16 +40,19 @@ if ($this->session->userdata('Email') == null)
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-  
+
   <style>
-        html {
-            font-size: 14px;
-        }
-        .nav-item a p,.nav-item a,
-        table thead tr th,table tbody tr td  {
-            font-size: 14px;
-        }
-    </style>
+    html {
+      font-size: 14px;
+    }
+
+    .nav-item a p,
+    .nav-item a,
+    table thead tr th,
+    table tbody tr td {
+      font-size: 14px;
+    }
+  </style>
   <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
   <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -73,9 +76,9 @@ if ($this->session->userdata('Email') == null)
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script type="text/javascript" src="<?php echo base_url(); ?>framework/js/xtab.js"></script>
-<link rel="stylesheet" href="<?php echo base_url(); ?>framework/css/xtab.css"/>
+  <link rel="stylesheet" href="<?php echo base_url(); ?>framework/css/xtab.css" />
 
-  
+
 
 
 </head>
@@ -235,7 +238,7 @@ if ($this->session->userdata('Email') == null)
             </li>
             <li class="nav-item">
               <a href="<?php echo base_url(); ?>site/dashboard_kinerja" class="nav-link ">
-                <i class="fa fa-bar-chart" aria-hidden="true"></i></i>
+                <i class="fa fa-bar-chart nav-icon" aria-hidden="true"></i></i>
                 <p>
                   Dashboard Kinerja
 
@@ -246,7 +249,7 @@ if ($this->session->userdata('Email') == null)
 
             <li class="nav-item">
               <a href="<?php echo base_url(); ?>site/profil" class="nav-link">
-                <i class="fas fa-users"></i>
+                <i class="fas fa-user nav-icon"></i>
                 <p>
                   Profil Saya
 
@@ -254,22 +257,72 @@ if ($this->session->userdata('Email') == null)
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo base_url(); ?>site/laporan_harian" class="nav-link">
-                <i class="fas fa-save"></i>
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
                 <p>
-                  Laporan Harian
-
+                  Harian
+                  <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/laporan_harian" class="nav-link">
+                    <i class="fa fa-file-excel-o nav-icon" aria-hidden="true"></i>
+                    <p>
+                      Laporan Harian
+
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/rekap_laporan_harian" class="nav-link">
+                    <i class="fa fa-archive nav-icon"></i>
+                    <p>
+                      Rekap Laporan Harian
+
+                    </p>
+                  </a>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
-              <a href="<?php echo base_url(); ?>site/rekap_laporan_harian" class="nav-link">
-                <i class="fas fa-save"></i>
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-moon-o"></i>
                 <p>
-                  Rekap Laporan Harian
-
+                  Bulanan
+                  <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/pekerjaan_bulanan" class="nav-link">
+                    <i class="fa fa-database nav-icon"></i>
+                    <p>
+                      Master Pekerjaan & Penugasan
+
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/pekerjaan_saya" class="nav-link">
+                    <i class="fas fa-save nav-icon"></i>
+                    <p>
+                      Pekerjaan Saya
+
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/pekerjaan_semua" class="nav-link">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>
+                      Pekerjaan Semua Pegawai
+
+                    </p>
+                  </a>
+                </li>
+
+              </ul>
             </li>
 
             <?php
@@ -301,35 +354,8 @@ if ($this->session->userdata('Email') == null)
             ?>
 
             <li class="nav-item">
-              <a href="<?php echo base_url(); ?>site/pekerjaan_bulanan" class="nav-link">
-                <i class="fas fa-save"></i>
-                <p>
-                  Master Pekerjaan Saya
-
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="<?php echo base_url(); ?>site/pekerjaan_saya" class="nav-link">
-                <i class="fas fa-save"></i>
-                <p>
-                  Pekerjaan Yang Ditugaskan Ke Saya
-
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="<?php echo base_url(); ?>site/pekerjaan_semua" class="nav-link">
-                <i class="fas fa-save"></i>
-                <p>
-                  Pekerjaan Semua Pegawai
-
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
               <a href="<?php echo base_url(); ?>site/pegawai_bawahan" class="nav-link">
-                <i class="fas fa-users"></i>
+                <i class="fa fa-gift nav-icon"></i>
                 <p>
                   Nilai Untuk Bawahan
 
@@ -339,7 +365,7 @@ if ($this->session->userdata('Email') == null)
 
             <li class="nav-item">
               <a href="<?php echo base_url(); ?>site/logout" class="nav-link">
-                <i class='fas fa-sign-out-alt'></i>
+                <i class='fas fa-sign-out-alt nav-icon'></i>
                 <p>
                   Logout
 
@@ -402,3 +428,7 @@ if ($this->session->userdata('Email') == null)
 </body>
 
 </html>
+
+<link rel="stylesheet" href="<?php echo base_url(); ?>AdminLTE-master/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<script src="<?php echo base_url(); ?>AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
