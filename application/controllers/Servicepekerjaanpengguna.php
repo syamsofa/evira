@@ -66,7 +66,14 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
+    public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan_by_tim_penilai()
+    {
+        $dataInput = $this->input->post();
 
+        $output = $this->model_pekerjaan_bulanan_pengguna->read_pekerjaan_pengguna_by_pengguna_tahun_bulan_by_tim_penilai($dataInput);
+
+        echo json_encode($output);
+    }
     public function update_volume_realisasi_volume_by_id()
     {
         $dataInput = $this->input->post();
@@ -84,7 +91,15 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
+    public function update_penilaian_tim_penilai()
+    {
+        $dataInput = $this->input->post();
 
+        $output = $this->model_pekerjaan_bulanan_pengguna->update_penilaian_tim_penilai($dataInput);
+
+        echo json_encode($output);
+    }
+    
     public function testes()
     {
         // $templateLaporan = "./../../uploads/2021-11-01__Nia Aprillyana, S.ST, M.Si. (wfh).xlsx";

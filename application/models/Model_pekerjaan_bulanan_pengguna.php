@@ -77,6 +77,33 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         );
     }
 
+    public function update_penilaian_tim_penilai($dataInput)
+    {
+        // print_r($dataInput);
+        // print_r($dataInput);
+        $this->db->query("update penilaian_tim set Nilai=?  where IdPenilai=? and IdPekerjaanPengguna=?
+		", array($dataInput['Nilai'],$dataInput['IdPenilai'], $dataInput['RecId']));
+
+
+        $afftectedRows = $this->db->affected_rows();
+        if ($afftectedRows == 1) {
+            // $this->model_log_pekerjaan_pengguna->create_log_pekerjaan_bulanan_pengguna($dataInput);
+            return array(
+                'sukses' => true,
+                'data' => $dataInput
+            );
+        } else {
+
+            $this->db->query("insert into penilaian_tim (Nilai,IdPenilai,IdPekerjaanPengguna) values (?,?,?)
+            ", array($dataInput['Nilai'],$dataInput['IdPenilai'], $dataInput['RecId']));
+    
+    
+            return array(
+                'sukses' => false,
+                'data' => $dataInput
+            );
+        }
+    }
     public function update_penilaian_atasan_by_id($dataInput)
     {
         // print_r($dataInput);
@@ -102,7 +129,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     public function update_volume_realisasi_volume_by_id($dataInput)
     {
 
-     
+
         $this->db->query("update pekerjaan_bulanan_pengguna set VolumeRealisasi=?, TanggalRealisasi=?,ModifiedDate=?,ModifiedBy=? where RecId=?
 		", array($dataInput['VolumeRealisasi'], $this->fungsi->ubahFormatTanggal($dataInput['TanggalRealisasi']), "2022-01-12 09:43:43", $this->session->userdata('RecId'), $dataInput['RecId']));
 
@@ -121,24 +148,35 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         }
     }
 
+
+    public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan_by_tim_penilai($dataInput)
+    {
+
+        return   $this->read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput);
+    }
     public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput)
     {
-        $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan  ,
+        $query_tambahan="";
+        if(isset($dataInput['PenilaiId']))
+            $query_tambahan="and f.IdPenilai=".$dataInput['PenilaiId'];
+        $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan,
         DATE(a.TanggalMulai) as TanggalMulai,DATE(a.TanggalSelesai) as TanggalSelesai,
-        d.Deskripsi,e.Satuan
+        d.Deskripsi,e.Satuan,f.Nilai
          from pekerjaan_bulanan_pengguna a
         left join pengguna b on b.RecId=a.PenerimaPekerjaanId
         left join pengguna c on c.RecId=a.PemberiPekerjaanId
         left join pekerjaan_bulanan d on d.RecId=a.PekerjaanId     
         left join satuan e on d.SatuanId=e.RecId   
+        
+        left join penilaian_tim f on a.RecId=f.IdPekerjaanPengguna
+        $query_tambahan
          where a.PenerimaPekerjaanId=?
          and 
 (         MONTH(a.TanggalMulai)=?
          or
          MONTH(a.TanggalSelesai)=?
        )
-       and YEAR(a.TanggalSelesai)=?
-       ;
+       and YEAR(a.TanggalSelesai)=?;
 		", array($dataInput['PenerimaPekerjaanId'], $dataInput['Bulan'], $dataInput['Bulan'], $dataInput['Tahun']));
         $dataPerBaris = array();
 
@@ -250,7 +288,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     public function create_pekerjaan_pengguna($dataInput)
     {
         date_default_timezone_set('Asia/Jakarta');
-        
+
         $rangeTanggal = $dataInput['RangeTanggal'];
         $rangeTanggal = str_replace(" ", "", $rangeTanggal);
         $arrTanggal = explode("-", $rangeTanggal);

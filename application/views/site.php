@@ -180,7 +180,7 @@ if ($this->session->userdata('Email') == null)
             foreach ($detailPengguna['data']['DataRole']['data'] as $row) {
             ?>
               <a href="<?php echo base_url() . '/servicepengguna/ubah_role?RoleId=' . $row['RecId'] . '&Role=' . $row['Role'] . '&PenggunaId=' . $row['PenggunaId']; ?>" class="dropdown-item">
-                <i class="fas fa-envelope mr-2"></i><?php echo $row['Role'] ?>
+                <i class="fas fa-user mr-2"></i><?php echo $row['Role'] ?>
               </a>
 
               <div class="dropdown-divider"></div>
@@ -332,7 +332,7 @@ if ($this->session->userdata('Email') == null)
             ?>
               <li class="nav-item">
                 <a href="<?php echo base_url(); ?>site/satuan" class="nav-link">
-                  <i class="fas fa-save"></i>
+                  <i class="fas fa-save nav-icon"></i>
                   <p>
                     Satuan
 
@@ -341,7 +341,7 @@ if ($this->session->userdata('Email') == null)
               </li>
               <li class="nav-item">
                 <a href="<?php echo base_url(); ?>site/pengguna" class="nav-link">
-                  <i class="fas fa-users"></i>
+                  <i class="fas fa-users nav-icon"></i>
                   <p>
                     Pengguna
 
@@ -352,17 +352,23 @@ if ($this->session->userdata('Email') == null)
             <?php
             }
             ?>
+            <?php
 
-            <li class="nav-item">
-              <a href="<?php echo base_url(); ?>site/pegawai_bawahan" class="nav-link">
-                <i class="fa fa-gift nav-icon"></i>
-                <p>
-                  Nilai Untuk Bawahan
+            if ($this->session->userdata('RoleIdAktif') == 3) {
 
-                </p>
-              </a>
-            </li>
+            ?>
+              <li class="nav-item">
+                <a href="<?php echo base_url(); ?>site/penilaian_dari_saya" class="nav-link">
+                  <i class="fa fa-gift nav-icon"></i>
+                  <p>
+                    Penilaian Saya untuk Pegawai
 
+                  </p>
+                </a>
+              </li>
+            <?php
+            }
+            ?>
             <li class="nav-item">
               <a href="<?php echo base_url(); ?>site/logout" class="nav-link">
                 <i class='fas fa-sign-out-alt nav-icon'></i>
