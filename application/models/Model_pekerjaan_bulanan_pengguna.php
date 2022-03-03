@@ -16,7 +16,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     }
     public function read_pekerjaan_pengguna_by_pekerjaan($dataInput)
     {
-        $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan  from pekerjaan_bulanan_pengguna a
+        $query = $this->db->query("select a.*,CONVERT(a.TanggalMulai, DATE) as TanggalMulaiFormatted,CONVERT(a.TanggalSelesai, DATE) as TanggalSelesaiFormatted, b.Nama as NamaPenerimaPekerjaan  from pekerjaan_bulanan_pengguna a
         left join pengguna b on b.RecId=a.PenerimaPekerjaanId
          where a.PekerjaanId=?
 		", array($dataInput['RecId']));
@@ -82,7 +82,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         // print_r($dataInput);
         // print_r($dataInput);
         $this->db->query("update penilaian_tim set Nilai=?  where IdPenilai=? and IdPekerjaanPengguna=?
-		", array($dataInput['Nilai'],$dataInput['IdPenilai'], $dataInput['RecId']));
+		", array($dataInput['Nilai'], $dataInput['IdPenilai'], $dataInput['RecId']));
 
 
         $afftectedRows = $this->db->affected_rows();
@@ -95,9 +95,9 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         } else {
 
             $this->db->query("insert into penilaian_tim (Nilai,IdPenilai,IdPekerjaanPengguna) values (?,?,?)
-            ", array($dataInput['Nilai'],$dataInput['IdPenilai'], $dataInput['RecId']));
-    
-    
+            ", array($dataInput['Nilai'], $dataInput['IdPenilai'], $dataInput['RecId']));
+
+
             return array(
                 'sukses' => false,
                 'data' => $dataInput
@@ -156,9 +156,9 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     }
     public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput)
     {
-        $query_tambahan="";
-        if(isset($dataInput['PenilaiId']))
-            $query_tambahan="and f.IdPenilai=".$dataInput['PenilaiId'];
+        $query_tambahan = "";
+        if (isset($dataInput['PenilaiId']))
+            $query_tambahan = "and f.IdPenilai=" . $dataInput['PenilaiId'];
         $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan,
         DATE(a.TanggalMulai) as TanggalMulai,DATE(a.TanggalSelesai) as TanggalSelesai,
         d.Deskripsi,e.Satuan,f.Nilai
@@ -306,29 +306,37 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
             $dataInput['TanggalSelesai']
         );
 
-        $cekDuplikat = $this->cek_duplikat_pekerjaan_bulanan_pengguna($dataInput);
-
-        if ($cekDuplikat['data']['JumlahRecord'] == 0) {
-            $this->db->query(
-                "insert into pekerjaan_bulanan_pengguna (PenerimaPekerjaanId,PemberiPekerjaanId,PekerjaanId,Volume,CreatedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?)  ",
-                $dataToSave
+        // $cekDuplikat = $this->cek_duplikat_pekerjaan_bulanan_pengguna($dataInput);
+        // $cekDuplikat=0;
+        // if ($cekDuplikat['data']['JumlahRecord'] == 0) {
+        $this->db->query(
+            "insert into pekerjaan_bulanan_pengguna (PenerimaPekerjaanId,PemberiPekerjaanId,PekerjaanId,Volume,CreatedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?)  ",
+            $dataToSave
+        );
+        $afftectedRows = $this->db->affected_rows();
+        if ($afftectedRows == 1) {
+            return array(
+                'sukses' => true,
+                'data' => $dataInput
             );
-            $afftectedRows = $this->db->affected_rows();
-            if ($afftectedRows == 1) {
-                return array(
-                    'sukses' => true,
-                    'data' => $dataInput
-                );
-            } else
-                return array(
-                    'sukses' => false,
-                    'data' => $dataInput
-                );
         } else
             return array(
                 'sukses' => false,
-                'data' => ["Pesan" => "Terjadi Duplikat Data. Tidak Tersimpan"]
+                'data' => $dataInput
             );
+        // } else
+        //     return array(
+        //         'sukses' => false,
+        //         'data' => ["Pesan" => "Terjadi Duplikat Data. Tidak Tersimpan"]
+        //     );
+    }
+
+    public function ubah_volume_pekerjaan_pengguna_by_id($dataInput)
+    {
+        // print_r($dataInput);
+        $this->db->query("update pekerjaan_bulanan_pengguna 
+     set Volume=?    where RecId=?
+		", array($dataInput['Volume'], $dataInput['RecId']));
     }
     public function delete_pekerjaan_pengguna_by_id($dataInput)
     {

@@ -41,6 +41,71 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="modalEditPenugasan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="formEditPekerjaan" class="form-horizontal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Pekerjaan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="card-body">
+                        <input type="hidden" class="form-control" id="recIdEdit" placeholder="Email">
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="deskripsiEdit" placeholder="Deskripsi">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Volume</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="volumeEdit" placeholder="Volume">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Tanggal </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control rangeTanggal" id="rangeTanggalEdit" value="" />
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Satuan</label>
+                            <div class="col-sm-10">
+                                <select id="satuanIdEdit" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($satuan['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Satuan']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="modalEditPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -219,7 +284,7 @@
                                     <tr>
                                         <th>Penerima Pekerjaan</th>
                                         <th>Tanggal Penerimaan Tugas</th>
-                                        <th>Pemberi Tugas</th>
+                                        <th>Durasi Pekerjaan</th>
                                         <th>Volume</th>
                                         <th></th>
                                     </tr>
@@ -407,6 +472,7 @@
 
             },
             success: function(output) {
+                console.log(output)
                 TabelPenugasanPekerjaan.fnClearTable();
 
                 outputData = output.data
@@ -418,9 +484,9 @@
                     TabelPenugasanPekerjaan.fnAddData([
                         "" + outputDataBaris.NamaPenerimaPekerjaan + "",
                         "" + outputDataBaris.CreatedDate + "",
-                        "" + outputDataBaris.PemberiTugas.data.Nama + "",
+                        "" + outputDataBaris.TanggalMulaiFormatted + " s/d " + outputDataBaris.TanggalSelesaiFormatted,
 
-                        "" + outputDataBaris.Volume + "",
+                        "<input onchange='ubahVolumePenugasan(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;' value='" + outputDataBaris.Volume + "'>",
                         "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + "," + RecId + ")' class='btn btn-danger'>Hapus</button>"
                     ]);
                 } // End For
@@ -436,7 +502,35 @@
     }
 </script>
 <script>
+    function ubahVolumePenugasan(value, baris,pekerjaanId) {
+        console.log(value, baris)
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/Servicepekerjaanpengguna/ubah_volume_pekerjaan_pengguna_by_id',
+            data: {
+                Volume: value,
+                RecId:baris
+            },
+            dataType: 'json',
+            success: function(output) {
+                loadTabelPenugasanPekerjaan(pekerjaanId)
+
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
+    }
+</script>
+
+<script>
     function bukaModalPenugasanPekerjaan(RecId) {
+
         $('#modalPenugasanPekerjaan').modal('show');
         loadTabelPenugasanPekerjaan(RecId)
 
@@ -469,10 +563,17 @@
         });
 
     }
+
+    function bukaModalEditPenugasanPekerjaan(RecId) {
+
+        $('#modalEditPenugasan').modal('show');
+
+    }
 </script>
 <script>
     function bukaModalEditPekerjaan(RecId) {
         $('#modalEditPekerjaan').modal('show');
+
         $.ajax({
             type: "POST",
             async: false,
@@ -656,7 +757,7 @@
                     console.log(output)
                     loadTabelPenugasanPekerjaan(PekerjaanId)
                     $("#modalTambahPenugasanPekerjaan").modal('hide')
-                    
+
                     $('#penerimaPekerjaanId').val(null).trigger('change');
 
                 }
