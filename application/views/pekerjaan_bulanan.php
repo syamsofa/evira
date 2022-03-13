@@ -503,7 +503,7 @@
 </script>
 <script>
     function ubahVolumePenugasan(value, baris,pekerjaanId) {
-        console.log(value, baris)
+        // console.log(value, baris)
         $.ajax({
             type: "POST",
             async: false,
@@ -515,6 +515,7 @@
             dataType: 'json',
             success: function(output) {
                 loadTabelPenugasanPekerjaan(pekerjaanId)
+                
 
 
             },
@@ -756,9 +757,9 @@
                 success: function(output) {
                     console.log(output)
                     loadTabelPenugasanPekerjaan(PekerjaanId)
-                    $("#modalTambahPenugasanPekerjaan").modal('hide')
+                    // $("#modalTambahPenugasanPekerjaan").modal('hide')
 
-                    $('#penerimaPekerjaanId').val(null).trigger('change');
+                    // $('#penerimaPekerjaanId').val(null).trigger('change');
 
                 }
             })
