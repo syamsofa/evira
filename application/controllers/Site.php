@@ -166,7 +166,10 @@ class Site extends CI_Controller
 			'satuan' => $this->satuan,
 			'pengguna' => $this->pengguna,
 			'pekerjaan' => $this->pekerjaan,
-			'pekerjaanByPengguna' => $this->pekerjaanByPengguna
+			'pekerjaanByPengguna' => $this->pekerjaanByPengguna,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan
+
 
 
 		);

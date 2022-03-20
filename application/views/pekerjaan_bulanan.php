@@ -5,6 +5,7 @@
             <div class="col-md-12">
                 <!-- Default box -->
                 <div class="card">
+
                     <div class="card-header ui-sortable-handle" style="cursor: move;">
                         <div class="card-tools">
                             <ul class="nav nav-pills ml-auto">
@@ -18,6 +19,44 @@
 
                     </div>
                     <div class="card-body">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Tahun Pembuatan</label>
+                            <div class="col-sm-10">
+                                <select id="tahunPekerjaan" onchange="loadTabelPekerjaan()" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($tahun['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['Tahun']; ?>'><?php echo $rows['Tahun']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Bulan Pembuatan</label>
+                            <div class="col-sm-10">
+                                <select onchange="loadTabelPekerjaan()" id="bulanPekerjaan" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($bulan['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Bulan']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="table-responsive card-body p-0" style="display: block;">
                             <table id="TabelPekerjaan" class="table table-bordered table-striped">
                                 <thead>
@@ -502,7 +541,7 @@
     }
 </script>
 <script>
-    function ubahVolumePenugasan(value, baris,pekerjaanId) {
+    function ubahVolumePenugasan(value, baris, pekerjaanId) {
         // console.log(value, baris)
         $.ajax({
             type: "POST",
@@ -510,12 +549,12 @@
             url: '<?php echo base_url(); ?>/Servicepekerjaanpengguna/ubah_volume_pekerjaan_pengguna_by_id',
             data: {
                 Volume: value,
-                RecId:baris
+                RecId: baris
             },
             dataType: 'json',
             success: function(output) {
                 loadTabelPenugasanPekerjaan(pekerjaanId)
-                
+
 
 
             },
@@ -600,15 +639,12 @@
 
             }
         });
-        loadTabelPenugasanPekerjaan(RecId)
+        // loadTabelPenugasanPekerjaan(RecId)
 
     }
 </script>
 <script>
-    $(document).ready(function() {
-
-
-        function loadTabelPekerjaan() {
+    function loadTabelPekerjaan() {
             var TabelPekerjaan = $("#TabelPekerjaan").dataTable({
                 destroy: true,
                 dom: 'Bfrtip',
@@ -622,10 +658,12 @@
             $.ajax({
                 type: "POST",
                 async: false,
-                url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_pengguna',
+                url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_pengguna_by_tahun_by_bulan',
                 dataType: 'json',
                 data: {
-                    PenggunaId: <?php echo $this->session->userdata('RecId'); ?>
+                    PenggunaId: <?php echo $this->session->userdata('RecId'); ?>,
+                    Tahun: $("#tahunPekerjaan").val(),
+                    Bulan: $("#bulanPekerjaan").val()
 
                 },
                 success: function(output) {
@@ -656,6 +694,10 @@
                 }
             });
         }
+    $(document).ready(function() {
+
+
+        
 
 
 

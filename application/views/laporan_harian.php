@@ -67,7 +67,7 @@
                             <th>File</th>
                             <th>Lihat</th>
 
-                            <th>Tipe WFO/WFH</th>
+                            <th>Tipe WFO/WFH/Cuti</th>
                             <th>Waktu Upload</th>
                             <th></th>
 
@@ -107,6 +107,18 @@
 
                         <input type="hidden" class="form-control" id="idPengguna" value="<?php echo $this->session->userdata('RecId');  ?>">
                         <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Jenis (WFO/WFH/Cuti)</label>
+                            <div class="col-sm-10">
+                                <select required id="jenisKehadiran" onchange="setAtribut(this.value)" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <option value='wfh'>WFH</option>
+                                    <option value='wfo'>WFO</option>
+                                    <option value='cuti'>CUTI</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Tanggal </label>
                             <div class="col-sm-10">
                                 <input type="text" required class="form-control tanggal" autocomplete="off" id="tanggalPekerjaan" value="" />
@@ -123,17 +135,6 @@
                                     </div>
 
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Jenis (WFO/WFH)</label>
-                            <div class="col-sm-10">
-                                <select required id="jenisKehadiran" required class="custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <option value='wfh'>WFH</option>
-                                    <option value='wfo'>WFO</option>
-
-                                </select>
                             </div>
                         </div>
 
@@ -258,8 +259,7 @@
                 {
 
                     className: "text-center"
-                }
-                ,
+                },
                 {
 
                     className: "text-center"
@@ -310,15 +310,22 @@
                         () => {
                             if (outputDataBaris.Upload.JumUpload > 0) {
 
-                                return "<a href='" + outputDataBaris.Upload.Data.Tautan + "'><i class='fa fa-file-text' aria-hidden='true'></i> Tersedia</a>"
+                                if (outputDataBaris.Upload.Data.JenisKehadiran == 'cuti')
+                                    return "CUTI"
+                                else
+
+                                    return "<a href='" + outputDataBaris.Upload.Data.Tautan + "'><i class='fa fa-file-text' aria-hidden='true'></i> Tersedia</a>"
                             } else
                                 return '-'
                             // 
                         },
                         () => {
                             if (outputDataBaris.Upload.JumUpload > 0) {
+                                if (outputDataBaris.Upload.Data.JenisKehadiran == 'cuti')
+                                    return "CUTI"
+                                else
 
-                                return "<button class='btn-success' data-toggle='tooltipView' data-placement='top' title='Lihat Laporan Secara Live' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> </button>"
+                                    return "<button class='btn-success' data-toggle='tooltipView' data-placement='top' title='Lihat Laporan Secara Live' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> </button>"
                             } else
                                 return '-'
                             // 
@@ -333,21 +340,27 @@
                         },
                         () => {
                             if (outputDataBaris.Upload.JumUpload > 0) {
+                                if (outputDataBaris.Upload.Data.JenisKehadiran == 'cuti')
+                                    return "CUTI"
+                                else
 
-                                return outputDataBaris.Upload.Data.CreatedDate
+                                    return outputDataBaris.Upload.Data.CreatedDate
                             } else
                                 return '-'
                             // 
                         },
                         () => {
                             if (outputDataBaris.Upload.JumUpload > 0) {
+                                if (outputDataBaris.Upload.Data.JenisKehadiran == 'cuti')
+                                    return "CUTI"
+                                else
 
-                                return "<button class='btn-danger' data-toggle='tooltipHapus' data-placement='top' title='Hapus Laporan' onclick='hapusLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-trash' aria-hidden='true'></i> </button>"
+                                    return "<button class='btn-danger' data-toggle='tooltipHapus' data-placement='top' title='Hapus Laporan' onclick='hapusLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-trash' aria-hidden='true'></i> </button>"
                             } else
                                 return '-'
                             // 
                         },
- 
+
                         // "" + outputDataBaris.CreatedDate + "",
                         // " Realisasi Volume Diubah dari " + outputDataBaris.VolumePraRealisasi + " MenJadi " + outputDataBaris.VolumeRealisasi + ""
 
@@ -458,7 +471,7 @@
 
             }
         });
-        
+
 
     }
 </script>
@@ -575,4 +588,24 @@
 
 
     });
+</script>
+
+<script>
+    function setAtribut(jenis)
+    {
+        // alert(jenis)
+        if(jenis=='cuti')
+        {
+            // $( "#tanggalPekerjaan" ).prop( "disabled", true );
+            $( "#fileLaporan" ).prop( "disabled", true );
+            
+
+        }
+        else
+        {
+            $( "#fileLaporan" ).prop( "disabled", false);
+            
+        }
+
+    }
 </script>
