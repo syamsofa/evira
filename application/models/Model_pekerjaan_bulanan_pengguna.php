@@ -180,6 +180,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
 		", array($dataInput['PenerimaPekerjaanId'], $dataInput['Bulan'], $dataInput['Bulan'], $dataInput['Tahun']));
         $dataPerBaris = array();
 
+        $jumKegiatan = 0;
         $jumPersentaseKetepatanWaktu = 0;
 
         $jumPersentaseRealisasiVolume = 0;
@@ -225,6 +226,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
             // $row['PersentaseKetepatanWaktu'] = $row['SelisihRealisasiDanTarget'];
             // ,
             $urut++;
+            $jumKegiatan = $jumKegiatan + 1;
             $jumPersentaseRealisasiVolume = $jumPersentaseRealisasiVolume + $row['PersentaseRealisasiVolume'];
             $jumPersentasePenilaianAtasan = $jumPersentasePenilaianAtasan + $row['PenilaianAtasan'];
             $jumPersentaseKetepatanWaktu = $jumPersentaseKetepatanWaktu + $row['SelisihRealisasiDanTarget'];
@@ -252,7 +254,8 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
                     "rerataPersentaseRealisasiVolume" => $rerataPersentaseRealisasiVolume,
                     "rerataPersentasePenilaianAtasan" => $rerataPersentasePenilaianAtasan,
                     "rerataPersentaseKetepatanWaktu" => $rerataPersentaseKetepatanWaktu,
-                    "rerataPersentaseKinerja" => $rerataPersentaseKetepatanWaktu + $rerataPersentaseRealisasiVolume
+                    "rerataPersentaseKinerja" => $rerataPersentaseKetepatanWaktu + $rerataPersentaseRealisasiVolume,
+                    "jumKegiatan" => $jumKegiatan
                 )
             )
         );

@@ -80,71 +80,6 @@
         </div>
     </div>
 </section>
-<div class="modal fade" id="modalEditPenugasan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="formEditPekerjaan" class="form-horizontal">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Pekerjaan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="card-body">
-                        <input type="hidden" class="form-control" id="recIdEdit" placeholder="Email">
-                        <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" required id="deskripsiEdit" placeholder="Deskripsi">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Volume</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" required id="volumeEdit" placeholder="Volume">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Tanggal </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control rangeTanggal" id="rangeTanggalEdit" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Satuan</label>
-                            <div class="col-sm-10">
-                                <select id="satuanIdEdit" required class="custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <?php
-                                    foreach ($satuan['data'] as $rows) {
-
-                                    ?>
-
-                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Satuan']; ?></option>
-
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="modalEditPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -300,16 +235,13 @@
 
                         <hr>
 
-                        <strong><i class="fas fa-book mr-1"></i> Satuan Pekerjaan</strong>
+                        <strong><i class="fas fa-book mr-1"></i> Volume dan Satuan</strong>
 
                         <p id="satuanPekerjaanDetail" class="text-muted">
                             TESTES
                         </p>
 
                         <hr>
-                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Volume</strong>
-                        <p id="volumePekerjaanDetail" class="text-muted">
-                            TESTES
                         <p class="text-muted">
                             <button onclick="bukaModalTambahPenugasanPekerjaan()" type="button" class="btn btn-primary btn-sm"><i class="fa fa-address-card" aria-hidden="true"></i> Tambah Penugasan</button>
 
@@ -465,6 +397,8 @@
     function loadTabelPenugasanPekerjaan(RecId) {
 
         var TabelPenugasanPekerjaan = $("#TabelPenugasanPekerjaan").dataTable({
+            "scrollY": "200px",
+            "scrollCollapse": true,
             columns: [{
 
                     className: "text-center"
@@ -588,8 +522,7 @@
                 console.log(output);
                 data = output.data[0]
                 $("#namaPekerjaanDetail").html(data['Deskripsi'])
-                $("#volumePekerjaanDetail").html(data['Volume'])
-                $("#satuanPekerjaanDetail").html(data['Satuan'])
+                $("#satuanPekerjaanDetail").html(data['Volume'] + ' ' + data['Satuan'])
                 $("#pekerjaanId").val(data['RecId'])
                 $("#rangeTanggalPenugasan").val(data['RangeTanggal'])
 
@@ -624,8 +557,9 @@
             dataType: 'json',
             success: function(output) {
 
-                console.log(output);
                 data = output.data[0]
+                console.log(data);
+
                 $("#recIdEdit").val(data.RecId)
                 $("#satuanIdEdit").val(data.SatuanId)
                 $("#deskripsiEdit").val(data.Deskripsi)
@@ -645,59 +579,59 @@
 </script>
 <script>
     function loadTabelPekerjaan() {
-            var TabelPekerjaan = $("#TabelPekerjaan").dataTable({
-                destroy: true,
-                dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            });
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_pengguna_by_tahun_by_bulan',
-                dataType: 'json',
-                data: {
-                    PenggunaId: <?php echo $this->session->userdata('RecId'); ?>,
-                    Tahun: $("#tahunPekerjaan").val(),
-                    Bulan: $("#bulanPekerjaan").val()
+        var TabelPekerjaan = $("#TabelPekerjaan").dataTable({
+            destroy: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_pengguna_by_tahun_by_bulan',
+            dataType: 'json',
+            data: {
+                PenggunaId: <?php echo $this->session->userdata('RecId'); ?>,
+                Tahun: $("#tahunPekerjaan").val(),
+                Bulan: $("#bulanPekerjaan").val()
 
-                },
-                success: function(output) {
-                    TabelPekerjaan.fnClearTable();
+            },
+            success: function(output) {
+                TabelPekerjaan.fnClearTable();
 
-                    outputData = output.data
-                    for (var i = 0; i < outputData.length; i++) {
+                outputData = output.data
+                for (var i = 0; i < outputData.length; i++) {
 
-                        outputDataBaris = outputData[i]
-                        j = i + 1
+                    outputDataBaris = outputData[i]
+                    j = i + 1
 
-                        TabelPekerjaan.fnAddData([
-                            "" + outputDataBaris.Deskripsi + "",
-                            "" + outputDataBaris.Volume + "",
-                            "" + outputDataBaris.Satuan + "",
-                            "" + outputDataBaris.Nama + "",
-                            "" + outputDataBaris.CreatedDate + "",
-                            "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
-                            "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-tasks'>"
-                        ]);
-                    } // End For
+                    TabelPekerjaan.fnAddData([
+                        "" + outputDataBaris.Deskripsi + "",
+                        "" + outputDataBaris.Volume + "",
+                        "" + outputDataBaris.Satuan + "",
+                        "" + outputDataBaris.Nama + "",
+                        "" + outputDataBaris.CreatedDate + "",
+                        "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
+                        "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-tasks'>"
+                    ]);
+                } // End For
 
-                },
+            },
 
-                error: function(e) {
-                    console.log(e.responseText);
+            error: function(e) {
+                console.log(e.responseText);
 
-                }
-            });
-        }
+            }
+        });
+    }
     $(document).ready(function() {
 
 
-        
+
 
 
 
@@ -799,6 +733,11 @@
                 success: function(output) {
                     console.log(output)
                     loadTabelPenugasanPekerjaan(PekerjaanId)
+                    if(output.sukses==true)
+                    Swal.fire('Berhasil tambah penugasan', '', 'success')
+                    else
+                    Swal.fire('Gagal tambah penugasan', '', 'error')
+
                     // $("#modalTambahPenugasanPekerjaan").modal('hide')
 
                     // $('#penerimaPekerjaanId').val(null).trigger('change');
@@ -877,7 +816,7 @@
 
                     }
                 });
-                Swal.fire('Saved!', '', 'success')
+                Swal.fire('Terhapus', '', 'success')
             } else if (result.isDenied) {
                 Swal.fire('Tidak jadi dihapus', '', 'info')
             }

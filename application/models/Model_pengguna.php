@@ -75,7 +75,9 @@ class Model_pengguna extends CI_Model
 		$query = $this->db->query("select a.*,b.OpsiLogin,c.Nama as NamaSatker,d.Nama as NamaOrganisasi 
 		from pengguna a left join opsi_login b on a.OpsiLoginId=b.RecId
 		left join satker c on c.RecId=a.SatkerId
-		left join organisasi d on d.RecId=a.OrganisasiId;
+		left join organisasi d on d.RecId=a.OrganisasiId
+		order by a.Nama
+		;
 		", array());
 		$data = array();
 

@@ -35,7 +35,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Bulan</label>
                 <div class="col-sm-10">
-                    <select  id="bulanPekerjaan" required class="custom-select">
+                    <select id="bulanPekerjaan" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($bulan['data'] as $rows) {
@@ -53,7 +53,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Pegawai</label>
                 <div class="col-sm-10">
-                    <select  id="idPengguna" required class="custom-select">
+                    <select id="idPengguna" required class="custom-select">
                         <option value=''>--PILIH--</option>
                     </select>
                 </div>
@@ -70,6 +70,7 @@
                         <tr>
                             <th>Nama Kegiatan</th>
                             <th>Pemberi Tugas</th>
+                            <th>Satuan</th>
                             <th>Target</th>
                             <th>Realisasi</th>
                             <th>Persentase</th>
@@ -365,6 +366,10 @@
                 {
 
                     className: "text-center"
+                },
+                {
+
+                    className: "text-center"
                 }
 
             ],
@@ -382,6 +387,10 @@
         $('title').text('Pekerjaan_' + $("#tahunPekerjaan").val() + '_bulan_' + $("#bulanPekerjaan").val())
         var TabelPekerjaanSaya = $("#TabelPekerjaanSaya").dataTable({
             columns: [{
+
+                    className: "text-center"
+                },
+                {
 
                     className: "text-center"
                 },
@@ -455,6 +464,7 @@
                     TabelPekerjaanSaya.fnAddData([
                         "" + outputDataBaris.Deskripsi + "",
                         "" + outputDataBaris.NamaPemberiPekerjaan + "",
+                        "" + outputDataBaris.Satuan + "",
 
                         "" + outputDataBaris.Volume + "",
                         "" + outputDataBaris.VolumeRealisasi + "",
@@ -844,15 +854,15 @@
         async: false,
         url: '<?php echo base_url(); ?>/servicepengguna/read_pengguna',
         dataType: 'json',
-        
+
         success: function(output) {
             console.log(output.data)
 
             output.data.forEach(element => {
-                $('#idPengguna').append("<option value='"+element.RecId+"'>"+element.Nama+"</option>")
-                
+                $('#idPengguna').append("<option value='" + element.RecId + "'>" + element.Nama + "</option>")
+
             });
-           
+
         },
 
         error: function(e) {
