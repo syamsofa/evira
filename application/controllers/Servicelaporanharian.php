@@ -124,6 +124,31 @@ class Servicelaporanharian extends CI_Controller
                 $outputRespon = ["sukses" => false, "pesan" => "Ekstensi tidak diizinkan. Harus Xls/Xlsx"];
         }
 
+        else
+        {
+            $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
+                
+            $dataInput = [
+                "Tanggal" => $input['TanggalPekerjaan'],
+                "NamaFile" => '-',
+                "CreatedDate" => $this->now,
+                "JenisKehadiran" => $input['JenisKehadiran'],
+                "Pengguna" => [
+                    "IdPengguna" => $input['IdPengguna'],
+                    "NipLama" => $dataPenggunaRinci['NipLama'],
+                    "Nama" => $dataPenggunaRinci['Nama']
+                ],
+                "CreatedBy" => $this->session->userdata('RecId'),
+                "Ekstensi" => '-',
+                // "Base64" => base64_encode(file_get_contents($_FILES['file']['tmp_name']))
+                "Base64" => ''
+
+            ];
+            // print_r($dataInput);
+            $output = $this->model_laporan_harian->create_laporan_harian($dataInput);
+            $outputRespon = $output;
+            
+        }
         // print_r($dataInput);
         echo json_encode($outputRespon);
     }

@@ -67,7 +67,7 @@ class Site extends CI_Controller
 	{
 		$data = array(
 			'menu' => $this->uri->segment(2),
-			'judul' => 'Dashboard Kinerja',
+			'judul' => 'Dashboard Kinerja dan Kegiatan',
 			'role_by_pengguna' => $this->roleByPengguna,
 			'detailPengguna' => $this->detailPengguna,
 			'satker' => $this->satker,
@@ -166,7 +166,10 @@ class Site extends CI_Controller
 			'satuan' => $this->satuan,
 			'pengguna' => $this->pengguna,
 			'pekerjaan' => $this->pekerjaan,
-			'pekerjaanByPengguna' => $this->pekerjaanByPengguna
+			'pekerjaanByPengguna' => $this->pekerjaanByPengguna,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan
+
 
 
 		);

@@ -1,3 +1,8 @@
+<script>
+    var globalVolumeTotal = 0;
+    var globalVolumeTotalDinamis = 0;
+</script>
+
 <section class="content">
     <div class="container-fluid">
 
@@ -5,6 +10,7 @@
             <div class="col-md-12">
                 <!-- Default box -->
                 <div class="card">
+
                     <div class="card-header ui-sortable-handle" style="cursor: move;">
                         <div class="card-tools">
                             <ul class="nav nav-pills ml-auto">
@@ -18,6 +24,44 @@
 
                     </div>
                     <div class="card-body">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Tahun Pembuatan</label>
+                            <div class="col-sm-10">
+                                <select id="tahunPekerjaan" onchange="loadTabelPekerjaan()" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($tahun['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['Tahun']; ?>'><?php echo $rows['Tahun']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Bulan Pembuatan</label>
+                            <div class="col-sm-10">
+                                <select onchange="loadTabelPekerjaan()" id="bulanPekerjaan" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($bulan['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Bulan']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="table-responsive card-body p-0" style="display: block;">
                             <table id="TabelPekerjaan" class="table table-bordered table-striped">
                                 <thead>
@@ -41,71 +85,6 @@
         </div>
     </div>
 </section>
-<div class="modal fade" id="modalEditPenugasan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="formEditPekerjaan" class="form-horizontal">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Pekerjaan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="card-body">
-                        <input type="hidden" class="form-control" id="recIdEdit" placeholder="Email">
-                        <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" required id="deskripsiEdit" placeholder="Deskripsi">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Volume</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" required id="volumeEdit" placeholder="Volume">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Tanggal </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control rangeTanggal" id="rangeTanggalEdit" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Satuan</label>
-                            <div class="col-sm-10">
-                                <select id="satuanIdEdit" required class="custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <?php
-                                    foreach ($satuan['data'] as $rows) {
-
-                                    ?>
-
-                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Satuan']; ?></option>
-
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="modalEditPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -261,16 +240,16 @@
 
                         <hr>
 
-                        <strong><i class="fas fa-book mr-1"></i> Satuan Pekerjaan</strong>
+                        <strong><i class="fas fa-book mr-1"></i> Volume dan Satuan</strong>
 
                         <p id="satuanPekerjaanDetail" class="text-muted">
                             TESTES
                         </p>
+                        <p style="color:black" id="jumlahTeralokasi" class="text-muted">
+                            TESTES
+                        </p>
 
                         <hr>
-                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Volume</strong>
-                        <p id="volumePekerjaanDetail" class="text-muted">
-                            TESTES
                         <p class="text-muted">
                             <button onclick="bukaModalTambahPenugasanPekerjaan()" type="button" class="btn btn-primary btn-sm"><i class="fa fa-address-card" aria-hidden="true"></i> Tambah Penugasan</button>
 
@@ -426,6 +405,8 @@
     function loadTabelPenugasanPekerjaan(RecId) {
 
         var TabelPenugasanPekerjaan = $("#TabelPenugasanPekerjaan").dataTable({
+            "scrollY": "200px",
+            "scrollCollapse": true,
             columns: [{
 
                     className: "text-center"
@@ -472,14 +453,19 @@
 
             },
             success: function(output) {
-                console.log(output)
+                console.log('output', output)
+
+                $("#jumlahTeralokasi").text('Sudah Teralokasi : ' + output.agregat.JumlahVolume)
                 TabelPenugasanPekerjaan.fnClearTable();
 
                 outputData = output.data
+
+                globalVolumeTotalDinamis = 0
                 for (var i = 0; i < outputData.length; i++) {
 
                     outputDataBaris = outputData[i]
                     j = i + 1
+
 
                     TabelPenugasanPekerjaan.fnAddData([
                         "" + outputDataBaris.NamaPenerimaPekerjaan + "",
@@ -489,7 +475,21 @@
                         "<input onchange='ubahVolumePenugasan(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;' value='" + outputDataBaris.Volume + "'>",
                         "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + "," + RecId + ")' class='btn btn-danger'>Hapus</button>"
                     ]);
+
+                    globalVolumeTotalDinamis = globalVolumeTotalDinamis + parseInt(outputDataBaris.Volume);
+
+                    console.log('globalVolumeTotalDinamis ' + globalVolumeTotalDinamis)
+
+
                 } // End For
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Sudah teralokasi ' + globalVolumeTotalDinamis + ' dari ' + globalVolumeTotal,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
 
             },
 
@@ -502,19 +502,21 @@
     }
 </script>
 <script>
-    function ubahVolumePenugasan(value, baris,pekerjaanId) {
-        console.log(value, baris)
+    function ubahVolumePenugasan(value, baris, pekerjaanId) {
+
+        // console.log(value, baris)
         $.ajax({
             type: "POST",
             async: false,
             url: '<?php echo base_url(); ?>/Servicepekerjaanpengguna/ubah_volume_pekerjaan_pengguna_by_id',
             data: {
                 Volume: value,
-                RecId:baris
+                RecId: baris
             },
             dataType: 'json',
             success: function(output) {
                 loadTabelPenugasanPekerjaan(pekerjaanId)
+
 
 
             },
@@ -525,11 +527,15 @@
             }
         });
 
+
+
     }
 </script>
 
 <script>
-    function bukaModalPenugasanPekerjaan(RecId) {
+    function bukaModalPenugasanPekerjaan(RecId, VolumeTotal) {
+
+        globalVolumeTotal = VolumeTotal;
 
         $('#modalPenugasanPekerjaan').modal('show');
         loadTabelPenugasanPekerjaan(RecId)
@@ -548,8 +554,9 @@
                 console.log(output);
                 data = output.data[0]
                 $("#namaPekerjaanDetail").html(data['Deskripsi'])
-                $("#volumePekerjaanDetail").html(data['Volume'])
-                $("#satuanPekerjaanDetail").html(data['Satuan'])
+                $("#satuanPekerjaanDetail").html(data['Volume'] + ' ' + data['Satuan'])
+
+                globalVolumeTotal = data['Volume']
                 $("#pekerjaanId").val(data['RecId'])
                 $("#rangeTanggalPenugasan").val(data['RangeTanggal'])
 
@@ -584,8 +591,9 @@
             dataType: 'json',
             success: function(output) {
 
-                console.log(output);
                 data = output.data[0]
+                console.log(data);
+
                 $("#recIdEdit").val(data.RecId)
                 $("#satuanIdEdit").val(data.SatuanId)
                 $("#deskripsiEdit").val(data.Deskripsi)
@@ -599,62 +607,65 @@
 
             }
         });
-        loadTabelPenugasanPekerjaan(RecId)
+        // loadTabelPenugasanPekerjaan(RecId)
 
     }
 </script>
 <script>
+    function loadTabelPekerjaan() {
+        var TabelPekerjaan = $("#TabelPekerjaan").dataTable({
+            destroy: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_pengguna_by_tahun_by_bulan',
+            dataType: 'json',
+            data: {
+                PenggunaId: <?php echo $this->session->userdata('RecId'); ?>,
+                Tahun: $("#tahunPekerjaan").val(),
+                Bulan: $("#bulanPekerjaan").val()
+
+            },
+            success: function(output) {
+                TabelPekerjaan.fnClearTable();
+
+                outputData = output.data
+                for (var i = 0; i < outputData.length; i++) {
+
+                    outputDataBaris = outputData[i]
+                    j = i + 1
+
+                    TabelPekerjaan.fnAddData([
+                        "" + outputDataBaris.Deskripsi + "",
+                        "" + outputDataBaris.Volume + "",
+                        "" + outputDataBaris.Satuan + "",
+                        "" + outputDataBaris.Nama + "",
+                        "" + outputDataBaris.CreatedDate + "",
+                        "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
+                        "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>"
+                    ]);
+                } // End For
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+    }
     $(document).ready(function() {
 
 
-        function loadTabelPekerjaan() {
-            var TabelPekerjaan = $("#TabelPekerjaan").dataTable({
-                destroy: true,
-                dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            });
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_pengguna',
-                dataType: 'json',
-                data: {
-                    PenggunaId: <?php echo $this->session->userdata('RecId'); ?>
 
-                },
-                success: function(output) {
-                    TabelPekerjaan.fnClearTable();
-
-                    outputData = output.data
-                    for (var i = 0; i < outputData.length; i++) {
-
-                        outputDataBaris = outputData[i]
-                        j = i + 1
-
-                        TabelPekerjaan.fnAddData([
-                            "" + outputDataBaris.Deskripsi + "",
-                            "" + outputDataBaris.Volume + "",
-                            "" + outputDataBaris.Satuan + "",
-                            "" + outputDataBaris.Nama + "",
-                            "" + outputDataBaris.CreatedDate + "",
-                            "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
-                            "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-tasks'>"
-                        ]);
-                    } // End For
-
-                },
-
-                error: function(e) {
-                    console.log(e.responseText);
-
-                }
-            });
-        }
 
 
 
@@ -756,9 +767,14 @@
                 success: function(output) {
                     console.log(output)
                     loadTabelPenugasanPekerjaan(PekerjaanId)
-                    $("#modalTambahPenugasanPekerjaan").modal('hide')
+                    if (output.sukses == true)
+                        Swal.fire('Berhasil tambah penugasan', '', 'success')
+                    else
+                        Swal.fire('Gagal tambah penugasan', '', 'error')
 
-                    $('#penerimaPekerjaanId').val(null).trigger('change');
+                    // $("#modalTambahPenugasanPekerjaan").modal('hide')
+
+                    // $('#penerimaPekerjaanId').val(null).trigger('change');
 
                 }
             })
@@ -834,7 +850,7 @@
 
                     }
                 });
-                Swal.fire('Saved!', '', 'success')
+                Swal.fire('Terhapus', '', 'success')
             } else if (result.isDenied) {
                 Swal.fire('Tidak jadi dihapus', '', 'info')
             }

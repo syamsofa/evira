@@ -50,6 +50,28 @@ class Model_pekerjaan_bulanan extends CI_Model
             'data' => $data
         );
     }
+
+    public function read_pekerjaan_by_pengguna_by_tahun_by_bulan($inputData)
+    {
+        $query = $this->db->query("select a.*,b.Satuan ,c.Nama,d.Status
+        from pekerjaan_bulanan a left join satuan b on a.SatuanId=b.RecId
+        left join pengguna c on c.RecId=a.CreatedBy
+        left join status_penugasan d on d.RecId=a.StatusPenugasanId
+        where a.CreatedBy=?
+                and MONTH(a.CreatedDate)=?
+                and YEAR(a.CreatedDate)=?		", array($inputData['RecId'], $inputData['Bulan'], $inputData['Tahun']));
+        $data = array();
+
+        foreach ($query->result_array() as $row) {
+            $data[] = $row;
+        }
+
+        return array(
+            'sukses' => true,
+            'data' => $data
+        );
+    }
+
     public function read_pekerjaan_by_id($dataInput)
     {
         $query = $this->db->query("select a.*,b.Satuan ,c.Nama as NamaPembuat,d.Status
@@ -61,11 +83,10 @@ class Model_pekerjaan_bulanan extends CI_Model
         $data = array();
 
         foreach ($query->result_array() as $row) {
-            $tanggalMulaiFormatted=$this->fungsi->ubahFormatTanggal2($row['TanggalMulai']);
-            $tanggalSelesaiFormatted=$this->fungsi->ubahFormatTanggal2($row['TanggalSelesai']);
-            $row['RangeTanggal']=$tanggalMulaiFormatted.' - '.$tanggalSelesaiFormatted;
+            $tanggalMulaiFormatted = $this->fungsi->ubahFormatTanggal2($row['TanggalMulai']);
+            $tanggalSelesaiFormatted = $this->fungsi->ubahFormatTanggal2($row['TanggalSelesai']);
+            $row['RangeTanggal'] = $tanggalMulaiFormatted . ' - ' . $tanggalSelesaiFormatted;
             $data[] = $row;
-
         }
 
         return array(
@@ -76,7 +97,7 @@ class Model_pekerjaan_bulanan extends CI_Model
     public function create_pekerjaan($dataInput)
     {
         date_default_timezone_set('Asia/Jakarta');
-        
+
         $rangeTanggal = $dataInput['RangeTanggal'];
         $rangeTanggal = str_replace(" ", "", $rangeTanggal);
         $arrTanggal = explode("-", $rangeTanggal);
@@ -113,7 +134,7 @@ class Model_pekerjaan_bulanan extends CI_Model
     public function edit_pekerjaan($dataInput)
     {
         date_default_timezone_set('Asia/Jakarta');
-        
+
         $rangeTanggal = $dataInput['RangeTanggal'];
         $rangeTanggal = str_replace(" ", "", $rangeTanggal);
         $arrTanggal = explode("-", $rangeTanggal);
@@ -130,7 +151,7 @@ class Model_pekerjaan_bulanan extends CI_Model
             $dataInput['TanggalMulai'],
             $dataInput['TanggalSelesai'],
             $dataInput['RecId'],
-            
+
 
 
         );

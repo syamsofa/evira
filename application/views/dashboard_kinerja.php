@@ -56,19 +56,21 @@
             </div>
             <button onclick="tampilData()" type="button" class="btn btn-success float-left">Tampilkan</button>
           </div>
-          <div id="container" class="card-body box-profile">
+          <div id="container_persentase" class="card-body box-profile">
 
           </div>
+          <div id="container_kegiatan" class="card-body box-profile">
+
+          </div>
+
         </div>
 
       </div>
-
-    </div>
-    <!-- /.row -->
-    <!-- Main row -->
-    <div class="row"></div>
-    <!-- /.row (main row) -->
-  </div><!-- /.container-fluid -->
+      <!-- /.row -->
+      <!-- Main row -->
+      <div class="row"></div>
+      <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
 </section>
 
 
@@ -87,9 +89,11 @@
         console.log(output)
         categories = [];
         nilai = [];
+        nilaiKegiatan = [];
         warna = [];
         output.forEach(row => {
           categories.push(row.Nama)
+
           let warna
           if (row.Ringkasan.rerataPersentaseKinerja > 95)
             warna = 'green'
@@ -102,11 +106,16 @@
             color: warna
           })
 
+          nilaiKegiatan.push({
+            y: parseInt(row.Ringkasan.jumKegiatan),
+            color: 'green'
+          })
+
         });
-      
 
 
-        Highcharts.chart('container', {
+
+        Highcharts.chart('container_persentase', {
           chart: {
             type: 'column'
           },
@@ -159,10 +168,81 @@
             data: nilai,
             dataLabels: {
               enabled: true,
-              rotation: -90,
+
+              rotation: 0,
               color: '#FFFAFF',
               align: 'right',
-              format: '{point.y:.1f}', // one decimal
+              format: '{point.y:.0f}', // one decimal
+              y: 10, // 10 pixels down from the top
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Verdana, sans-serif'
+              }
+
+            }
+
+          }]
+        });
+
+        Highcharts.chart('container_kegiatan', {
+          chart: {
+            type: 'column'
+          },
+          title: {
+            text: 'Jumlah Kegiatan di Bulan ' + $("#bulanPekerjaan").val() + ' Tahun ' + $("#tahunPekerjaan").val()
+          },
+          xAxis: {
+            categories: categories,
+            title: {
+              text: null
+            }
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: 'Jumlah Kegiatan',
+              align: 'high'
+            },
+            labels: {
+              overflow: 'justify'
+            }
+          },
+          tooltip: {
+            valueSuffix: ' '
+          },
+          plotOptions: {
+            bar: {
+              dataLabels: {
+                enabled: true
+              }
+            }
+          },
+          // colors: warna,
+          legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+          },
+          credits: {
+            enabled: false
+          },
+          series: [{
+            name: 'Jumlah Kegiatan',
+            data: nilaiKegiatan,
+            dataLabels: {
+              enabled: true,
+              inside: true,
+
+              rotation: 0,
+              color: '#FFFAFF',
+              align: 'right',
+              format: '{point.y:.0f}', // zero decimal
               y: 10, // 10 pixels down from the top
               style: {
                 fontSize: '10px',

@@ -8,12 +8,6 @@ class Fungsi
         // in_array()
         return in_array($ekstensi, $ekstensiIzin);
     }
-    function isFileAllowed($ekstensi)
-    {
-        $ekstensiIzin = ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application/vnd.oasis.opendocument.spreadsheet"];
-        // in_array()
-        return in_array($ekstensi, $ekstensiIzin);
-    }
 
     function ubahFormatTanggal($tanggal)
     {
