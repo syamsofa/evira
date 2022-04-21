@@ -51,7 +51,7 @@ class PHPExcel_Cell_DefaultValueBinder implements PHPExcel_Cell_IValueBinder
         } elseif (is_object($value)) {
             // Handle any objects that might be injected
             if ($value instanceof DateTime) {
-                $value = $value->format('Y-m-d G:i:s');
+                $value = $value->format('Y-m-d H:i:s');
             } elseif (!($value instanceof PHPExcel_RichText)) {
                 $value = (string) $value;
             }

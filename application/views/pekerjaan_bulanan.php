@@ -1,3 +1,8 @@
+<script>
+    var globalVolumeTotal = 0;
+    var globalVolumeTotalDinamis = 0;
+</script>
+
 <section class="content">
     <div class="container-fluid">
 
@@ -240,6 +245,9 @@
                         <p id="satuanPekerjaanDetail" class="text-muted">
                             TESTES
                         </p>
+                        <p style="color:black" id="jumlahTeralokasi" class="text-muted">
+                            TESTES
+                        </p>
 
                         <hr>
                         <p class="text-muted">
@@ -445,14 +453,19 @@
 
             },
             success: function(output) {
-                console.log(output)
+                console.log('output', output)
+
+                $("#jumlahTeralokasi").text('Sudah Teralokasi : ' + output.agregat.JumlahVolume)
                 TabelPenugasanPekerjaan.fnClearTable();
 
                 outputData = output.data
+
+                globalVolumeTotalDinamis = 0
                 for (var i = 0; i < outputData.length; i++) {
 
                     outputDataBaris = outputData[i]
                     j = i + 1
+
 
                     TabelPenugasanPekerjaan.fnAddData([
                         "" + outputDataBaris.NamaPenerimaPekerjaan + "",
@@ -462,7 +475,21 @@
                         "<input onchange='ubahVolumePenugasan(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;' value='" + outputDataBaris.Volume + "'>",
                         "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + "," + RecId + ")' class='btn btn-danger'>Hapus</button>"
                     ]);
+
+                    globalVolumeTotalDinamis = globalVolumeTotalDinamis + parseInt(outputDataBaris.Volume);
+
+                    console.log('globalVolumeTotalDinamis ' + globalVolumeTotalDinamis)
+
+
                 } // End For
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Sudah teralokasi ' + globalVolumeTotalDinamis + ' dari ' + globalVolumeTotal,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
 
             },
 
@@ -476,6 +503,10 @@
 </script>
 <script>
     function ubahVolumePenugasan(value, baris, pekerjaanId) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 09811e0d56dc3ec319f72927b1ee0e6f12ee55da
         // console.log(value, baris)
         $.ajax({
             type: "POST",
@@ -499,11 +530,15 @@
             }
         });
 
+
+
     }
 </script>
 
 <script>
-    function bukaModalPenugasanPekerjaan(RecId) {
+    function bukaModalPenugasanPekerjaan(RecId, VolumeTotal) {
+
+        globalVolumeTotal = VolumeTotal;
 
         $('#modalPenugasanPekerjaan').modal('show');
         loadTabelPenugasanPekerjaan(RecId)
@@ -523,6 +558,11 @@
                 data = output.data[0]
                 $("#namaPekerjaanDetail").html(data['Deskripsi'])
                 $("#satuanPekerjaanDetail").html(data['Volume'] + ' ' + data['Satuan'])
+<<<<<<< HEAD
+=======
+
+                globalVolumeTotal = data['Volume']
+>>>>>>> 09811e0d56dc3ec319f72927b1ee0e6f12ee55da
                 $("#pekerjaanId").val(data['RecId'])
                 $("#rangeTanggalPenugasan").val(data['RangeTanggal'])
 
@@ -616,7 +656,11 @@
                         "" + outputDataBaris.Nama + "",
                         "" + outputDataBaris.CreatedDate + "",
                         "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
+<<<<<<< HEAD
                         "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-tasks'>"
+=======
+                        "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>"
+>>>>>>> 09811e0d56dc3ec319f72927b1ee0e6f12ee55da
                     ]);
                 } // End For
 
@@ -733,10 +777,17 @@
                 success: function(output) {
                     console.log(output)
                     loadTabelPenugasanPekerjaan(PekerjaanId)
+<<<<<<< HEAD
                     if(output.sukses==true)
                     Swal.fire('Berhasil tambah penugasan', '', 'success')
                     else
                     Swal.fire('Gagal tambah penugasan', '', 'error')
+=======
+                    if (output.sukses == true)
+                        Swal.fire('Berhasil tambah penugasan', '', 'success')
+                    else
+                        Swal.fire('Gagal tambah penugasan', '', 'error')
+>>>>>>> 09811e0d56dc3ec319f72927b1ee0e6f12ee55da
 
                     // $("#modalTambahPenugasanPekerjaan").modal('hide')
 

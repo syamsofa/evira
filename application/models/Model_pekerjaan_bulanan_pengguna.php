@@ -22,14 +22,17 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
 		", array($dataInput['RecId']));
         $data = array();
 
+        $jumlahVolume = 0;
         foreach ($query->result_array() as $row) {
             $row['PemberiTugas'] = $this->model_pengguna->read_pengguna_by_id(array("RecId" => $row['PemberiPekerjaanId']));
             $data[] = $row;
+            $jumlahVolume = $jumlahVolume + $row['Volume'];
         }
 
         return array(
             'sukses' => true,
-            'data' => $data
+            'data' => $data,
+            'agregat' => ["JumlahVolume" => $jumlahVolume]
         );
     }
     public function read_pekerjaan_pengguna_by_pengguna($dataInput)
