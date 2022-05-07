@@ -262,9 +262,8 @@
                                 <thead>
                                     <tr>
                                         <th>Penerima Pekerjaan</th>
-                                        <th>Tanggal Penerimaan Tugas</th>
-                                        <th>Durasi Pekerjaan</th>
-                                        <th>Volume</th>
+                                        <th>Volume Target</th>
+                                        <th>Volume Realisasi</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -423,12 +422,7 @@
                 {
 
                     className: "text-center"
-                },
-                {
-
-                    className: "text-center"
                 }
-
             ],
             "responsive": true,
             destroy: true,
@@ -469,10 +463,9 @@
 
                     TabelPenugasanPekerjaan.fnAddData([
                         "" + outputDataBaris.NamaPenerimaPekerjaan + "",
-                        "" + outputDataBaris.CreatedDate + "",
-                        "" + outputDataBaris.TanggalMulaiFormatted + " s/d " + outputDataBaris.TanggalSelesaiFormatted,
-
+                        
                         "<input onchange='ubahVolumePenugasan(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;' value='" + outputDataBaris.Volume + "'>",
+                        "<input  style='text-align:right;' disabled value='" + outputDataBaris.Volume + "'>",
                         "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + "," + RecId + ")' class='btn btn-danger'>Hapus</button>"
                     ]);
 

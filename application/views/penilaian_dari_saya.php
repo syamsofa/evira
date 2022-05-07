@@ -46,7 +46,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Pegawai</label>
                 <div class="col-sm-10">
-                    <select id="penggunaId" required class="select3 custom-select">
+                    <select id="penggunaId" required class="select2 custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($pengguna['data'] as $rows) {
@@ -748,4 +748,11 @@
         });
 
     }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2()
+
+    });
 </script>

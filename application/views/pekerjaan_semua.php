@@ -53,7 +53,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Pegawai</label>
                 <div class="col-sm-10">
-                    <select id="idPengguna" required class="custom-select">
+                    <select id="idPengguna" required class="select2 custom-select">
                         <option value=''>--PILIH--</option>
                     </select>
                 </div>
@@ -869,5 +869,12 @@
             console.log(e.responseText);
 
         }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2()
+
     });
 </script>
