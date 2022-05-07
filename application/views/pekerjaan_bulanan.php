@@ -503,10 +503,6 @@
 </script>
 <script>
     function ubahVolumePenugasan(value, baris, pekerjaanId) {
-<<<<<<< HEAD
-=======
-
->>>>>>> 09811e0d56dc3ec319f72927b1ee0e6f12ee55da
         // console.log(value, baris)
         $.ajax({
             type: "POST",
@@ -558,11 +554,8 @@
                 data = output.data[0]
                 $("#namaPekerjaanDetail").html(data['Deskripsi'])
                 $("#satuanPekerjaanDetail").html(data['Volume'] + ' ' + data['Satuan'])
-<<<<<<< HEAD
-=======
 
                 globalVolumeTotal = data['Volume']
->>>>>>> 09811e0d56dc3ec319f72927b1ee0e6f12ee55da
                 $("#pekerjaanId").val(data['RecId'])
                 $("#rangeTanggalPenugasan").val(data['RangeTanggal'])
 
@@ -656,11 +649,7 @@
                         "" + outputDataBaris.Nama + "",
                         "" + outputDataBaris.CreatedDate + "",
                         "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
-<<<<<<< HEAD
-                        "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-tasks'>"
-=======
                         "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>"
->>>>>>> 09811e0d56dc3ec319f72927b1ee0e6f12ee55da
                     ]);
                 } // End For
 
@@ -777,17 +766,10 @@
                 success: function(output) {
                     console.log(output)
                     loadTabelPenugasanPekerjaan(PekerjaanId)
-<<<<<<< HEAD
-                    if(output.sukses==true)
-                    Swal.fire('Berhasil tambah penugasan', '', 'success')
-                    else
-                    Swal.fire('Gagal tambah penugasan', '', 'error')
-=======
                     if (output.sukses == true)
                         Swal.fire('Berhasil tambah penugasan', '', 'success')
                     else
                         Swal.fire('Gagal tambah penugasan', '', 'error')
->>>>>>> 09811e0d56dc3ec319f72927b1ee0e6f12ee55da
 
                     // $("#modalTambahPenugasanPekerjaan").modal('hide')
 
