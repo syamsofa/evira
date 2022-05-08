@@ -63,6 +63,8 @@
                 </div>
             </div>
             <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left"> <i class="fa fa-desktop" aria-hidden="true"></i> Tampilkan</button>
+            <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button>
+            <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button>
 
         </div>
         <div class="card-body">

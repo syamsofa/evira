@@ -200,7 +200,7 @@ class Servicepekerjaanpengguna extends CI_Controller
             $sheet->setCellValue('E' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['Volume']);
             $sheet->setCellValue('F' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['VolumeRealisasi']);
             $sheet->setCellValue('G' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PersentaseRealisasiVolume']);
-            $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PenilaianAtasan']);
+            $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PenilaianTim']['data']['Rerata']);
             $sheet->getStyle("B:K")->getFont()->setItalic(false);
 
             $startBarisPekerjaanPengguna++;

@@ -308,6 +308,47 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalLihatPenilaianTim" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-file-text" aria-hidden="true"></i> Lihat Nilai</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body">
+
+                <div class="table-responsive card-body p-0" style="display: block;">
+                    <table id="TabelPenilaianTim" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nama Penilai</th>
+                                <th>Nilai Yang Diberikan</th>
+
+
+                            </tr>
+
+                        </thead>
+                        <tfoot>
+
+                        </tfoot>
+                        <tbody></tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var penggunaId = '<?php echo $this->session->userdata('RecId') ?>'
 
@@ -455,10 +496,10 @@
                     TabelPekerjaanSaya.fnAddData([
                         "" + outputDataBaris.Deskripsi + "",
                         "" + outputDataBaris.NamaPemberiPekerjaan + "",
-                        "" + outputDataBaris.Satuan+ "",
+                        "" + outputDataBaris.Satuan + "",
                         "" + outputDataBaris.Volume + "",
-                        
-                  
+
+
                         "" + outputDataBaris.VolumeRealisasi + "",
                         "" + outputDataBaris.PersentaseRealisasiVolume + "%",
 
@@ -466,10 +507,8 @@
                         // "" + outputDataBaris.KalimatSisaHari + "",
                         "" + outputDataBaris.TanggalRealisasiFormatted + "",
                         "" + outputDataBaris.KalimatSelisihRealisasiDanTarget + "",
-                        "" + outputDataBaris.PenilaianAtasan + "",
+                        "" + outputDataBaris.PenilaianTim.data.Rerata + " <button onclick=bukaModalLihatPenilaianTim(" + i + ")>Lihat</button>",
 
-
-                        "<button type='button ' onclick='bukaModalLogPekerjaanPengguna(RecId=" + outputDataBaris.RecId + ")' class=' btn-sm btn btn-primary'>Log</button>" +
                         "<button type='button' onclick='bukaModalRealisasi(outputData," + i + ")' class='btn btn-primary  btn-sm'>Realisasi </button>"
 
 
@@ -832,4 +871,47 @@
 
 
     });
+</script>
+
+
+<script>
+    function bukaModalLihatPenilaianTim(index) {
+        $('#modalLihatPenilaianTim').modal('show');
+        console.log(outputData[index].PenilaianTim.data)
+
+        var TabelPenilaianTim = $("#TabelPenilaianTim").dataTable({
+            columns: [{
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                }
+            ],
+            "paging": false,
+            "responsive": true,
+            destroy: true,
+
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        })
+
+        TabelPenilaianTim.fnClearTable();
+        let outputDataNilaiPerKegiatan = outputData[index].PenilaianTim.data.Detail;
+        for (var i = 0; i < outputDataNilaiPerKegiatan.length; i++) {
+
+
+            j = i + 1
+            outputDataBaris = outputDataNilaiPerKegiatan[i]
+            TabelPenilaianTim.fnAddData([
+                "" + outputDataBaris.Penilai.data.Nama + "",
+                "" + outputDataBaris.Nilai + ""
+
+            ]);
+        } // End For
+
+        $('#TabelPenilaianTim_info').text('Nilai Rata-rata = ' + outputData[index].PenilaianTim.data.Rerata)
+    }
 </script>

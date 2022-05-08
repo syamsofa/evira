@@ -10,6 +10,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         // $this->load->library('lib_security');
         $this->load->model('model_log_pekerjaan_pengguna');
         $this->load->model('model_pengguna');
+        $this->load->model('model_penilaian_tim');
         // $this->load->model('email_model');
         //call function
         // Your own constructor code
@@ -159,19 +160,23 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     }
     public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput)
     {
+
         $query_tambahan = "";
-        if (isset($dataInput['PenilaiId']))
-            $query_tambahan = "and f.IdPenilai=" . $dataInput['PenilaiId'];
+        $kolom_tambahan="";
+        if (isset($dataInput['PenilaiId'])) {
+            $query_tambahan = "left join penilaian_tim f on f.IdPekerjaanPengguna=a.RecId
+            and f.IdPenilai=" . $dataInput['PenilaiId'];
+            $kolom_tambahan = ", f.Nilai";
+        }
         $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan,
         DATE(a.TanggalMulai) as TanggalMulai,DATE(a.TanggalSelesai) as TanggalSelesai,
-        d.Deskripsi,e.Satuan,f.Nilai
+        d.Deskripsi,e.Satuan $kolom_tambahan
          from pekerjaan_bulanan_pengguna a
         left join pengguna b on b.RecId=a.PenerimaPekerjaanId
         left join pengguna c on c.RecId=a.PemberiPekerjaanId
         left join pekerjaan_bulanan d on d.RecId=a.PekerjaanId     
         left join satuan e on d.SatuanId=e.RecId   
         
-        left join penilaian_tim f on a.RecId=f.IdPekerjaanPengguna
         $query_tambahan
          where a.PenerimaPekerjaanId=?
          and 
@@ -193,6 +198,8 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         // print_r($query->result_array());
 
         foreach ($query->result_array() as $row) {
+
+            $row['PenilaianTim'] = $this->model_penilaian_tim->read_nilai_by_id_pekerjaan_pengguna($row['RecId']);;
             $row['SelisihHari'] = (new DateTime($row['TanggalSelesai']))->diff(new DateTime($row['TanggalMulai']))->days + 1;
 
             $row['SisaHari'] = (new DateTime(date("Y-m-d")))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
