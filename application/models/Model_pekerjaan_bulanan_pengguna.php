@@ -162,7 +162,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     {
 
         $query_tambahan = "";
-        $kolom_tambahan="";
+        $kolom_tambahan = "";
         if (isset($dataInput['PenilaiId'])) {
             $query_tambahan = "left join penilaian_tim f on f.IdPekerjaanPengguna=a.RecId
             and f.IdPenilai=" . $dataInput['PenilaiId'];
@@ -344,6 +344,52 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         //     );
     }
 
+    public function create_pekerjaan_pengguna_2($dataInput)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $rangeTanggal = $dataInput['RangeTanggal'];
+        $rangeTanggal = str_replace(" ", "", $rangeTanggal);
+        $arrTanggal = explode("-", $rangeTanggal);
+
+        $dataInput['TanggalMulai'] = $this->fungsi->ubahFormatTanggal($arrTanggal[0]);
+        $dataInput['TanggalSelesai'] = $this->fungsi->ubahFormatTanggal($arrTanggal[1]);
+        $dataToSave = array(
+            $dataInput['PenerimaPekerjaanId'],
+            $this->session->userdata('RecId'),
+            $dataInput['PekerjaanId'],
+            $dataInput['Volume'],
+            date("Y-m-d G:i:s"),
+            $this->session->userdata('RecId'),
+            $dataInput['TanggalMulai'],
+            $dataInput['TanggalSelesai']
+        );
+
+        // $cekDuplikat = $this->cek_duplikat_pekerjaan_bulanan_pengguna($dataInput);
+        // $cekDuplikat=0;
+        // if ($cekDuplikat['data']['JumlahRecord'] == 0) {
+        $this->db->query(
+            "insert into pekerjaan_bulanan_pengguna (PenerimaPekerjaanId,PemberiPekerjaanId,PekerjaanId,Volume,CreatedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?)  ",
+            $dataToSave
+        );
+        $afftectedRows = $this->db->affected_rows();
+        if ($afftectedRows == 1) {
+            return array(
+                'sukses' => true,
+                'data' => $dataInput
+            );
+        } else
+            return array(
+                'sukses' => false,
+                'data' => $dataInput
+            );
+        // } else
+        //     return array(
+        //         'sukses' => false,
+        //         'data' => ["Pesan" => "Terjadi Duplikat Data. Tidak Tersimpan"]
+        //     );
+    }
+
     public function ubah_volume_pekerjaan_pengguna_by_id($dataInput)
     {
         // print_r($dataInput);
@@ -356,5 +402,25 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         $this->db->query("delete from pekerjaan_bulanan_pengguna 
          where RecId=?
 		", array($dataInput['RecId']));
+    }
+
+
+    public function duplikasi_pekerjaan_pengguna($dataInput)
+    {
+        print_r($dataInput);
+
+        $query = $this->db->query("select * from pekerjaan_bulanan_pengguna where PekerjaanId=?
+		", array($dataInput['IdPekerjaanBulananToDuplikat']));
+
+
+        foreach ($query->result_array() as $row) {
+            $dataInput = $row;
+            $this->create_pekerjaan_pengguna_2($dataInput);
+        }
+
+
+        // $this->db->query("delete from pekerjaan_bulanan_pengguna 
+        //  where RecId=?
+        // ", array($dataInput['RecId']));
     }
 }

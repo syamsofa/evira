@@ -67,8 +67,7 @@
                                 <thead>
                                     <tr>
                                         <th>Deskripsi</th>
-                                        <th>Volume</th>
-                                        <th>Satuan</th>
+                                        <th>Volume Satuan</th>
                                         <th>CreatedBy</th>
                                         <th>CreatedDate</th>
                                         <th>Aksi</th>
@@ -134,6 +133,82 @@
                                     <?php
                                     }
                                     ?>
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalDuplikasiPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="formDuplikasiPekerjaan" class="form-horizontal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Duplikasi Pekerjaan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Silahkan lakukan penyesuaian/modifikasi untuk hasil data duplikasinya
+                    <div class="card-body">
+                        <input type="hidden" class="form-control" id="recIdDup" placeholder="Email">
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="deskripsiDup" placeholder="Deskripsi">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Volume</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="volumeDup" placeholder="Volume">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Tanggal </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control rangeTanggal" id="rangeTanggalDup" value="" />
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Satuan</label>
+                            <div class="col-sm-10">
+                                <select id="satuanIdDup" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($satuan['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Satuan']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Apakah Penugasannya Juga Diduplikasi?</label>
+                            <div class="col-sm-10">
+                                <select id="isPenugasanDup" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <option value='1'>Iya</option>
+                                    <option value='0'>Tidak</option>
+                                    
                                 </select>
                             </div>
                         </div>
@@ -463,9 +538,9 @@
 
                     TabelPenugasanPekerjaan.fnAddData([
                         "" + outputDataBaris.NamaPenerimaPekerjaan + "",
-                        
+
                         "<input onchange='ubahVolumePenugasan(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;' value='" + outputDataBaris.Volume + "'>",
-                        "<input  style='text-align:right;' disabled value='" + outputDataBaris.Volume + "'>",
+                        "<input  style='text-align:right;' disabled value='" + outputDataBaris.VolumeRealisasi + "'>",
                         "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + "," + RecId + ")' class='btn btn-danger'>Hapus</button>"
                     ]);
 
@@ -604,6 +679,40 @@
     }
 </script>
 <script>
+    function bukaModalDuplikasiPekerjaan(RecId) {
+        $('#modalDuplikasiPekerjaan').modal('show');
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_id',
+            data: {
+                RecId: RecId
+            },
+            dataType: 'json',
+            success: function(output) {
+
+                data = output.data[0]
+                console.log(data);
+
+                $("#recIdDup").val(data.RecId)
+                $("#satuanIdDup").val(data.SatuanId)
+                $("#deskripsiDup").val(data.Deskripsi)
+                $("#volumeDup").val(data.Volume)
+                $("#rangeTanggalDup").val(data.RangeTanggal)
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+        // loadTabelPenugasanPekerjaan(RecId)
+
+    }
+</script>
+<script>
     function loadTabelPekerjaan() {
         var TabelPekerjaan = $("#TabelPekerjaan").dataTable({
             destroy: true,
@@ -637,12 +746,13 @@
 
                     TabelPekerjaan.fnAddData([
                         "" + outputDataBaris.Deskripsi + "",
-                        "" + outputDataBaris.Volume + "",
-                        "" + outputDataBaris.Satuan + "",
+                        "" + outputDataBaris.Volume +
+                        " " + outputDataBaris.Satuan + "",
                         "" + outputDataBaris.Nama + "",
                         "" + outputDataBaris.CreatedDate + "",
                         "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
-                        "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>"
+                        "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>" +
+                        "<button type='button' onclick='bukaModalDuplikasiPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-success fa fa-clone'>"
                     ]);
                 } // End For
 
@@ -659,6 +769,47 @@
 
 
 
+        $("#formDuplikasiPekerjaan").submit(function(e) {
+            console.log('okkkk')
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: '<?php echo base_url(); ?>/servicepekerjaan/duplikasi_pekerjaan',
+                dataType: 'json',
+                data: {
+                    Deskripsi: $('#deskripsiDup').val(),
+                    SatuanId: $('#satuanIdDup').val(),
+                    Volume: $('#volumeDup').val(),
+                    RangeTanggal: $('#rangeTanggalDup').val(),
+                    RecId: $('#recIdDup').val(),
+                    IsPenugasan: $('#isPenugasanDup').val()
+                    
+                    // TanggalMulai:tanggalMulai,
+                    // TanggalSelesai:tanggalSelesai
+                },
+                success: function(output) {
+                    console.log(output)
+                    loadTabelPekerjaan()
+                    formEditPekerjaan.reset()
+                    $("#modalEditPekerjaan").modal('hide')
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Data tersimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+
+
+
+                }
+            })
+            e.preventDefault()
+
+            return false;
+
+
+        });
 
 
 

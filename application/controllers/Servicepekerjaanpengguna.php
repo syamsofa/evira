@@ -39,7 +39,7 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
-    
+
     public function ubah_volume_pekerjaan_pengguna_by_id()
     {
         $dataInput = $this->input->post();
@@ -57,12 +57,20 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
-    
+
     public function create_pekerjaan_pengguna()
     {
         $dataInput = $this->input->post();
 
         $output = $this->model_pekerjaan_bulanan_pengguna->create_pekerjaan_pengguna($dataInput);
+
+        echo json_encode($output);
+    }
+    public function duplikasi_pekerjaan_pengguna()
+    {
+        $dataInput = $this->input->post();
+
+        $output = $this->model_pekerjaan_bulanan_pengguna->duplikasi_pekerjaan_pengguna($dataInput);
 
         echo json_encode($output);
     }
@@ -108,11 +116,11 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
-    
+
     public function testes()
     {
         // $templateLaporan = "./../../uploads/2021-11-01__Nia Aprillyana, S.ST, M.Si. (wfh).xlsx";
-        $templateLaporan='uploads/2022-01-06_340053328_Mohamad Achiruzaman S.ST, M.T (wfh).xlsx';
+        $templateLaporan = 'uploads/2022-01-06_340053328_Mohamad Achiruzaman S.ST, M.T (wfh).xlsx';
 
         $spreadsheet = new Spreadsheet();
 
@@ -133,7 +141,6 @@ class Servicepekerjaanpengguna extends CI_Controller
             # code...
         }
         echo "<table>";
-
     }
     public function cetak_laporan_ckpr()
     {
@@ -188,8 +195,12 @@ class Servicepekerjaanpengguna extends CI_Controller
             $sheet->insertNewRowBefore($startBarisPekerjaanPengguna);
         }
 
-        $no = 1;
+        $indeks = 0;
+        // $coPenilaianTim=0;
+        $sumPenilaianTim = 0;
         foreach ($outputPekerjaanPengguna['data']['detail'] as $rowPekerjaanPengguna) {
+            $no = $indeks + 1;
+
             $sheet->setCellValue('A' . $startBarisPekerjaanPengguna, $no);
             $sheet->setCellValue('B' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['Deskripsi']);
             $spreadsheet->getActiveSheet()->mergeCells("B" . $startBarisPekerjaanPengguna . ":C" . $startBarisPekerjaanPengguna);
@@ -203,10 +214,12 @@ class Servicepekerjaanpengguna extends CI_Controller
             $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PenilaianTim']['data']['Rerata']);
             $sheet->getStyle("B:K")->getFont()->setItalic(false);
 
-            $startBarisPekerjaanPengguna++;
-            $no++;
-        }
+            $sumPenilaianTim = $sumPenilaianTim + $rowPekerjaanPengguna['PenilaianTim']['data']['Rerata'];
 
+            $startBarisPekerjaanPengguna++;
+            $indeks++;
+        }
+        $rerataPenilaianTim = $sumPenilaianTim / ($indeks + 1);
 
         $writer = new Xlsx($spreadsheet);
 

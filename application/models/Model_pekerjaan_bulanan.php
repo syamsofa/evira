@@ -8,7 +8,7 @@ class Model_pekerjaan_bulanan extends CI_Model
         $this->load->library('fungsi');
         // $this->load->library('lib');
         // $this->load->library('lib_security');
-        // $this->load->model('role_model');
+        $this->load->model('model_pekerjaan_bulanan_pengguna');
         // $this->load->model('email_model');
         //call function
         // Your own constructor code
@@ -110,20 +110,22 @@ class Model_pekerjaan_bulanan extends CI_Model
             $dataInput['Volume'],
             $dataInput['SatuanId'],
             date("Y-m-d G:i:s"),
+            date("Y-m-d G:i:s"),
             $this->session->userdata('RecId'),
             $dataInput['TanggalMulai'],
             $dataInput['TanggalSelesai']
 
         );
         $query1 = $this->db->query(
-            "insert into pekerjaan_bulanan (Deskripsi,Volume,SatuanId,CreatedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?)  ",
+            "insert into pekerjaan_bulanan (Deskripsi,Volume,SatuanId,CreatedDate,ModifiedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?)  ",
             $dataToSave
         );
         $afftectedRows = $this->db->affected_rows();
         if ($afftectedRows == 1) {
             return array(
                 'sukses' => true,
-                'data' => $dataToSave
+                'data' => $dataToSave,
+                'insertId' => $this->db->insert_id()
             );
         } else
             return array(
@@ -170,5 +172,28 @@ class Model_pekerjaan_bulanan extends CI_Model
                 'sukses' => false,
                 'data' => $dataToSave
             );
+    }
+    public function duplikasi_pekerjaan($dataInput)
+    {
+        // print_r($dataInput);
+        // $dataToSave = array(
+        //     $dataInput['Deskripsi'],
+        //     $dataInput['Volume'],
+        //     $dataInput['SatuanId'],
+        //     date("Y-m-d G:i:s"),
+        //     $this->session->userdata('RecId'),
+        //     $dataInput['TanggalMulai'],
+        //     $dataInput['TanggalSelesai'],
+        //     $dataInput['RecId'],
+
+
+
+        // );
+
+        $IdPekerjaanBulananOutput=$this->create_pekerjaan($dataInput)['insertId'];
+        $this->model_pekerjaan_bulanan_pengguna->duplikasi_pekerjaan_pengguna([
+            "IdPekerjaanBulananToDuplikat" => $dataInput['RecId'],
+            "IdPekerjaanBulananOutput" => $IdPekerjaanBulananOutput,
+        ]);
     }
 }
