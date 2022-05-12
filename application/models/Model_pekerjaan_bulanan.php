@@ -175,24 +175,28 @@ class Model_pekerjaan_bulanan extends CI_Model
                 'data' => $dataToSave
             );
     }
+    public function delete_pekerjaan($dataInput)
+    {
+        $this->db->query(
+            "delete from pekerjaan_bulanan_pengguna where PekerjaanId=? ",
+            [$dataInput['RecId']]
+        );
+        $this->db->query(
+            "delete from pekerjaan_bulanan where RecId=? ",
+            [$dataInput['RecId']]
+        );
+        $afftectedRows = $this->db->affected_rows();
+        if ($afftectedRows == 1) {
+            return array(
+                'sukses' => true
+            );
+        } else
+            return array(
+                'sukses' => false
+            );
+    }
     public function duplikasi_pekerjaan($dataInput)
     {
-        // print_r($dataInput);
-        // $dataToSave = array(
-        //     $dataInput['Deskripsi'],
-        //     $dataInput['Volume'],
-        //     $dataInput['SatuanId'],
-        //     date("Y-m-d G:i:s"),
-        //     $this->session->userdata('RecId'),
-        //     $dataInput['TanggalMulai'],
-        //     $dataInput['TanggalSelesai'],
-        //     $dataInput['RecId'],
-
-
-
-        // );
-
-
         $outputDuplikasiMaster = $this->create_pekerjaan($dataInput);
         $IdPekerjaanBulananOutput = $outputDuplikasiMaster['insertId'];
         $TanggalMulai = $outputDuplikasiMaster['tanggalMulai'];

@@ -51,6 +51,13 @@ class Servicepekerjaan extends CI_Controller
 
         echo json_encode($output);
     }
+    public function delete_pekerjaan()
+    {
+        $dataInput = $this->input->post();
+        $output = $this->model_pekerjaan_bulanan->delete_pekerjaan($dataInput);
+
+        echo json_encode($output);
+    }
     public function duplikasi_pekerjaan()
     {
         $dataInput = $this->input->post();

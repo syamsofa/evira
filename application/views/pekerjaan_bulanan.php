@@ -754,7 +754,8 @@
                         "" + outputDataBaris.CreatedDate + "",
                         "<button title='Edit keterangan pekerjaan' type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
                         "<button title='Tambah/edit penugasan' type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>" +
-                        "<button title='Lakukan duplikasi pekerjaan dan penugasan' type='button' onclick='bukaModalDuplikasiPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-success fa fa-clone'>"
+                        "<button title='Lakukan duplikasi pekerjaan dan penugasan' type='button' onclick='bukaModalDuplikasiPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-success fa fa-clone'>" +
+                        "<button title='Hapus master pekerjaan dan penugasan sekaligus' type='button' onclick='bukaDialogHapusPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-danger fa fa-trash'>"
                     ]);
                 } // End For
 
@@ -1028,4 +1029,38 @@
         })
 
     });
+</script>
+
+<script>
+    function bukaDialogHapusPekerjaan(RecId) {
+        Swal.fire({
+            title: 'Anda yakin menghapus semua pekerjaan dan sekaligus penugasannya? Data yang dihapus tidak bisa direstore',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Ya',
+            denyButtonText: `Tidak`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                // Swal.fire('Saved!', '', 'success')
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: '<?php echo base_url(); ?>/servicepekerjaan/delete_pekerjaan',
+                    dataType: 'json',
+                    data: {
+                        RecId: RecId
+                    },
+                    success: function(output) {
+                        console.log(output)
+                        loadTabelPekerjaan()
+
+                    }
+                })
+
+            } else if (result.isDenied) {
+                Swal.fire('Changes are not saved', '', 'info')
+            }
+        })
+    }
 </script>
