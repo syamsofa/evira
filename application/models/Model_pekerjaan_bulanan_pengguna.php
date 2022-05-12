@@ -404,6 +404,8 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     public function duplikasi_pekerjaan_pengguna($dataInput)
     {
         $IdPekerjaanBulananOutput = $dataInput['IdPekerjaanBulananOutput'];
+        $TanggalMulai = $dataInput['TanggalMulai'];
+        $TanggalSelesai = $dataInput['TanggalSelesai'];
 
         $query = $this->db->query("select * from pekerjaan_bulanan_pengguna where PekerjaanId=?
 		", array($dataInput['IdPekerjaanBulananToDuplikat']));
@@ -412,6 +414,8 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         foreach ($query->result_array() as $row) {
             $dataInput = $row;
             $dataInput['IdPekerjaanBulananOutput'] = $IdPekerjaanBulananOutput;
+            $dataInput['TanggalMulai'] = $TanggalMulai;
+            $dataInput['TanggalSelesai'] = $TanggalSelesai;
 
 
             if ($this->create_pekerjaan_pengguna_2($dataInput)['sukses'] == true)

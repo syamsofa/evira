@@ -125,7 +125,9 @@ class Model_pekerjaan_bulanan extends CI_Model
             return array(
                 'sukses' => true,
                 'data' => $dataToSave,
-                'insertId' => $this->db->insert_id()
+                'insertId' => $this->db->insert_id(),
+                'tanggalMulai' => $dataInput['TanggalMulai'],
+                'tanggalSelesai' => $dataInput['TanggalSelesai']
             );
         } else
             return array(
@@ -191,12 +193,17 @@ class Model_pekerjaan_bulanan extends CI_Model
         // );
 
 
-        $IdPekerjaanBulananOutput = $this->create_pekerjaan($dataInput)['insertId'];
+        $outputDuplikasiMaster = $this->create_pekerjaan($dataInput);
+        $IdPekerjaanBulananOutput = $outputDuplikasiMaster['insertId'];
+        $TanggalMulai = $outputDuplikasiMaster['tanggalMulai'];
+        $TanggalSelesai = $outputDuplikasiMaster['tanggalSelesai'];
 
         if ($dataInput['IsPenugasan'] == 1)
             return $this->model_pekerjaan_bulanan_pengguna->duplikasi_pekerjaan_pengguna([
                 "IdPekerjaanBulananToDuplikat" => $dataInput['RecId'],
                 "IdPekerjaanBulananOutput" => $IdPekerjaanBulananOutput,
+                "TanggalMulai" => $TanggalMulai,
+                "TanggalSelesai" => $TanggalSelesai
             ]);
         else
             return [
