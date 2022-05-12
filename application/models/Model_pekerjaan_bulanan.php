@@ -190,10 +190,19 @@ class Model_pekerjaan_bulanan extends CI_Model
 
         // );
 
-        $IdPekerjaanBulananOutput=$this->create_pekerjaan($dataInput)['insertId'];
-        $this->model_pekerjaan_bulanan_pengguna->duplikasi_pekerjaan_pengguna([
-            "IdPekerjaanBulananToDuplikat" => $dataInput['RecId'],
-            "IdPekerjaanBulananOutput" => $IdPekerjaanBulananOutput,
-        ]);
+
+        $IdPekerjaanBulananOutput = $this->create_pekerjaan($dataInput)['insertId'];
+
+        if ($dataInput['IsPenugasan'] == 1)
+            return $this->model_pekerjaan_bulanan_pengguna->duplikasi_pekerjaan_pengguna([
+                "IdPekerjaanBulananToDuplikat" => $dataInput['RecId'],
+                "IdPekerjaanBulananOutput" => $IdPekerjaanBulananOutput,
+            ]);
+        else
+            return [
+                'sukses' => true,
+                'jumlahBarisTerduplikasi' => 0
+                // 'data' => $dataInput
+            ];
     }
 }

@@ -61,7 +61,9 @@
                                 </select>
                             </div>
                         </div>
-
+                        <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left" onclick="loadTabelPekerjaan()">Tampilkan / Refresh</button>
+                    </div>
+                    <div class="card-body">
                         <div class="table-responsive card-body p-0" style="display: block;">
                             <table id="TabelPekerjaan" class="table table-bordered table-striped">
                                 <thead>
@@ -208,7 +210,7 @@
                                     <option value=''>--PILIH--</option>
                                     <option value='1'>Iya</option>
                                     <option value='0'>Tidak</option>
-                                    
+
                                 </select>
                             </div>
                         </div>
@@ -750,9 +752,9 @@
                         " " + outputDataBaris.Satuan + "",
                         "" + outputDataBaris.Nama + "",
                         "" + outputDataBaris.CreatedDate + "",
-                        "<button type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
-                        "<button type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>" +
-                        "<button type='button' onclick='bukaModalDuplikasiPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-success fa fa-clone'>"
+                        "<button title='Edit keterangan pekerjaan' type='button' onclick='bukaModalEditPekerjaan(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary fa fa-pencil-square-o'>" +
+                        "<button title='Tambah/edit penugasan' type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>" +
+                        "<button title='Lakukan duplikasi pekerjaan dan penugasan' type='button' onclick='bukaModalDuplikasiPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-success fa fa-clone'>"
                     ]);
                 } // End For
 
@@ -770,7 +772,8 @@
 
 
         $("#formDuplikasiPekerjaan").submit(function(e) {
-            console.log('okkkk')
+
+            console.log('proses')
             $.ajax({
                 type: "POST",
                 async: false,
@@ -783,23 +786,33 @@
                     RangeTanggal: $('#rangeTanggalDup').val(),
                     RecId: $('#recIdDup').val(),
                     IsPenugasan: $('#isPenugasanDup').val()
-                    
+
                     // TanggalMulai:tanggalMulai,
                     // TanggalSelesai:tanggalSelesai
                 },
                 success: function(output) {
                     console.log(output)
                     loadTabelPekerjaan()
-                    formEditPekerjaan.reset()
-                    $("#modalEditPekerjaan").modal('hide')
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Data tersimpan',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+                    if (output.sukses == true) {
+                        formDuplikasiPekerjaan.reset()
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Master pekerjaan berhasil dibuat, Data penugasan yang Terduplikasi sebanyak ' + output.jumlahBarisTerduplikasi,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $('#modalDuplikasiPekerjaan').modal('hide');
 
+
+                    } else
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: 'Gagal lakukan duplikasi',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
 
 
                 }

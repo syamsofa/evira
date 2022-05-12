@@ -348,16 +348,12 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     {
         date_default_timezone_set('Asia/Jakarta');
 
-        $rangeTanggal = $dataInput['RangeTanggal'];
-        $rangeTanggal = str_replace(" ", "", $rangeTanggal);
-        $arrTanggal = explode("-", $rangeTanggal);
-
-        $dataInput['TanggalMulai'] = $this->fungsi->ubahFormatTanggal($arrTanggal[0]);
-        $dataInput['TanggalSelesai'] = $this->fungsi->ubahFormatTanggal($arrTanggal[1]);
+        $dataInput['TanggalMulai'] = $dataInput['TanggalMulai'];
+        $dataInput['TanggalSelesai'] = $dataInput['TanggalSelesai'];
         $dataToSave = array(
             $dataInput['PenerimaPekerjaanId'],
             $this->session->userdata('RecId'),
-            $dataInput['PekerjaanId'],
+            $dataInput['IdPekerjaanBulananOutput'],
             $dataInput['Volume'],
             date("Y-m-d G:i:s"),
             $this->session->userdata('RecId'),
@@ -375,13 +371,13 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         $afftectedRows = $this->db->affected_rows();
         if ($afftectedRows == 1) {
             return array(
-                'sukses' => true,
-                'data' => $dataInput
+                'sukses' => true
+                // 'data' => $dataInput
             );
         } else
             return array(
-                'sukses' => false,
-                'data' => $dataInput
+                'sukses' => false
+                // 'data' => $dataInput
             );
         // } else
         //     return array(
@@ -407,16 +403,27 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
 
     public function duplikasi_pekerjaan_pengguna($dataInput)
     {
-        print_r($dataInput);
+        $IdPekerjaanBulananOutput = $dataInput['IdPekerjaanBulananOutput'];
 
         $query = $this->db->query("select * from pekerjaan_bulanan_pengguna where PekerjaanId=?
 		", array($dataInput['IdPekerjaanBulananToDuplikat']));
 
-
+        $jumlahBarisTerduplikat = 0;
         foreach ($query->result_array() as $row) {
             $dataInput = $row;
-            $this->create_pekerjaan_pengguna_2($dataInput);
+            $dataInput['IdPekerjaanBulananOutput'] = $IdPekerjaanBulananOutput;
+
+
+            if ($this->create_pekerjaan_pengguna_2($dataInput)['sukses'] == true)
+                $jumlahBarisTerduplikat = $jumlahBarisTerduplikat + 1;
         }
+
+
+        return [
+            'sukses' => true,
+            'jumlahBarisTerduplikasi' => $jumlahBarisTerduplikat
+            // 'data' => $dataInput
+        ];
 
 
         // $this->db->query("delete from pekerjaan_bulanan_pengguna 
