@@ -107,13 +107,14 @@
 
                         <input type="hidden" class="form-control" id="idPengguna" value="<?php echo $this->session->userdata('RecId');  ?>">
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Jenis (WFO/WFH/Cuti)</label>
+                            <label for="" class="col-sm-2 col-form-label">Jenis (WFO/WFH/Cuti/DL)</label>
                             <div class="col-sm-10">
                                 <select required id="jenisKehadiran" onchange="setAtribut(this.value)" required class="custom-select">
                                     <option value=''>--PILIH--</option>
                                     <option value='wfh'>WFH</option>
                                     <option value='wfo'>WFO</option>
                                     <option value='cuti'>CUTI</option>
+                                    <option value='dl'>Dinas Luar</option>
 
                                 </select>
                             </div>
