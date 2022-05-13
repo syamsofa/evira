@@ -55,6 +55,7 @@
                     </select>
                 </div>
             </div>
+            <button id="" onclick="unduhRekapLaporan()" type="button" class="btn btn-warning float-right"><i class="fa fa-download" aria-hidden="true"></i> Unduh Data Laporan dalam Satu Bulan</button>
             <button id="" onclick="bukaModalTambahLaporanHarian()" type="button" class="btn btn-success float-right"><i class="fa fa-plus-square" aria-hidden="true"></i> Upload Laporan Harian</button>
 
         </div>
@@ -592,21 +593,23 @@
 </script>
 
 <script>
-    function setAtribut(jenis)
-    {
+    function setAtribut(jenis) {
         // alert(jenis)
-        if(jenis=='cuti')
-        {
+        if (jenis == 'cuti') {
             // $( "#tanggalPekerjaan" ).prop( "disabled", true );
-            $( "#fileLaporan" ).prop( "disabled", true );
-            
+            $("#fileLaporan").prop("disabled", true);
+
+
+        } else {
+            $("#fileLaporan").prop("disabled", false);
 
         }
-        else
-        {
-            $( "#fileLaporan" ).prop( "disabled", false);
-            
-        }
 
+    }
+</script>
+<script>
+    function unduhRekapLaporan() {
+        window.location.href = '<?php echo base_url(); ?>/servicelaporanharian/eksporlaporansatubulan?Tahun='+$("#tahunPekerjaan").val()+'&Bulan='+$("#bulanPekerjaan").val()+'&IdPengguna='+$("#idPengguna").val()
+        
     }
 </script>

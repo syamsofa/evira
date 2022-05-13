@@ -59,7 +59,7 @@ class Servicelaporanharian extends CI_Controller
             $jumBaris++;
         }
 
-        print_r([$jumBaris,$jumKolom]);
+        print_r([$jumBaris, $jumKolom]);
 
         // echo "<table>";
         foreach ($rows as $isi) {
@@ -122,12 +122,9 @@ class Servicelaporanharian extends CI_Controller
                     $outputRespon = ["sukses" => false, "pesan" => "Tidak berhasil simpan/upload laporan"];
             } else
                 $outputRespon = ["sukses" => false, "pesan" => "Ekstensi tidak diizinkan. Harus Xls/Xlsx"];
-        }
-
-        else
-        {
+        } else {
             $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
-                
+
             $dataInput = [
                 "Tanggal" => $input['TanggalPekerjaan'],
                 "NamaFile" => '-',
@@ -147,7 +144,6 @@ class Servicelaporanharian extends CI_Controller
             // print_r($dataInput);
             $output = $this->model_laporan_harian->create_laporan_harian($dataInput);
             $outputRespon = $output;
-            
         }
         // print_r($dataInput);
         echo json_encode($outputRespon);
@@ -226,5 +222,122 @@ class Servicelaporanharian extends CI_Controller
         ];
 
         echo json_encode($output);
+    }
+    public function eksporlaporansatubulan()
+    {
+
+        $Tahun = $this->input->get('Tahun');
+        $Bulan = $this->input->get('Bulan');
+        $IdPengguna = $this->input->get('IdPengguna');
+
+        $DataPengguna = $this->model_pengguna->read_pengguna_by_id(["RecId" => $IdPengguna]);
+
+        // echo json_encode($DataPengguna);
+        $outputs = $this->model_laporan_harian->read_laporan_harian_by_pengguna_tahun_bulan(["Tahun" => $Tahun, "Bulan" => $Bulan, "IdPengguna" => $IdPengguna]);
+        // echo json_encode($outputs['data']);
+
+        $listData = [];
+        foreach ($outputs['data'] as $outputD) {
+            if ($outputD['Upload']['JumUpload'] == 1)
+                $listData[] = [
+                    "NamaFile" => $outputD['Upload']['Data']['NamaFile'],
+                    "TanggalLaporan" => $outputD['Tanggal'],
+                    "JenisKehadiran" => $outputD['Upload']['Data']['JenisKehadiran']
+                ];
+        }
+
+        // echo json_encode($listData);
+
+        $toDisplay = [];
+
+        foreach ($listData as $list) {
+            $NamaFile = $list['NamaFile'];
+            $file = "uploads/" . $NamaFile;
+
+            if (file_exists($file)) {
+                $spreadsheet = new Spreadsheet();
+
+                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
+
+
+                $worksheet = $spreadsheet->getActiveSheet();
+                $rows = [];
+
+                $jumBaris = 0;
+                $jumKolom = 0;
+                foreach ($worksheet->getRowIterator() as $row) {
+                    $cellIterator = $row->getCellIterator();
+                    $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+                    $cells = [];
+
+                    $kolomIter = 0;
+                    foreach ($cellIterator as $cell) {
+                        $cells[] = $cell->getValue();
+                        $kolomIter++;
+                        if ($jumKolom <= $kolomIter) $jumKolom = $kolomIter;
+                    }
+                    $rows[] = $cells;
+                    $jumBaris++;
+                    if ($jumBaris >= 100)
+                        break;
+                }
+
+                $flagMulai = 0;
+                $flagSelesai = 0;
+
+                foreach ($rows as $row_) {
+                    if ($flagMulai == 1 and $flagSelesai == 0) {
+
+                        if (is_numeric($row_[0]) == false) break;
+
+                        $toDisplay[] = [$row_[0], $row_[1], $row_[2], $row_[3], $row_[4], $row_[5], $row_[6], $list['TanggalLaporan'], $list['JenisKehadiran']];
+                    }
+                    if ($row_[0] == '[1]')
+                        $flagMulai = 1;
+                }
+                // break;
+            }
+        }
+        // echo (json_encode($toDisplay));
+
+        $templateLaporan = "aset/template_matriks/template.xlsx";
+
+
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($templateLaporan);
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('C2', $Tahun);
+        $sheet->setCellValue('C3', $this->fungsi->bulanByNo($Bulan));
+        $sheet->setCellValue('C4', $DataPengguna['data']['NipLama'].' - '.$DataPengguna['data']['NipBaru']);
+        $sheet->setCellValue('C5', $DataPengguna['data']['Nama']);
+        
+// $DataPengguna
+
+        $initialBaris = 8;
+        $inisialNomor = 1;
+        foreach ($toDisplay as $toWrite) {
+            $sheet->setCellValue('B' . $initialBaris, $inisialNomor);
+            $sheet->setCellValue('C' . $initialBaris, $toWrite[1]);
+            $sheet->setCellValue('D' . $initialBaris, $toWrite[2]);
+            $sheet->setCellValue('E' . $initialBaris, $toWrite[3]);
+            $sheet->setCellValue('F' . $initialBaris, $toWrite[4]);
+            $sheet->setCellValue('G' . $initialBaris, $toWrite[5]);
+            $sheet->setCellValue('H' . $initialBaris, $toWrite[6]);
+            $sheet->setCellValue('I' . $initialBaris, $toWrite[7]);
+            // $sheet->setCellValue('I'.$initialBaris, $toWrite[7]);
+            $sheet->setCellValue('J' . $initialBaris, $toWrite[8]);
+
+            $initialBaris++;
+            $inisialNomor++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . urlencode('Rekap_Data_Kegiatan_Tahun_'.$Tahun.'_Bulan_'.$Bulan.'_NIP_'.$DataPengguna['data']['NipBaru'].'_'.$DataPengguna['data']['Nama'].'.xlsx') . '"');
+        $writer->save('php://output');
     }
 }

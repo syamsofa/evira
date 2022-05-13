@@ -51,8 +51,9 @@
                 </div>
             </div>
             <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left">Tampilkan</button>
-            <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button>
-            <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button>
+            <button id="" onclick="unduhRekapLaporan()" type="button" class="btn btn-warning float-right"><i class="fa fa-download" aria-hidden="true"></i> Unduh Data dari Laporan Harian</button>
+            <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right"><i class="fa fa-download" aria-hidden="true"></i> Cetak CKPR</button>
+            <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right"><i class="fa fa-download" aria-hidden="true"></i> Cetak CKPT</button>
 
         </div>
         <div class="card-body">
@@ -913,5 +914,12 @@
         } // End For
 
         $('#TabelPenilaianTim_info').text('Nilai Rata-rata = ' + outputData[index].PenilaianTim.data.Rerata)
+    }
+</script>
+
+<script>
+    function unduhRekapLaporan() {
+        window.location.href = '<?php echo base_url(); ?>/servicelaporanharian/eksporlaporansatubulan?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&IdPengguna=' + penggunaId
+
     }
 </script>

@@ -61,6 +61,7 @@
                 </div>
             </div>
             <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left">Tampilkan / Refresh</button>
+            <button id="" onclick="unduhRekapLaporan()" type="button" class="btn btn-warning float-right"><i class="fa fa-download" aria-hidden="true"></i> Unduh Data dari Laporan Harian</button>
             <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button>
             <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button>
         </div>
@@ -982,4 +983,11 @@
             window.open('<?php echo base_url(); ?>/servicepekerjaanpengguna/cetak_laporan_ckpt?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&PenerimaPekerjaanId=' + penggunaId, )
 
     });
+</script>
+
+<script>
+    function unduhRekapLaporan() {
+        window.location.href = '<?php echo base_url(); ?>/servicelaporanharian/eksporlaporansatubulan?Tahun=' + $("#tahunPekerjaan").val() + '&Bulan=' + $("#bulanPekerjaan").val() + '&IdPengguna=' + $("#idPengguna").val()
+
+    }
 </script>
