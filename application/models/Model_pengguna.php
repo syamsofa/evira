@@ -69,7 +69,19 @@ class Model_pengguna extends CI_Model
 				'data' => $data
 			);
 	}
+	public function read_pengguna_search($search)
+	{
+		$query = $this->db->query("select * from pengguna where Nama like '%" . $search . "%'");
+		$list = [];
+		$key = 0;
+		foreach ($query->result_array() as $row) {
+			$list[$key]['id'] = $row['RecId'];
+			$list[$key]['text'] = $row['Nama'];
+			$key++;
+		}
 
+		return $list;
+	}
 	public function read_pengguna()
 	{
 		$query = $this->db->query("select a.*,b.OpsiLogin,c.Nama as NamaSatker,d.Nama as NamaOrganisasi 
@@ -95,7 +107,7 @@ class Model_pengguna extends CI_Model
 		// print_r($dataInput);
 		$query = $this->db->query("update pengguna set Nama=?,Jabatan=?,SatkerId=?,OrganisasiId=?,NipLama=?,NipBaru=?,AtasanId=? 
 		where RecId=?
-		", array($dataInput['Nama'],$dataInput['Jabatan'], $dataInput['SatkerId'], $dataInput['OrganisasiId'], $dataInput['NipLama'], $dataInput['NipBaru'], $dataInput['AtasanId'], $dataInput['RecId']));
+		", array($dataInput['Nama'], $dataInput['Jabatan'], $dataInput['SatkerId'], $dataInput['OrganisasiId'], $dataInput['NipLama'], $dataInput['NipBaru'], $dataInput['AtasanId'], $dataInput['RecId']));
 		$afftectedRows = $this->db->affected_rows();
 		if ($afftectedRows == 1) {
 

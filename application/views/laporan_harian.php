@@ -477,9 +477,6 @@
 
     }
 </script>
-
-
-<input type="text" class="form-control">
 <script>
     $(function() {
         $('.tanggal').datepicker({
@@ -622,7 +619,7 @@
             placeholder: 'masukkan nama propinsi',
             ajax: {
                 dataType: 'json',
-                url: 'action/daftarProvinsi.php',
+                url: '<?php echo base_url(); ?>/servicepengguna/read_pengguna_search',
                 delay: 800,
                 data: function(params) {
                     return {
@@ -636,8 +633,9 @@
                 },
             }
         }).on('select2:select', function(evt) {
+            console.log(evt.params.data.id);
             var data = $(".select2 option:selected").text();
-            alert("Data yang dipilih adalah " + data);
+            // alert("Data yang dipilih adalah " + data);
         });
     });
 </script>
