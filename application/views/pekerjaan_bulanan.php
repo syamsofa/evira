@@ -542,7 +542,7 @@
                         "" + outputDataBaris.NamaPenerimaPekerjaan + "",
 
                         "<input onchange='ubahVolumePenugasan(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;' value='" + outputDataBaris.Volume + "'>",
-                        "<input  style='text-align:right;' disabled value='" + outputDataBaris.VolumeRealisasi + "'>",
+                        "<input onchange='ubahVolumeRealisasi(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;'  value='" + outputDataBaris.VolumeRealisasi + "'>",
                         "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + "," + RecId + ")' class='btn btn-danger'>Hapus</button>"
                     ]);
 
@@ -578,6 +578,35 @@
             type: "POST",
             async: false,
             url: '<?php echo base_url(); ?>/Servicepekerjaanpengguna/ubah_volume_pekerjaan_pengguna_by_id',
+            data: {
+                Volume: value,
+                RecId: baris
+            },
+            dataType: 'json',
+            success: function(output) {
+                loadTabelPenugasanPekerjaan(pekerjaanId)
+
+
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
+
+
+    }
+</script>
+<script>
+    function ubahVolumeRealisasi(value, baris, pekerjaanId) {
+        // console.log(value, baris)
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/Servicepekerjaanpengguna/ubah_volume_realisasi_pekerjaan_pengguna_by_id',
             data: {
                 Volume: value,
                 RecId: baris
