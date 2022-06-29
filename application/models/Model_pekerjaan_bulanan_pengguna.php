@@ -401,6 +401,13 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
      set VolumeRealisasi=?    where RecId=?
 		", array($dataInput['Volume'], $dataInput['RecId']));
     }
+    public function ubah_tanggal_pekerjaan_pengguna_by_id($dataInput)
+    {
+        // print_r($dataInput);
+        $this->db->query("update pekerjaan_bulanan_pengguna 
+     set TanggalMulai=?,TanggalSelesai=? where PekerjaanId=?
+		", array($dataInput['TanggalMulai'],$dataInput['TanggalSelesai'], $dataInput['RecId']));
+    }
     public function delete_pekerjaan_pengguna_by_id($dataInput)
     {
         $this->db->query("delete from pekerjaan_bulanan_pengguna 

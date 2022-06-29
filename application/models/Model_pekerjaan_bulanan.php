@@ -165,6 +165,8 @@ class Model_pekerjaan_bulanan extends CI_Model
         );
         $afftectedRows = $this->db->affected_rows();
         if ($afftectedRows == 1) {
+
+            $this->model_pekerjaan_bulanan_pengguna->ubah_tanggal_pekerjaan_pengguna_by_id($dataInput);
             return array(
                 'sukses' => true,
                 'data' => $dataToSave
