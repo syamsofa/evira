@@ -68,7 +68,7 @@
                             <th>File</th>
                             <th>Lihat</th>
 
-                            <th>Tipe WFO/WFH/Cuti</th>
+                            <th>Tipe WFO/Cuti/Dinas Luar</th>
                             <th>Waktu Upload</th>
                             <th></th>
 
@@ -592,7 +592,7 @@
 <script>
     function setAtribut(jenis) {
         // alert(jenis)
-        if (jenis == 'cuti') {
+        if (jenis == 'cuti' || jenis == 'dl' ) {
             // $( "#tanggalPekerjaan" ).prop( "disabled", true );
             $("#fileLaporan").prop("disabled", true);
 
