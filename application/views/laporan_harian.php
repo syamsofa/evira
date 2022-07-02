@@ -314,6 +314,8 @@
 
                                 if (outputDataBaris.Upload.Data.JenisKehadiran == 'cuti')
                                     return "CUTI"
+                                else if (outputDataBaris.Upload.Data.JenisKehadiran == 'dl')
+                                    return "Dinas Luar"
                                 else
 
                                     return "<a href='" + outputDataBaris.Upload.Data.Tautan + "'><i class='fa fa-file-text' aria-hidden='true'></i> Tersedia</a>"
@@ -325,6 +327,8 @@
                             if (outputDataBaris.Upload.JumUpload > 0) {
                                 if (outputDataBaris.Upload.Data.JenisKehadiran == 'cuti')
                                     return "CUTI"
+                                else if (outputDataBaris.Upload.Data.JenisKehadiran == 'dl')
+                                    return "Dinas Luar"
                                 else
 
                                     return "<button class='btn-success' data-toggle='tooltipView' data-placement='top' title='Lihat Laporan Secara Live' onclick='bukaModalViewLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-eye' aria-hidden='true'></i> </button>"
@@ -336,6 +340,7 @@
                             if (outputDataBaris.Upload.JumUpload > 0) {
 
                                 return outputDataBaris.Upload.Data.JenisKehadiran
+
                             } else
                                 return '-'
                             // 
@@ -344,6 +349,9 @@
                             if (outputDataBaris.Upload.JumUpload > 0) {
                                 if (outputDataBaris.Upload.Data.JenisKehadiran == 'cuti')
                                     return "CUTI"
+                                else if (outputDataBaris.Upload.Data.JenisKehadiran == 'dl')
+                                    return "Dinas Luar"
+
                                 else
 
                                     return outputDataBaris.Upload.Data.CreatedDate
@@ -355,6 +363,9 @@
                             if (outputDataBaris.Upload.JumUpload > 0) {
                                 if (outputDataBaris.Upload.Data.JenisKehadiran == 'cuti')
                                     return "CUTI"
+                                else if (outputDataBaris.Upload.Data.JenisKehadiran == 'dl')
+                                    return "Dinas Luar"
+
                                 else
 
                                     return "<button class='btn-danger' data-toggle='tooltipHapus' data-placement='top' title='Hapus Laporan' onclick='hapusLaporanHarian(\"" + outputDataBaris.Upload.Data.NamaFile + "\")' ><i class='fa fa-trash' aria-hidden='true'></i> </button>"
@@ -592,7 +603,7 @@
 <script>
     function setAtribut(jenis) {
         // alert(jenis)
-        if (jenis == 'cuti' || jenis == 'dl' ) {
+        if (jenis == 'cuti' || jenis == 'dl') {
             // $( "#tanggalPekerjaan" ).prop( "disabled", true );
             $("#fileLaporan").prop("disabled", true);
 
@@ -639,13 +650,3 @@
         });
     });
 </script>
-<div class="row">
-    <div class="col-lg-4">
-        <form class="form-group">
-            <label>Contoh Select2 Ajax</label>
-            <select name="kabupaten" class="form-control select2">
-                <option value="">- pilih kabupaten -</option>
-            </select>
-        </form>
-    </div>
-</div>

@@ -10,7 +10,7 @@ if ($this->session->userdata('Email') == null)
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Evaluasi BPS Rembang</title>
+  <title>Evaluasi BPS Kabupaten Rembang</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -416,7 +416,7 @@ if ($this->session->userdata('Email') == null)
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-      <strong>Copyright &copy; 2021 <a href="">BPS Rembang</a>.</strong>
+      <strong>Copyright &copy; 2021 <a href="">BPS Kabupaten Rembang</a>.</strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> 1.0.0
