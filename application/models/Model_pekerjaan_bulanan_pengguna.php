@@ -11,6 +11,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         $this->load->model('model_log_pekerjaan_pengguna');
         $this->load->model('model_pengguna');
         $this->load->model('model_penilaian_tim');
+        $this->load->model('model_laporan_harian');
         // $this->load->model('email_model');
         //call function
         // Your own constructor code
@@ -275,6 +276,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         $array = [];
         foreach ($this->model_pengguna->read_pengguna()['data'] as $row) {
             $row['Ringkasan'] = $this->read_pekerjaan_pengguna_by_pengguna_tahun_bulan(array("PenerimaPekerjaanId" => $row['RecId'], "Tahun" => $dataInput['Tahun'], "Bulan" => $dataInput['Bulan']))['data']['ringkasan'];
+            $row['KinerjaLaporanHarian'] = $this->model_laporan_harian->kinerja_laporan_harian_by_pengguna_tahun_bulan(array("IdPengguna" => $row['RecId'], "Tahun" => $dataInput['Tahun'], "Bulan" => $dataInput['Bulan']));
 
             $array[] = $row;
         }
@@ -406,7 +408,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         // print_r($dataInput);
         $this->db->query("update pekerjaan_bulanan_pengguna 
      set TanggalMulai=?,TanggalSelesai=? where PekerjaanId=?
-		", array($dataInput['TanggalMulai'],$dataInput['TanggalSelesai'], $dataInput['RecId']));
+		", array($dataInput['TanggalMulai'], $dataInput['TanggalSelesai'], $dataInput['RecId']));
     }
     public function delete_pekerjaan_pengguna_by_id($dataInput)
     {

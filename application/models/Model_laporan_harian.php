@@ -23,13 +23,30 @@ class Model_laporan_harian extends CI_Model
             'data' => $dataLengkap
         );
     }
+    public function kinerja_laporan_harian_by_pengguna_tahun_bulan($dataInput)
+    {
+        $data = $this->fungsi->daftarTanggalByBulanByTahun($dataInput['Tahun'], $dataInput['Bulan']);
+        $dataLengkap = [];
+        $Jum = 0;
+        foreach ($data as $dataPerTanggal) {
+            $Jum = $Jum + $this->cek_laporan_harian([
+                "Tanggal" => $dataPerTanggal['Tanggal'],
+                "Pengguna" => ["IdPengguna" => $dataInput['IdPengguna']],
+
+            ]);
+        }
+        return array(
+            'sukses' => true,
+            'jum' => $Jum
+        );
+    }
     public function create_laporan_harian($dataInput)
     {
         // print_r($this->cek_laporan_harian($dataInput));
         if ($this->cek_laporan_harian($dataInput) > 0) {
             $this->db->query(
                 "update laporan_harian set NamaFile=?,JenisKehadiran=?,Ekstensi=?,Base64=?,CreatedDate=? where Tanggal=? and IdPengguna=? ",
-                [$dataInput['NamaFile'], $dataInput['JenisKehadiran'], $dataInput['Ekstensi'], $dataInput['Base64'],$dataInput['CreatedDate'], $dataInput['Tanggal'], $dataInput['Pengguna']['IdPengguna']]
+                [$dataInput['NamaFile'], $dataInput['JenisKehadiran'], $dataInput['Ekstensi'], $dataInput['Base64'], $dataInput['CreatedDate'], $dataInput['Tanggal'], $dataInput['Pengguna']['IdPengguna']]
             );
             return array(
                 'sukses' => true,
@@ -140,7 +157,6 @@ class Model_laporan_harian extends CI_Model
                 return ["sukses" => true, "pesan" => "Berhasil Mengubah Database"];
             else
                 return ["sukses" => true, "pesan" => "Tidak Berhasil Mengubah Database"];
-
         }
     }
 }

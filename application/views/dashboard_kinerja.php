@@ -56,6 +56,39 @@
             </div>
             <button onclick="tampilData()" type="button" class="btn btn-success float-left">Tampilkan</button>
           </div>
+          <div class="d-none">
+            <div class="col-sm-4">
+              <div class="position-relative text-center">
+                <img height="300dp" src="https://community.bps.go.id/images/avatar/340053328_20190724105413.jpg" alt="Photo 1" class="img-circle elevation-2">
+                <div class="ribbon-wrapper ribbon-lg">
+                  <div class="ribbon bg-success text-xl">
+                    #1
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="position-relative">
+                <img src="../../dist/img/photo2.png" alt="Photo 2" class="img-fluid">
+                <div class="ribbon-wrapper ribbon-xl">
+                  <div class="ribbon bg-success text-xl">
+                    #2
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="position-relative" style="min-height: 180px;">
+                <img src="../../dist/img/photo3.jpg" alt="Photo 3" class="img-fluid">
+                <div class="ribbon-wrapper ribbon-xl">
+                  <div class="ribbon bg-success text-xl">
+                    #3
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="container_laporan_harian" class="card-body box-profile"> </div>
           <div id="container_persentase" class="card-body box-profile">
 
           </div>
@@ -72,7 +105,7 @@
       <!-- /.row (main row) -->
     </div><!-- /.container-fluid -->
 </section>
-<div class="modal fade" id="modalPenugasanPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalQuote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -114,6 +147,7 @@
       success: function(output) {
         console.log(output)
         categories = [];
+        jumlahLaporanHarian = [];
         nilai = [];
         nilaiKegiatan = [];
         warna = [];
@@ -127,6 +161,10 @@
             warna = 'blue'
           else warna = 'red'
 
+          jumlahLaporanHarian.push({
+            y: parseInt(row.KinerjaLaporanHarian.jum),
+            color: warna
+          })
           nilai.push({
             y: parseInt(row.Ringkasan.rerataPersentaseKinerja),
             color: warna
@@ -139,7 +177,74 @@
 
         });
 
+        Highcharts.chart('container_laporan_harian', {
+          chart: {
+            type: 'column'
+          },
+          title: {
+            text: 'Jumlah Upload Laporan Harian Bulan ' + $("#bulanPekerjaan").val() + ' Tahun ' + $("#tahunPekerjaan").val()
+          },
+          xAxis: {
+            categories: categories,
+            title: {
+              text: null
+            }
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: 'Jumlah',
+              align: 'high'
+            },
+            labels: {
+              overflow: 'justify'
+            }
+          },
+          tooltip: {
+            valueSuffix: ' laporan'
+          },
+          plotOptions: {
+            bar: {
+              dataLabels: {
+                enabled: true
+              }
+            }
+          },
+          // colors: warna,
+          legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+          },
+          credits: {
+            enabled: false
+          },
+          series: [{
+            name: 'Jumlah Laporan',
+            data: jumlahLaporanHarian,
+            dataLabels: {
+              enabled: true,
 
+              rotation: 0,
+              color: '#FFFAFF',
+              align: 'right',
+              format: '{point.y:.0f}', // one decimal
+              y: 10, // 10 pixels down from the top
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Verdana, sans-serif'
+              }
+
+            }
+
+          }]
+        });
 
         Highcharts.chart('container_persentase', {
           chart: {
@@ -303,16 +408,11 @@
 </script>
 
 <script>
-  function bukaModalPenugasanPekerjaan() {
-
-
-
-    $('#modalPenugasanPekerjaan').modal('show');
-
-
-
-
-
+  function bukamodalQuote() {
+    $('#modalQuote').modal('show');
   }
-  bukaModalPenugasanPekerjaan()
+
+  let pantun = "<?php echo $this->uri->segment(3); ?>"
+  if (pantun == 'pantun')
+    bukamodalQuote()
 </script>
