@@ -161,9 +161,16 @@
             warna = 'blue'
           else warna = 'red'
 
+          let warnaLaporanHarian
+          if (row.KinerjaLaporanHarian.jum > 18)
+            warnaLaporanHarian = 'green'
+          else if (row.KinerjaLaporanHarian.jum > 10)
+            warnaLaporanHarian = 'blue'
+          else warnaLaporanHarian = 'red'
+
           jumlahLaporanHarian.push({
             y: parseInt(row.KinerjaLaporanHarian.jum),
-            color: warna
+            color: warnaLaporanHarian
           })
           nilai.push({
             y: parseInt(row.Ringkasan.rerataPersentaseKinerja),
