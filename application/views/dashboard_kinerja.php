@@ -72,6 +72,32 @@
       <!-- /.row (main row) -->
     </div><!-- /.container-fluid -->
 </section>
+<div class="modal fade" id="modalPenugasanPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="exampleModalLabel">QUOTE</h1>
+
+
+
+      </div>
+      <div class="modal-body">
+        <blockquote class="blockquote text-left">
+          <p class="mb-0">
+          <h1>
+            <p><i>Gelar Kloso DiLenggui Wong Papat. Ojo Roso Roso, Ayo Semangat.</i></p>
+          </h1>.</p>
+          <footer class="blockquote-footer">Mas <cite title="Source Title">Bro</cite></footer>
+        </blockquote>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script>
@@ -274,4 +300,19 @@
 
     tampilData()
   }, 1000);
+</script>
+
+<script>
+  function bukaModalPenugasanPekerjaan() {
+
+
+
+    $('#modalPenugasanPekerjaan').modal('show');
+
+
+
+
+
+  }
+  bukaModalPenugasanPekerjaan()
 </script>

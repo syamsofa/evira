@@ -70,7 +70,7 @@
                             <th>Batas Waktu</th>
                             <th>Tanggal Penyelesaian/Penyerahan</th>
                             <th>Kepatuhan</th>
-                            <th>Penilaian Atasan</th>
+                            <th>Penilaian Ketua Tim</th>
                             <th>Aksi</th>
 
 

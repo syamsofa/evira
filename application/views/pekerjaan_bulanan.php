@@ -25,7 +25,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Tahun Pembuatan/ Kegiatan</label>
+                            <label for="" class="col-sm-2 col-form-label">Tahun Kegiatan</label>
                             <div class="col-sm-10">
                                 <select id="tahunPekerjaan" onchange="loadTabelPekerjaan()" required class="custom-select">
                                     <option value=''>--PILIH--</option>
@@ -44,7 +44,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Bulan Pembuatan/ Kegiatan</label>
+                            <label for="" class="col-sm-2 col-form-label">Bulan Kegiatan</label>
                             <div class="col-sm-10">
                                 <select onchange="loadTabelPekerjaan()" id="bulanPekerjaan" required class="custom-select">
                                     <option value=''>--PILIH--</option>

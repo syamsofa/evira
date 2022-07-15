@@ -58,16 +58,13 @@ class Model_pekerjaan_bulanan extends CI_Model
         left join pengguna c on c.RecId=a.CreatedBy
         left join status_penugasan d on d.RecId=a.StatusPenugasanId
         where a.CreatedBy=? and (
-                 (MONTH(a.CreatedDate)=?
-                and YEAR(a.CreatedDate)=?)
-                
-                or 
+                  
                 
                 (MONTH(a.TanggalMulai)=? and YEAR(a.TanggalMulai)=?)
                 
                 or 
                 
-                (MONTH(a.TanggalSelesai)=? and YEAR(a.TanggalSelesai)=?));		", array($inputData['RecId'], $inputData['Bulan'], $inputData['Tahun'], $inputData['Bulan'], $inputData['Tahun'], $inputData['Bulan'], $inputData['Tahun']));
+                (MONTH(a.TanggalSelesai)=? and YEAR(a.TanggalSelesai)=?));		", array($inputData['RecId'],  $inputData['Bulan'], $inputData['Tahun'], $inputData['Bulan'], $inputData['Tahun']));
         $data = array();
 
         foreach ($query->result_array() as $row) {

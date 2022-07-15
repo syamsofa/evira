@@ -433,7 +433,7 @@
                         "" + outputDataBaris.TanggalRealisasiFormatted + "",
                         "" + outputDataBaris.KalimatSelisihRealisasiDanTarget + "",
 
-                        "<input class='inputNilai form-control' style='text-align: right;' id='pa_" + i + "' onBlur='ubahPenilaianTimPenilai(outputData," + i + ",\"" + outputDataBaris.PenilaianAtasan + "\",this.value)' max=100  type='number' min='0' value=" + outputDataBaris.Nilai + "> "
+                        "Rerata: " + outputDataBaris.PenilaianTim.data.Rerata + "<button onclick=bukaModalLihatPenilaianTim(" + i + ")>Lihat</button><input size='3' class='inputNilai form-control' style='text-align: right;' id='pa_" + i + "' onBlur='ubahPenilaianTimPenilai(outputData," + i + ",\"" + outputDataBaris.PenilaianAtasan + "\",this.value)' max=100  type='number' min='0' value=" + outputDataBaris.Nilai + "> "
 
 
 

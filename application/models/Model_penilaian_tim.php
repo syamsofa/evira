@@ -24,7 +24,7 @@ class Model_penilaian_tim extends CI_Model
 		foreach ($query->result_array() as $row) {
 
 
-			$row['Penilai']=$this->model_pengguna->read_pengguna_by_id(["RecId" => $row['IdPenilai']]);
+			$row['Penilai'] = $this->model_pengguna->read_pengguna_by_id(["RecId" => $row['IdPenilai']]);
 			$data[] = $row;
 			$jumlah = $jumlah + $row['Nilai'];
 			$count++;
@@ -35,7 +35,7 @@ class Model_penilaian_tim extends CI_Model
 
 		return array(
 			'sukses' => true,
-			'data' => ["Rerata" => $rerata, "Detail" => $data]
+			'data' => ["Rerata" => number_format($rerata, 2), "Detail" => $data]
 		);
 	}
 }

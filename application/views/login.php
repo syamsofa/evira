@@ -1,6 +1,6 @@
 <?php
 if ($this->session->userdata('Email'))
-    redirect('site/dashboard');
+    redirect('site/dashboard_kinerja/pantun');
 
 ?>
 
@@ -44,58 +44,76 @@ include APPPATH . 'third_party/glogin/config.php';
 </head>
 
 <body class="hold-transition login-page">
-
+    
     <div class="login-box align-items-center">
-        <!-- /.login-logo -->
-        <div class="card card-outline card-primary">
-            <div class="card-header text-center">
-                <i class="fa fa-desktop fa-2x" aria-hidden="true"></i> <a href="<?php echo base_url(); ?>" class="h1"><b>Evaluasi</b> <br>BPS Rembang</a>
-            </div>
-            <div class="card-body">
+        
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="position-relative">
+                            <img src="https://rembangkab.bps.go.id/backend/images/Header-Frontend-Besar-ind.jpg" alt="Photo 1" class="img-fluid">
+                            <div class="card card-outline card-primary">
+                                <div class="card-header text-center">
+                                    <a href="<?php echo base_url(); ?>" class="h3"><b>Evaluasi</b> <br>BPS Kab. Rembang</a>
+                                </div>
+                                <div class="card-body">
 
-                <form id="formLogin">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="username" placeholder="Username Community">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
+                                    <form id="formLogin">
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="username" placeholder="Username Community">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-user"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <input type="password" class="form-control" id="password" placeholder="Password Community">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-lock"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="icheck-primary">
+                                                </div>
+                                            </div>
+                                            <!-- /.col -->
+                                            <div class="col-4">
+
+
+                                                <button id="buttonSubmit" type="submit" class="btn btn-primary btn-block">Login</button>
+                                            </div>
+
+                                            <!-- /.col -->
+                                        </div>
+                                    </form>
+
+                                    <div class="social-auth-links text-center mt-2 mb-3">
+                                        <a hidden href="<?php echo $google_client->createAuthUrl(); ?>" class="btn btn-block btn-danger">
+                                            <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+                                        </a>
+                                    </div>
+                                    <!-- /.social-auth-links -->
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <div class="ribbon-wrapper ribbon-lg">
+                                <div class="ribbon bg-success text-lg">
+                                    EVIRA
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" id="password" placeholder="Password Community">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                            </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-4">
-
-
-                            <button id="buttonSubmit" type="submit" class="btn btn-primary btn-block">Login</button>
-                        </div>
-
-                        <!-- /.col -->
-                    </div>
-                </form>
-
-                <div class="social-auth-links text-center mt-2 mb-3">
-                    <a hidden href="<?php echo $google_client->createAuthUrl(); ?>" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                    </a>
+                   
                 </div>
-                <!-- /.social-auth-links -->
-
             </div>
-            <!-- /.card-body -->
-        </div>
+
+        
+
         <!-- /.card -->
     </div>
     <script src="<?php echo base_url(); ?>/AdminLTE-master/plugins/jquery/jquery.min.js"></script>
