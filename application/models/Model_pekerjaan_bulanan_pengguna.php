@@ -280,7 +280,19 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
 
             $array[] = $row;
         }
+        // $array['Deadline'] = $this->read_deadline(["Tahun" => $dataInput['Tahun'], "Bulan" => $dataInput['Bulan']]);
+
         return $array;
+    }
+    public function dashboard_deadline($dataInput)
+    {
+
+        $query = $this->db->query("SELECT *,now(), DATEDIFF(TanggalSelesai,now()) AS date_difference FROM pekerjaan_bulanan where  YEAR(TanggalSelesai)=? and MONTH(TanggalSelesai)=? 
+        AND DATEDIFF(TanggalSelesai,now()) <=5
+        AND DATEDIFF(TanggalSelesai,now())>0
+        ORDER by TanggalSelesai DESC LIMIT 9 ",["Tahun" => $dataInput['Tahun'], "Bulan" => $dataInput['Bulan']]);
+
+        return $query->result_array();
     }
     public function cek_duplikat_pekerjaan_bulanan_pengguna($dataInput)
     {
@@ -330,6 +342,11 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         );
         $afftectedRows = $this->db->affected_rows();
         if ($afftectedRows == 1) {
+
+            $this->db->query(
+                "insert into penilaian_tim (IdPenilai,IdPekerjaanPengguna,Nilai) values (?,?,?)  ",
+                [$this->session->userdata('RecId'), $this->db->insert_id(), 98]
+            );
             return array(
                 'sukses' => true,
                 'data' => $dataInput

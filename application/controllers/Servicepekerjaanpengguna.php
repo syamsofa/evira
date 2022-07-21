@@ -310,6 +310,11 @@ class Servicepekerjaanpengguna extends CI_Controller
         $writer->save('php://output');
         // echo json_encode($output);
     }
+    public function dashboard_deadline()
+    {
+
+        echo json_encode($this->model_pekerjaan_bulanan_pengguna->dashboard_deadline($this->input->post()));
+    }
     public function dashboard_kinerja()
     {
 

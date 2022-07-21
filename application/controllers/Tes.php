@@ -24,6 +24,19 @@ class Tes extends CI_Controller
     {
         date_default_timezone_set('Asia/Jakarta');
         echo  date("Y-m-d G:i:s");
-        
+    }
+    public function jebret()
+    {
+        $query = $this->db->query("select * from pekerjaan_bulanan_pengguna ");
+
+        foreach ($query->result_array() as $dat) {
+            // print_r($dat);
+            $jum = $this->db->query("select * from penilaian_tim where IdPekerjaanPengguna=? ", [$dat['RecId']])->num_rows();
+            if ($jum == 0)
+                $this->db->query(
+                    "insert into penilaian_tim (IdPenilai,IdPekerjaanPengguna,Nilai) values (?,?,?)  ",
+                    [$dat['PemberiPekerjaanId'], $dat['RecId'], 98]
+                );
+        }
     }
 }

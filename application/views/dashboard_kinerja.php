@@ -7,9 +7,19 @@
 
 <script>
   var globalTahun = new Date().getFullYear()
-  var globalBulan = new Date().getMonth()
+  var globalBulan = (new Date().getMonth())
 </script>
+<style>
+  .blink_me {
+    animation: blinker 1s linear infinite;
+  }
 
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+</style>
 <section class="content">
   <div class="container-fluid">
     <!-- Small boxes (Stat box) -->
@@ -88,6 +98,27 @@
               </div>
             </div>
           </div>
+          <div class="container-fluid">
+            <div id="deadline" class="row">
+
+              <div id="ojo" class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                  <div class="inner">
+                    <h3>44</h3>
+
+                    <p>User Registrations</p>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                  </div>
+                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+              <!-- ./col -->
+
+            </div>
+          </div>
           <div id="container_laporan_harian" class="card-body box-profile"> </div>
           <div id="container_persentase" class="card-body box-profile">
 
@@ -115,14 +146,32 @@
 
       </div>
       <div class="modal-body">
-        <blockquote class="blockquote text-left">
-          <p class="mb-0">
-          <h1>
-            <p><i>Gelar Kloso DiLenggui Wong Papat. Ojo Roso Roso, Ayo Semangat.</i></p>
-          </h1>.</p>
-          <footer class="blockquote-footer">Mas <cite title="Source Title">Bro</cite></footer>
-        </blockquote>
-
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img class="d-block w-100" src="https://statics.indozone.news/content/2020/05/28/Pjs44q7/p_5ecf7a8ca138f_4.jpg?w=700&q=85" alt="First slide">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="https://assets.promediateknologi.com/crop/0x0:0x0/x/photo/2022/04/17/4130119111.jpg" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="https://www.posbagus.com/wp-content/uploads/2019/03/000147-03_kata-kata-semangat-kerja_tombol-tunda_800x450_cc0-min.jpg" alt="Third slide">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
 
       </div>
       <div class="modal-footer">
@@ -135,6 +184,43 @@
 
 <script>
   function tampilData() {
+    $.ajax({
+      type: "POST",
+      async: false,
+      data: {
+        Bulan: $("#bulanPekerjaan").val(),
+        Tahun: $("#tahunPekerjaan").val()
+      },
+      url: '<?php echo base_url(); ?>/servicepekerjaanpengguna/dashboard_deadline',
+      dataType: 'json',
+      success: function(output) {
+        console.log(output)
+        $("#deadline").empty()
+        output.forEach(dataDeadline => {
+          $("#deadline").append("<div class='col-lg-3 col-6'>" +
+            "<div class='small-box bg-warning'>" +
+            " <div class='inner'>" +
+            " <h3 class='blink_me'>"+dataDeadline.date_difference+" hari lagi</h3>" +
+
+            " <p>" + dataDeadline.Deskripsi + "</p>" +
+            " </div>" +
+            " <div class='icon'>" +
+            "   <i class='ion ion-person-add'></i>" +
+            " </div>" +
+            " <a href='#' class='small-box-footer'> <i class='fas fa-arrow-circle-right'></i></a>" +
+            " </div>" +
+            " </div>")
+
+
+        });
+
+      },
+
+      error: function(e) {
+        console.log(e.responseText);
+
+      }
+    });
     $.ajax({
       type: "POST",
       async: false,
@@ -407,7 +493,7 @@
 
 <script>
   setTimeout(() => {
-    $("#bulanPekerjaan").val(globalBulan)
+    $("#bulanPekerjaan").val(globalBulan + 1)
     $("#tahunPekerjaan").val(globalTahun)
 
     tampilData()
