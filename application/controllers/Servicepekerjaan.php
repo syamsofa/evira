@@ -24,7 +24,7 @@ class Servicepekerjaan extends CI_Controller
         $dataInput['RecId'] = $this->input->post('PenggunaId');
         $dataInput['Tahun'] = $this->input->post('Tahun');
         $dataInput['Bulan'] = $this->input->post('Bulan');
-
+// 
         // print_r($dataInput);
 
         $output = $this->model_pekerjaan_bulanan->read_pekerjaan_by_pengguna_by_tahun_by_bulan($dataInput);

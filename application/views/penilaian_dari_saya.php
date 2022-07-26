@@ -9,7 +9,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Tahun</label>
                 <div class="col-sm-10">
-                    <select id="tahunPekerjaan" required class="custom-select">
+                    <select id="tahunPekerjaan" onchange="tampilPekerjaanPenilai()" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($tahun['data'] as $rows) {
@@ -28,7 +28,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Bulan</label>
                 <div class="col-sm-10">
-                    <select id="bulanPekerjaan" required class="custom-select">
+                    <select id="bulanPekerjaan" onchange="tampilPekerjaanPenilai()" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($bulan['data'] as $rows) {
@@ -43,10 +43,32 @@
                     </select>
                 </div>
             </div>
+
             <div class="form-group row">
-                <label for="" class="col-sm-2 col-form-label">Pegawai</label>
+                <label for="" class="col-sm-2 col-form-label">Opsi Penugasan</label>
                 <div class="col-sm-10">
-                    <select id="penggunaId" required class="select2 custom-select">
+                    <select id="opsiTampil" required class="custom-select">
+                        <option value='semua'>Semua</option>
+                        <option value='darisaya'>Hanya pekerjaan yang saya tugaskan</option>
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-sm-2 col-form-label">Jika hanya yang ditugaskan dari saya, pekerjaan mana</label>
+                <div class="col-sm-10">
+                    <select id="idPekerjaan" disabled required class="custom-select">
+                        <option value=''>--PILIH--</option>
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-sm-2 col-form-label">Nama Pegawai</label>
+                <div class="col-sm-10">
+                    <select style="width:100%" id="penggunaId" required class="select2 custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($pengguna['data'] as $rows) {
@@ -439,7 +461,9 @@
             Tahun: $("#tahunPekerjaan").val(),
             Bulan: $("#bulanPekerjaan").val(),
             PenerimaPekerjaanId: $("#penggunaId").val(),
-            PenilaiId: $("#idPenilai").val()
+            PenilaiId: $("#idPenilai").val(),
+            OpsiTampil: $("#opsiTampil").val(),
+            PekerjaanId: $("#idPekerjaan").val()
 
         }
         $.ajax({
@@ -837,5 +861,51 @@
         } // End For
 
         $('#TabelPenilaianTim_info').text('Nilai Rata-rata = ' + outputData[index].PenilaianTim.data.Rerata)
+    }
+</script>
+
+<script>
+    $("#opsiTampil").change(function() {
+        if (this.value == 'darisaya')
+            $("#idPekerjaan").prop("disabled", false);
+
+        else
+            $("#idPekerjaan").prop("disabled", true);
+
+    })
+</script>
+<script>
+    function tampilPekerjaanPenilai() {
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_pengguna_by_tahun_by_bulan',
+            dataType: 'json',
+            data: {
+                PenggunaId: $("#idPenilai").val(),
+                Tahun: $("#tahunPekerjaan").val(),
+                Bulan: $("#bulanPekerjaan").val()
+
+
+            },
+            success: function(output) {
+
+                $("#idPekerjaan").empty()
+                $("#idPekerjaan").append("<option value=''>Semua Pekerjaan</option>")
+
+                output.data.forEach(element => {
+                    // console.log(element)
+
+                    $("#idPekerjaan").append("<option value=" + element.RecId + ">" + element.Deskripsi + "</option>")
+                });
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
     }
 </script>

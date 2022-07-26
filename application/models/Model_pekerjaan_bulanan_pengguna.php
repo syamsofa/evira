@@ -161,7 +161,6 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
     }
     public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput)
     {
-
         $query_tambahan = "";
         $kolom_tambahan = "";
         if (isset($dataInput['PenilaiId'])) {
@@ -169,6 +168,23 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
             and f.IdPenilai=" . $dataInput['PenilaiId'];
             $kolom_tambahan = ", f.Nilai";
         }
+
+        if (isset($dataInput['OpsiTampil'])) {
+            if ($dataInput['OpsiTampil'] == 'darisaya')
+                $query_tambahan2 = "and a.PemberiPekerjaanId=" . $dataInput['PenilaiId'];
+            elseif ($dataInput['OpsiTampil'] == 'semua')
+                $query_tambahan2 = '';
+            else
+                $query_tambahan2 = '';
+        } else
+            $query_tambahan2 = "";
+
+        if (isset($dataInput['PekerjaanId']) and $dataInput['PekerjaanId'] <> '') {
+            $query_tambahan3 = " and a.PekerjaanId=" . $dataInput['PekerjaanId'];
+        } else
+            $query_tambahan3 = "";
+
+
         $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan,
         DATE(a.TanggalMulai) as TanggalMulai,DATE(a.TanggalSelesai) as TanggalSelesai,
         d.Deskripsi,e.Satuan $kolom_tambahan
@@ -185,7 +201,10 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
          or
          MONTH(a.TanggalSelesai)=?
        )
-       and YEAR(a.TanggalSelesai)=?;
+       and YEAR(a.TanggalSelesai)=?
+       $query_tambahan2
+      $query_tambahan3
+       ;
 		", array($dataInput['PenerimaPekerjaanId'], $dataInput['Bulan'], $dataInput['Bulan'], $dataInput['Tahun']));
         $dataPerBaris = array();
 
@@ -290,7 +309,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         $query = $this->db->query("SELECT *,now(), DATEDIFF(TanggalSelesai,now()) AS date_difference FROM pekerjaan_bulanan where  YEAR(TanggalSelesai)=? and MONTH(TanggalSelesai)=? 
         AND DATEDIFF(TanggalSelesai,now()) <=5
         AND DATEDIFF(TanggalSelesai,now())>0
-        ORDER by TanggalSelesai DESC LIMIT 9 ",["Tahun" => $dataInput['Tahun'], "Bulan" => $dataInput['Bulan']]);
+        ORDER by TanggalSelesai DESC LIMIT 8 ", ["Tahun" => $dataInput['Tahun'], "Bulan" => $dataInput['Bulan']]);
 
         return $query->result_array();
     }
@@ -345,7 +364,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
 
             $this->db->query(
                 "insert into penilaian_tim (IdPenilai,IdPekerjaanPengguna,Nilai) values (?,?,?)  ",
-                [$this->session->userdata('RecId'), $this->db->insert_id(), 98]
+                [$this->session->userdata('RecId'), $this->db->insert_id(), 100]
             );
             return array(
                 'sukses' => true,
@@ -389,6 +408,11 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         );
         $afftectedRows = $this->db->affected_rows();
         if ($afftectedRows == 1) {
+            $this->db->query(
+                "insert into penilaian_tim (IdPenilai,IdPekerjaanPengguna,Nilai) values (?,?,?)  ",
+                [$this->session->userdata('RecId'), $this->db->insert_id(), 100]
+            );
+
             return array(
                 'sukses' => true
                 // 'data' => $dataInput

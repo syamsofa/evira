@@ -154,10 +154,10 @@
           </ol>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img class="d-block w-100" src="https://statics.indozone.news/content/2020/05/28/Pjs44q7/p_5ecf7a8ca138f_4.jpg?w=700&q=85" alt="First slide">
+              <img class="d-block w-100" src="https://www.posbagus.com/wp-content/uploads/2019/03/000147-03_kata-kata-semangat-kerja_tombol-tunda_800x450_cc0-min.jpg" alt="First slide">
             </div>
             <div class="carousel-item">
-              <img class="d-block w-100" src="https://assets.promediateknologi.com/crop/0x0:0x0/x/photo/2022/04/17/4130119111.jpg" alt="Second slide">
+              <img class="d-block w-100" src="https://www.posbagus.com/wp-content/uploads/2019/03/000147-03_kata-kata-semangat-kerja_tombol-tunda_800x450_cc0-min.jpg" alt="Second slide">
             </div>
             <div class="carousel-item">
               <img class="d-block w-100" src="https://www.posbagus.com/wp-content/uploads/2019/03/000147-03_kata-kata-semangat-kerja_tombol-tunda_800x450_cc0-min.jpg" alt="Third slide">
@@ -198,14 +198,14 @@
         $("#deadline").empty()
         output.forEach(dataDeadline => {
           $("#deadline").append("<div class='col-lg-3 col-6'>" +
-            "<div class='small-box bg-warning'>" +
+            "<div class='small-box bg-error'>" +
             " <div class='inner'>" +
             " <h3 class='blink_me'>"+dataDeadline.date_difference+" hari lagi</h3>" +
 
             " <p>" + dataDeadline.Deskripsi + "</p>" +
             " </div>" +
             " <div class='icon'>" +
-            "   <i class='ion ion-person-add'></i>" +
+            "   <i class='fa-file-audio-o '></i>" +
             " </div>" +
             " <a href='#' class='small-box-footer'> <i class='fas fa-arrow-circle-right'></i></a>" +
             " </div>" +
