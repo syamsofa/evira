@@ -17,4 +17,13 @@ class Servicepenilaian extends CI_Controller
 
         echo json_encode($output);
     }
+    
+    public function simpan_nilai_dari_kepala()
+    {
+        // print_r($this->input->post());
+        $output = $this->model_penilaian_tim->simpan_nilai_dari_kepala($this->input->post());
+
+        // echo json_encode($output);
+    }
+    
 }

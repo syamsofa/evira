@@ -92,6 +92,14 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
+    public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan_2()
+    {
+        $dataInput = $this->input->post();
+
+        $output = $this->model_pekerjaan_bulanan_pengguna->read_pekerjaan_pengguna_by_pengguna_tahun_bulan_2($dataInput);
+
+        echo json_encode($output);
+    }
     public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan_by_tim_penilai()
     {
         $dataInput = $this->input->post();
@@ -187,18 +195,10 @@ class Servicepekerjaanpengguna extends CI_Controller
         $startBarisPekerjaanPengguna = 12;
 
         $outputPekerjaanPengguna = $this->model_pekerjaan_bulanan_pengguna->read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput);
+        $outputPekerjaanPengguna = $this->model_pekerjaan_bulanan_pengguna->read_pekerjaan_pengguna_by_pengguna_tahun_bulan_2($dataInput);
 
-        // return array(
-        //     'sukses' => true,
-        //     'data' => array(
-        //         "detail" => $dataPerBaris,
-        //         "ringkasan" => array(
-        //             "rerataPersentaseRealisasiVolume" => $rerataPersentaseRealisasiVolume,
-        //             "rerataPersentasePenilaianAtasan" => $rerataPersentasePenilaianAtasan
-        //         )
-        // $outputPekerjaanPengguna
-        $sheet->setCellValue('G14', $outputPekerjaanPengguna['data']['ringkasan']['rerataPersentaseRealisasiVolume']);
-        $sheet->setCellValue('H14', $outputPekerjaanPengguna['data']['ringkasan']['rerataPersentasePenilaianAtasan']);
+        // $sheet->setCellValue('G14', $outputPekerjaanPengguna['data']['ringkasan']['rerataPersentaseRealisasiVolume']);
+        // $sheet->setCellValue('H14', $outputPekerjaanPengguna['data']['ringkasan']['rerataPersentasePenilaianAtasan']);
 
         foreach ($outputPekerjaanPengguna['data']['detail'] as $rowPekerjaanPengguna) {
             $sheet->insertNewRowBefore($startBarisPekerjaanPengguna);
@@ -206,7 +206,10 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         $indeks = 0;
         // $coPenilaianTim=0;
-        $sumPenilaianTim = 0;
+        // $sumPenilaianTim = 0;
+
+        $rerataKuantitas=0;
+        $rerataKualitas=0;
         foreach ($outputPekerjaanPengguna['data']['detail'] as $rowPekerjaanPengguna) {
             $no = $indeks + 1;
 
@@ -220,16 +223,20 @@ class Servicepekerjaanpengguna extends CI_Controller
             $sheet->setCellValue('E' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['Volume']);
             $sheet->setCellValue('F' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['VolumeRealisasi']);
             $sheet->setCellValue('G' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PersentaseRealisasiVolume']);
-            $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PenilaianTim']['data']['Rerata']);
+            $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PenilaianKepala']['nilai']);
             $sheet->getStyle("B:K")->getFont()->setItalic(false);
 
-            $sumPenilaianTim = $sumPenilaianTim + $rowPekerjaanPengguna['PenilaianTim']['data']['Rerata'];
+            $penilaianDariKepala=$rowPekerjaanPengguna['PenilaianKepala']['nilai'];
+            // $sumPenilaianTim = $sumPenilaianTim + $rowPekerjaanPengguna['PenilaianTim']['data']['Rerata'];
 
             $startBarisPekerjaanPengguna++;
             $indeks++;
         }
-        $rerataPenilaianTim = $sumPenilaianTim / ($indeks + 1);
-
+        $startBarisPekerjaanPengguna=$startBarisPekerjaanPengguna+2;
+        // $rerataPenilaianTim = $sumPenilaianTim / ($indeks + 1);
+        $sheet->setCellValue('G' . $startBarisPekerjaanPengguna, $outputPekerjaanPengguna['data']['ringkasan']['rerataPersentaseRealisasiVolume']);
+        $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $penilaianDariKepala);
+    
         $writer = new Xlsx($spreadsheet);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

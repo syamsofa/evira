@@ -898,6 +898,7 @@
 </script>
 <script>
     function cek(element) {
+        
         let nilaiMasukan = parseInt(element.value)
         const rangeNilai = [97, 98, 99]
         if (!rangeNilai.includes(nilaiMasukan)) {
@@ -925,14 +926,12 @@
         $.ajax({
             type: "POST",
             async: false,
-            url: '<?php echo base_url(); ?>/servicepenilaian/simpan_nilai',
+            url: '<?php echo base_url(); ?>/servicepenilaian/simpan_nilai_dari_kepala',
             dataType: 'json',
             data: {
                 BulanPekerjaan: BulanPekerjaan,
                 TahunPekerjaan: TahunPekerjaan,
-                IdPenilai: IdPenilai,
                 IdDinilai: $(element).attr("IdDinilai"),
-                Kolom: $(element).attr("Kolom"),
                 Nilai: element.value
 
             },
@@ -1002,7 +1001,7 @@
                             "" + outputDataBaris.Nama + "",
                             "" + outputDataBaris.Tahun + "-" + outputDataBaris.Bulan,
                             "" + outputDataBaris.NilaiDariKetuaTim.rerata + " <button onclick='lihatDataKetuaTim(\"" + i + "\")'>Lihat Detail</button>",
-                            "<input kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='' class='nilaiPegawai'  onblur='cek(this)'>",
+                            "<input onchange='cek(this)' kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.NilaiDariKepala.nilai + "' class='nilaiPegawai'  onblur='cek(this)'>",
                             ""
 
                         ]);
@@ -1062,8 +1061,8 @@
             $("#TabelPenilaianKetuaTim").append("<tr><td>" + element.Nama + "</td><td>" + element.Nilai.BebanKerja + "</td><td>" + element.Nilai.TanggungJawab + "</td><td>" + element.Nilai.Disiplin + "</td><td>" + element.Nilai.Profesionalitas + "</td><td>" + element.Nilai.KualitasKerja + "</td><td>" + element.Nilai.NilaiKeseluruhan + "</td></tr>");
         });
 
-        $("#TabelPenilaianKetuaTim").append("<tr><td  colspan=6>NILAI KESELURUHAN </td><td>"+TabelNilai[i].NilaiDariKetuaTim.rerata+"</td></tr>")
+        $("#TabelPenilaianKetuaTim").append("<tr><td  colspan=6>NILAI KESELURUHAN </td><td>" + TabelNilai[i].NilaiDariKetuaTim.rerata + "</td></tr>")
 
-        $("#teksKeteranganYangDinilai").text("Penilaian dari Ketua Tim untuk "+TabelNilai[i].Nama)
+        $("#teksKeteranganYangDinilai").text("Penilaian dari Ketua Tim untuk " + TabelNilai[i].Nama)
     }
 </script>

@@ -82,7 +82,7 @@ class Model_penilaian_tim extends CI_Model
 		$array = [];
 		if ($query->num_rows() > 0) {
 
-			
+
 			return array(
 				'sukses' => true,
 				'nilai' => $query->result_array()[0]['Nilai']
@@ -122,6 +122,31 @@ class Model_penilaian_tim extends CI_Model
 			'KualitasKerja' => $KualitasKerja,
 			'NilaiKeseluruhan' => $NilaiKeseluruhan
 		);
+	}
+
+	public function simpan_nilai_dari_kepala($dataMasukan)
+	{
+		print_r($dataMasukan);
+
+		$IdDinilai = $dataMasukan['IdDinilai'];
+		$Nilai = $dataMasukan['Nilai'];
+		$Tahun = $dataMasukan['TahunPekerjaan'];
+		$Bulan = $dataMasukan['BulanPekerjaan'];
+
+		$cek = $this->db->query("select * from penilaian_kepala where IdDinilai=? and Tahun=? and Bulan=?", array($IdDinilai, $Tahun, $Bulan));
+		if ($cek->num_rows() > 0) {
+
+			$this->db->query("update penilaian_kepala set Nilai=? where IdDinilai=? and Tahun=? and Bulan=?", [$Nilai, $IdDinilai,  $Tahun, $Bulan]);
+		} else
+			$this->db->query("insert into penilaian_kepala (IdDinilai,Tahun,Bulan,Nilai) values (?,?,?,?) ", [$IdDinilai,  $Tahun, $Bulan, $Nilai]);
+
+		// return array(
+		// 	'BebanKerja' => (empty($dataNilai['BebanKerja'])) ?  0 : $dataNilai['BebanKerja'],
+		// 	'TanggungJawab' => (empty($dataNilai['TanggungJawab'])) ?  0 : $dataNilai['TanggungJawab'],
+		// 	'Disiplin' => (empty($dataNilai['Disiplin'])) ?   0 : $dataNilai['Disiplin'],
+		// 	'Profesionalitas' => (empty($dataNilai['Profesionalitas'])) ?   0 : $dataNilai['Profesionalitas'],
+		// 	'KualitasKerja' => (empty($dataNilai['KualitasKerja'])) ?   0 : $dataNilai['KualitasKerja']
+		// );
 	}
 	public function simpan_nilai($dataMasukan)
 	{

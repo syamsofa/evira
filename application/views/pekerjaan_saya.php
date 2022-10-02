@@ -50,7 +50,7 @@
                     </select>
                 </div>
             </div>
-            <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left">Tampilkan</button>
+            <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left">Refresh</button>
             <button id="" onclick="unduhRekapLaporan()" type="button" class="btn btn-warning float-right"><i class="fa fa-download" aria-hidden="true"></i> Unduh Data dari Laporan Harian</button>
             <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right"><i class="fa fa-download" aria-hidden="true"></i> Cetak CKPR</button>
             <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right"><i class="fa fa-download" aria-hidden="true"></i> Cetak CKPT</button>
@@ -66,11 +66,11 @@
                             <th>Satuan</th>
                             <th>Target</th>
                             <th>Realisasi</th>
-                            <th>Persentase</th>
                             <th>Batas Waktu</th>
                             <th>Tanggal Penyelesaian/Penyerahan</th>
                             <th>Kepatuhan</th>
-                            <th>Penilaian Ketua Tim</th>
+                            <th>Kuantitas (%)</th>
+                            <th>Kualitas (%)</th>
                             <th>Aksi</th>
 
 
@@ -480,7 +480,7 @@
         $.ajax({
             type: "POST",
             async: false,
-            url: '<?php echo base_url(); ?>/servicepekerjaanpengguna/read_pekerjaan_pengguna_by_pengguna_tahun_bulan',
+            url: '<?php echo base_url(); ?>/servicepekerjaanpengguna/read_pekerjaan_pengguna_by_pengguna_tahun_bulan_2',
             dataType: 'json',
             data: data,
             success: function(output) {
@@ -502,13 +502,14 @@
 
 
                         "" + outputDataBaris.VolumeRealisasi + "",
-                        "" + outputDataBaris.PersentaseRealisasiVolume + "%",
 
                         "" + outputDataBaris.TanggalSelesaiFormatted + "",
                         // "" + outputDataBaris.KalimatSisaHari + "",
                         "" + outputDataBaris.TanggalRealisasiFormatted + "",
                         "" + outputDataBaris.KalimatSelisihRealisasiDanTarget + "",
-                        "" + outputDataBaris.PenilaianTim.data.Rerata + " <button onclick=bukaModalLihatPenilaianTim(" + i + ")>Lihat</button>",
+                        // "" + outputDataBaris.PenilaianTim.data.Rerata + " <button onclick=bukaModalLihatPenilaianTim(" + i + ")>Lihat</button>",
+                        "" + outputDataBaris.PersentaseRealisasiVolume + " ",
+                        "" + outputDataBaris.PenilaianKepala.nilai + " ",
 
                         "<button type='button' onclick='bukaModalRealisasi(outputData," + i + ")' class='btn btn-primary  btn-sm'>Realisasi </button>"
 
@@ -680,9 +681,6 @@
             url: '<?php echo base_url(); ?>/servicepekerjaanpengguna/create_pekerjaan_pengguna',
             dataType: 'json',
             data: {
-                //     $dataInput['PenerimaPekerjaanId'],
-                // $dataInput['PekerjaanId'],
-                // $dataInput['Volume'],
                 PenerimaPekerjaanId: PenerimaPekerjaanId,
                 PekerjaanId: PekerjaanId,
                 Volume: Volume,
