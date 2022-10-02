@@ -2,6 +2,7 @@
     var IdPenilai = <?php echo $this->session->userdata('RecId');  ?>
     var TahunPekerjaan = null
     var BulanPekerjaan = null
+    var TabelNilai = null
 </script>
 
 <style>
@@ -80,19 +81,14 @@
                 <table id="TabelPengguna" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th rowspan="2">Nama Pegawai</th>
-                            <th rowspan="2">Tahun-Bulan</th>
-                            <th colspan="5">Unsur Penilaian</th>
-                            <th rowspan="2">Rerata Nilai</th>
+                            <th>Nama Pegawai</th>
+                            <th>Tahun-Bulan</th>
+                            <th>Nilai Rerata dari Semua Ka Tim</th>
+                            <th>Nilai Kepala/Akhir</th>
+                            <th>Nilai Kepala/Akhir</th>
 
                         </tr>
-                        <tr>
-                            <th>Beban Kerja</th>
-                            <th>Tanggung Jawab</th>
-                            <th>Disiplin Pegawai</th>
-                            <th>Profesionalitas</th>
-                            <th>Kualitas Kerja</th>
-                        </tr>
+
                     </thead>
                     <tbody></tbody>
                 </table>
@@ -974,35 +970,32 @@
         $.ajax({
             type: "POST",
             async: false,
-            url: '<?php echo base_url(); ?>/servicepengguna/read_pengguna_nilai',
+            url: '<?php echo base_url(); ?>/servicepengguna/read_penilaian_kepala',
             dataType: 'json',
             data: {
                 BulanPekerjaan: BulanPekerjaan,
-                TahunPekerjaan: TahunPekerjaan,
-                IdPenilai: IdPenilai
+                TahunPekerjaan: TahunPekerjaan
 
             },
             success: function(output) {
                 TabelPengguna.fnClearTable();
 
                 outputData = output.data
+
+                TabelNilai=outputData
                 for (var i = 0; i < outputData.length; i++) {
 
                     outputDataBaris = outputData[i]
                     j = i + 1
 
-                    if (outputDataBaris.Bulan != '' && outputDataBaris.Tahun != '')
-                    {
-                        let rerata=(parseInt(outputDataBaris.Nilai.BebanKerja)+parseInt(outputDataBaris.Nilai.TanggungJawab)+parseInt(outputDataBaris.Nilai.Disiplin)+parseInt(outputDataBaris.Nilai.Profesionalitas)+parseInt(outputDataBaris.Nilai.KualitasKerja))/5
+                    if (outputDataBaris.Bulan != '' && outputDataBaris.Tahun != '') {
+                        // let rerata=(parseInt(outputDataBaris.NilaiDariKetuaTim.BebanKerja)+parseInt(outputDataBaris.Nilai.TanggungJawab)+parseInt(outputDataBaris.Nilai.Disiplin)+parseInt(outputDataBaris.Nilai.Profesionalitas)+parseInt(outputDataBaris.Nilai.KualitasKerja))/5
                         TabelPengguna.fnAddData([
                             "" + outputDataBaris.Nama + "",
                             "" + outputDataBaris.Tahun + "-" + outputDataBaris.Bulan,
-                            "<input kolom='BebanKerja' IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.BebanKerja + "' class='nilaiPegawai' onblur='cek(this)'>",
-                            "<input kolom='TanggungJawab'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.TanggungJawab + "' class='nilaiPegawai'  onblur='cek(this)'>",
-                            "<input kolom='Disiplin'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.Disiplin + "' class='nilaiPegawai'  onblur='cek(this)'>",
-                            "<input kolom='Profesionalitas'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.Profesionalitas + "' class='nilaiPegawai'  onblur='cek(this)'>",
-                            "<input kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.KualitasKerja + "' class='nilaiPegawai'  onblur='cek(this)'>",
-                            ""+rerata+""
+                            "" + outputDataBaris.NilaiDariKetuaTim.rerata + " <button onclick=''>Lihat Penilaian Semua Ketua Tim</button>",
+                            "<input kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='' class='nilaiPegawai'  onblur='cek(this)'>",
+                            ""
 
                         ]);
                     }

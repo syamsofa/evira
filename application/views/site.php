@@ -283,6 +283,24 @@ if ($this->session->userdata('Email') == null)
 
               </ul>
             </li>
+            <?php
+
+            if ($this->session->userdata('RoleIdAktif') == 4) {
+
+            ?>
+              <li class="nav-item">
+                <a href="<?php echo base_url(); ?>site/penilaian_kepala" class="nav-link">
+                  <i class="fas fa-save nav-icon"></i>
+                  <p>
+                    Penilaian Kepala
+
+                  </p>
+                </a>
+              </li>
+            
+            <?php
+            }
+            ?>
 
             <?php
 

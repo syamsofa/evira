@@ -17,6 +17,15 @@ class Servicepengguna extends CI_Controller
 
         echo json_encode($output);
     }
+    
+    public function read_penilaian_kepala()
+    {
+        $dataInput = $this->input->post();
+
+        $output = $this->model_pengguna->read_penilaian_kepala($dataInput);
+
+        echo json_encode($output);
+    }
     public function read_pengguna_nilai()
     {
         $dataInput = $this->input->post();

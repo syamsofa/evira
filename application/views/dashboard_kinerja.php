@@ -506,6 +506,6 @@
   }
 
   let pantun = "<?php echo $this->uri->segment(3); ?>"
-  if (pantun == 'pantun')
+  // if (pantun == 'pantun')
     // bukamodalQuote()
 </script>

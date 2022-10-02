@@ -102,6 +102,36 @@ class Model_pengguna extends CI_Model
 			'data' => $data
 		);
 	}
+
+	public function read_penilaian_kepala($dataInput)
+	{
+
+		$tahun = $dataInput['TahunPekerjaan'];
+		$bulan = $dataInput['BulanPekerjaan'];
+
+
+		$query = $this->db->query("select a.* from pengguna a order by a.Nama;", array());
+		$data = array();
+
+		foreach ($query->result_array() as $row) {
+
+			$dataMasukan = [
+				"Tahun" => $tahun,
+				"Bulan" => $bulan,
+				"IdDinilai" => $row['RecId']
+			];
+			$row['Tahun'] = $tahun;
+			$row['Bulan'] = $bulan;
+			$row['NilaiDariKetuaTim'] = $this->model_penilaian_tim->read_nilai_by_id_dinilai_tahun_bulan($dataMasukan);
+
+			$data[] = $row;
+		}
+
+		return array(
+			'sukses' => true,
+			'data' => $data
+		);
+	}
 	public function read_pengguna_nilai($dataInput)
 	{
 
@@ -118,8 +148,8 @@ class Model_pengguna extends CI_Model
 			$dataMasukan = [
 				"Tahun" => $tahun,
 				"Bulan" => $bulan,
-				"IdDinilai"=>$row['RecId'],
-				"IdPenilai"=>$idPenilai
+				"IdDinilai" => $row['RecId'],
+				"IdPenilai" => $idPenilai
 			];
 			$row['Tahun'] = $tahun;
 			$row['Bulan'] = $bulan;
