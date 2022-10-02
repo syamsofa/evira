@@ -33,6 +33,7 @@ if ($this->session->userdata('Email') == null)
 
 
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.4/css/fixedHeader.dataTables.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -58,6 +59,7 @@ if ($this->session->userdata('Email') == null)
   <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- DataTables  & Plugins -->
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
@@ -123,7 +125,7 @@ if ($this->session->userdata('Email') == null)
           </div>
         </li>
 
-      
+
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown show">
           <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="true">
@@ -319,6 +321,15 @@ if ($this->session->userdata('Email') == null)
                   <i class="fa fa-gift nav-icon"></i>
                   <p>
                     Penilaian Saya untuk Pegawai
+
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url(); ?>site/penilaian_bulanan" class="nav-link">
+                  <i class="fa fa-gift nav-icon"></i>
+                  <p>
+                    Penilaian Saya untuk Pegawai 2
 
                   </p>
                 </a>

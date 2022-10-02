@@ -119,6 +119,26 @@ class Site extends CI_Controller
 		$this->load->view('site', $data);
 		// echo json_encode($data);
 	}
+	public function penilaian_bulanan()
+	{
+		$data = array(
+			'menu' => $this->uri->segment(2),
+			'judul' => 'Penilaian Pegawai',
+			'role_by_pengguna' => $this->roleByPengguna,
+			'detailPengguna' => $this->detailPengguna,
+			'satker' => $this->satker,
+			'organisasi' => $this->organisasi,
+			'satuan' => $this->satuan,
+			'pengguna' => $this->pengguna,
+			'opsiLogin' => $this->opsiLogin,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan,
+
+
+		);
+		$this->load->view('site', $data);
+		// echo json_encode($data);
+	}
 	public function pengguna()
 	{
 		$data = array(

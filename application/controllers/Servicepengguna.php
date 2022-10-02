@@ -17,6 +17,14 @@ class Servicepengguna extends CI_Controller
 
         echo json_encode($output);
     }
+    public function read_pengguna_nilai()
+    {
+        $dataInput = $this->input->post();
+
+        $output = $this->model_pengguna->read_pengguna_nilai($dataInput);
+
+        echo json_encode($output);
+    }
     public function read_pengguna_search()
     {
         $output = $this->model_pengguna->read_pengguna_search($this->input->get('search'));

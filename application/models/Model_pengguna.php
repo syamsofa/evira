@@ -8,7 +8,7 @@ class Model_pengguna extends CI_Model
 		// $this->load->library('lib');
 		// $this->load->library('lib_security');
 		$this->load->model('model_role');
-		// $this->load->model('email_model');
+		$this->load->model('model_penilaian_tim');
 		//call function
 		// Your own constructor code
 	}
@@ -94,6 +94,37 @@ class Model_pengguna extends CI_Model
 		$data = array();
 
 		foreach ($query->result_array() as $row) {
+			$data[] = $row;
+		}
+
+		return array(
+			'sukses' => true,
+			'data' => $data
+		);
+	}
+	public function read_pengguna_nilai($dataInput)
+	{
+
+		$tahun = $dataInput['TahunPekerjaan'];
+		$bulan = $dataInput['BulanPekerjaan'];
+		$idPenilai = $dataInput['IdPenilai'];
+
+
+		$query = $this->db->query("select a.* from pengguna a order by a.Nama;", array());
+		$data = array();
+
+		foreach ($query->result_array() as $row) {
+
+			$dataMasukan = [
+				"Tahun" => $tahun,
+				"Bulan" => $bulan,
+				"IdDinilai"=>$row['RecId'],
+				"IdPenilai"=>$idPenilai
+			];
+			$row['Tahun'] = $tahun;
+			$row['Bulan'] = $bulan;
+			$row['Nilai'] = $this->model_penilaian_tim->read_nilai_by_id_dinilai_id_penilai_tahun_bulan($dataMasukan);
+
 			$data[] = $row;
 		}
 

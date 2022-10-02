@@ -38,4 +38,14 @@ class Model_penilaian_tim extends CI_Model
 			'data' => ["Rerata" => number_format($rerata, 2), "Detail" => $data]
 		);
 	}
+	public function read_nilai_by_id_dinilai_id_penilai_tahun_bulan($dataMasukan)
+	{
+		// print_r($dataMasukan);
+		$query = $this->db->query("select * from penilaian_kinerja where IdDinilai=? and IdPenilai=? and Tahun=? and Bulan=?", array($dataMasukan['IdDinilai'],$dataMasukan['IdPenilai'],$dataMasukan['Tahun'],$dataMasukan['Bulan']));
+		
+		return array(
+			'sukses' => true,
+			'data' => $query->result_array()
+		);
+	}
 }
