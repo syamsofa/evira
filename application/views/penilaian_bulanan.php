@@ -35,7 +35,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Tahun</label>
                 <div class="col-sm-10">
-                    <select id="tahunPekerjaan" onchange="tampilPekerjaanPenilai()" required class="custom-select">
+                    <select onchange="loadTabelPengguna()" id="tahunPekerjaan" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($tahun['data'] as $rows) {
@@ -54,7 +54,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Bulan</label>
                 <div class="col-sm-10">
-                    <select id="bulanPekerjaan" onchange="tampilPekerjaanPenilai()" required class="custom-select">
+                    <select onchange="loadTabelPengguna()" id="bulanPekerjaan" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($bulan['data'] as $rows) {
@@ -890,15 +890,54 @@
 </script>
 <script>
     function cek(element) {
-
         let nilaiMasukan = parseInt(element.value)
         const rangeNilai = [97, 98, 99]
-        console.log(nilaiMasukan)
         if (!rangeNilai.includes(nilaiMasukan)) {
-            alert("Hanya boleh berisi 99, 98, 97")
-
+            Alert979899()
             element.value = ''
+            $(element).css("background-color", "red");
+        } else {
+
+            if (element.value == 99)
+                $(element).css("background-color", "#96FF33");
+            if (element.value == 98)
+                $(element).css("background-color", "#F6FF33");
+            if (element.value == 97)
+                $(element).css("background-color", "#FFDD33");
+
         }
+
+        simpanNilai(element)
+
+    }
+</script>
+
+<script>
+    function simpanNilai(element) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicepenilaian/simpan_nilai',
+            dataType: 'json',
+            data: {
+                BulanPekerjaan: BulanPekerjaan,
+                TahunPekerjaan: TahunPekerjaan,
+                IdPenilai: IdPenilai,
+                IdDinilai: $(element).attr("IdDinilai"),
+                Kolom: $(element).attr("Kolom"),
+                Nilai: element.value
+
+            },
+            success: function(output) {
+                console.log(output)
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
     }
 </script>
 <script>
@@ -907,7 +946,7 @@
         TahunPekerjaan = $("#tahunPekerjaan").val()
         BulanPekerjaan = $("#bulanPekerjaan").val()
         IdPenilai = <?php echo $this->session->userdata('RecId');  ?>
-        
+
         // console.log(tahunPekerjaan, bulanPekerjaan)
         var TabelPengguna = $("#TabelPengguna").dataTable({
             fixedHeader: {
@@ -948,18 +987,19 @@
                     outputDataBaris = outputData[i]
                     j = i + 1
 
-                    TabelPengguna.fnAddData([
-                        "" + outputDataBaris.Nama + "",
-                        "Tahun-Bulan",
-                        "<input class='nilaiPegawai' onblur='cek(this)'>",
-                        "<input class='nilaiPegawai'>",
-                        "<input class='nilaiPegawai'>",
-                        "<input class='nilaiPegawai'>",
-                        "<input class='nilaiPegawai'>",
-                        "<button type='button' onclick='bukaFormEditPengguna(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary'>Edit" +
-                        "</button><button type='button' onclick='bukaFormRolePengguna(RecId=" + outputDataBaris.RecId + ")' class='btn btn-primary'>Role</button>'"
+                    if (outputDataBaris.Bulan != '' && outputDataBaris.Tahun != '')
 
-                    ]);
+                        TabelPengguna.fnAddData([
+                            "" + outputDataBaris.Nama + "",
+                            "" + outputDataBaris.Tahun + "-" + outputDataBaris.Bulan,
+                            "<input kolom='BebanKerja' IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.BebanKerja + "' class='nilaiPegawai' onblur='cek(this)'>",
+                            "<input kolom='TanggungJawab'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.TanggungJawab + "' class='nilaiPegawai'  onblur='cek(this)'>",
+                            "<input kolom='Disiplin'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.Disiplin + "' class='nilaiPegawai'  onblur='cek(this)'>",
+                            "<input kolom='Profesionalitas'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.Profesionalitas + "' class='nilaiPegawai'  onblur='cek(this)'>",
+                            "<input kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.KualitasKerja + "' class='nilaiPegawai'  onblur='cek(this)'>",
+                            ""
+
+                        ]);
                 } // End For
 
             },
@@ -979,4 +1019,25 @@
 </script>
 <script>
     $(".nilaiPegawai")
+</script>
+
+<script>
+    function Alert979899() {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'error',
+            title: 'Hanya boleh memasukkan 97,98,99'
+        })
+    }
 </script>

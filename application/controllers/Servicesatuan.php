@@ -16,5 +16,4 @@ class Servicesatuan extends CI_Controller
 
         echo json_encode($output);
     }
-
 }
