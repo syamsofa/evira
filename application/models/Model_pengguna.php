@@ -123,6 +123,7 @@ class Model_pengguna extends CI_Model
 			$row['Tahun'] = $tahun;
 			$row['Bulan'] = $bulan;
 			$row['NilaiDariKetuaTim'] = $this->model_penilaian_tim->read_nilai_by_id_dinilai_tahun_bulan($dataMasukan);
+			$row['NilaiDariKepala'] = $this->model_penilaian_tim->read_nilai_dari_kepala($dataMasukan);
 
 			$data[] = $row;
 		}

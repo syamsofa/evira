@@ -65,12 +65,32 @@ class Model_penilaian_tim extends CI_Model
 			return array(
 				'sukses' => true,
 				'data' => $array,
-				'rerata' => number_format($Rerata,2)
+				'rerata' => number_format($Rerata, 2)
 			);
 		} else
 			return array(
 				'sukses' => false,
 				'data' => null
+
+			);
+	}
+	public function read_nilai_dari_kepala($dataMasukan)
+	{
+
+		$query = $this->db->query("select * from penilaian_kepala where IdDinilai=? and Tahun=? and Bulan=?", [$dataMasukan['IdDinilai'], $dataMasukan['Tahun'], $dataMasukan['Bulan']]);
+
+		$array = [];
+		if ($query->num_rows() > 0) {
+
+			
+			return array(
+				'sukses' => true,
+				'nilai' => $query->result_array()[0]['Nilai']
+			);
+		} else
+			return array(
+				'sukses' => true,
+				'nilai' => 0
 
 			);
 	}

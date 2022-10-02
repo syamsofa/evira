@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left"> <i class="fa fa-desktop" aria-hidden="true"></i> Tampilkan</button>
+            <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left"> <i class="fa fa-desktop" aria-hidden="true"></i> REFRESH</button>
             <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button>
             <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button>
 
@@ -101,11 +101,11 @@
 
 </section>
 
-<div class="modal fade" id="modalTambahPenugasanPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalTabelPenilaianKetuaTim" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Penugasan Untuk Saya</h5>
+                <h5 class="modal-title" id="teksKeteranganYangDinilai">Penilaian dari Ketua Tim</h5>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -113,90 +113,34 @@
 
             </div>
             <div class="modal-body">
-                <form id="formTambahPenugasanPekerjaan" class="form-horizontal">
-                    <div class="modal-body">
-
-                        <input type="hidden" class="form-control" id="recId" placeholder="Email">
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Volume</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" required id="volumePenugasan" placeholder="Volume">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Untuk Siapa?</label>
-                            <div class="col-sm-10">
-                                <select id="penerimaPekerjaanId" required class="custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <?php
-                                    foreach ($pengguna['data'] as $rows) {
-
-                                    ?>
-
-                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Nama']; ?></option>
-
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Pekerjaan?</label>
-                            <div class="col-sm-10">
-
-                                <select id="pekerjaanId" onchange="fungsiGetRangeTanggal(this.value)" required class="custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <?php
-                                    foreach ($pekerjaanByPengguna['data'] as $rows) {
-
-                                    ?>
-
-                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Deskripsi']; ?></option>
-
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Range Tanggal </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control rangeTanggal" id="rangeTanggalPenugasan" value="" />
-
-                            </div>
-                        </div>
-
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </form>
-
-            </div>
-            <div class="modal-footer">
                 <div class="table-responsive card-body p-0" style="display: block;">
-                    <table id="TabelPekerjaan" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Deskripsi</th>
-                                <th>Status</th>
-                                <th>Volume</th>
-                                <th>Satuan</th>
-                                <th>CreatedBy</th>
-                                <th>CreatedDate</th>
-                                <th>Aksi</th>
+
+                                <th rowspan="2">Nama Penilai</th>
+                                <th colspan="5">Unsur Penilaian</th>
+                                <th rowspan="2">Aksi</th>
+                            </tr>
+                            <tr>
+                                <th>beban Kerja</th>
+                                <th>Tanggung Jawab</th>
+                                <th>Disiplin</th>
+                                <th>Profesio- nalitas</th>
+                                <th>Kualitas Kerja</th>
+
+
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="TabelPenilaianKetuaTim">
+
+                        </tbody>
                     </table>
 
                 </div>
+
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
     </div>
@@ -359,6 +303,70 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalTabelPenilaianKetuaTim" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="formTambahPekerjaan" class="form-horizontal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Pekerjaan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="deskripsi" placeholder="Deskripsi">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Volume</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="volume" placeholder="Volume">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Tanggal </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control rangeTanggal" id="rangeTanggal" value="" />
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Satuan</label>
+                            <div class="col-sm-10">
+                                <select id="satuanId" required class="select2 custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($satuan['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Satuan']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     var penggunaId = '<?php echo $this->session->userdata('RecId') ?>'
 </script>
@@ -532,8 +540,8 @@
 </script>
 
 <script>
-    function bukaModalTambahPekerjaanPengguna(RecId) {
-        $('#modalTambahPenugasanPekerjaan').modal('show');
+    function bukamodalTabelPenilaianKetuaTimPengguna(RecId) {
+        $('#modalTabelPenilaianKetuaTim').modal('show');
     }
 </script>
 
@@ -982,10 +990,10 @@
 
                 outputData = output.data
 
-                TabelNilai=outputData
+                TabelNilai = outputData
                 for (var i = 0; i < outputData.length; i++) {
 
-                    outputDataBaris = outputData[i]
+                    outputDataBaris = TabelNilai[i]
                     j = i + 1
 
                     if (outputDataBaris.Bulan != '' && outputDataBaris.Tahun != '') {
@@ -993,7 +1001,7 @@
                         TabelPengguna.fnAddData([
                             "" + outputDataBaris.Nama + "",
                             "" + outputDataBaris.Tahun + "-" + outputDataBaris.Bulan,
-                            "" + outputDataBaris.NilaiDariKetuaTim.rerata + " <button onclick=''>Lihat Penilaian Semua Ketua Tim</button>",
+                            "" + outputDataBaris.NilaiDariKetuaTim.rerata + " <button onclick='lihatDataKetuaTim(\"" + i + "\")'>Lihat Detail</button>",
                             "<input kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='' class='nilaiPegawai'  onblur='cek(this)'>",
                             ""
 
@@ -1038,5 +1046,24 @@
             icon: 'error',
             title: 'Hanya boleh memasukkan 97,98,99'
         })
+    }
+</script>
+
+<script>
+    function lihatDataKetuaTim(i) {
+        $('#modalTabelPenilaianKetuaTim').modal('show');
+        let dataTampil = TabelNilai[i].NilaiDariKetuaTim.data
+        console.log(TabelNilai[i])
+        $("#TabelPenilaianKetuaTim").empty()
+        dataTampil.forEach(element => {
+
+            // console.log(element)
+
+            $("#TabelPenilaianKetuaTim").append("<tr><td>" + element.Nama + "</td><td>" + element.Nilai.BebanKerja + "</td><td>" + element.Nilai.TanggungJawab + "</td><td>" + element.Nilai.Disiplin + "</td><td>" + element.Nilai.Profesionalitas + "</td><td>" + element.Nilai.KualitasKerja + "</td><td>" + element.Nilai.NilaiKeseluruhan + "</td></tr>");
+        });
+
+        $("#TabelPenilaianKetuaTim").append("<tr><td  colspan=6>NILAI KESELURUHAN </td><td>"+TabelNilai[i].NilaiDariKetuaTim.rerata+"</td></tr>")
+
+        $("#teksKeteranganYangDinilai").text("Penilaian dari Ketua Tim untuk "+TabelNilai[i].Nama)
     }
 </script>
