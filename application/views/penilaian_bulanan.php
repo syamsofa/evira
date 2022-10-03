@@ -1006,64 +1006,27 @@
                             "" + outputDataBaris.Nama + "",
                             "" + outputDataBaris.Tahun + "-" + outputDataBaris.Bulan,
 
-                            "<input  kolom='BebanKerja' name='radionilai_BebanKerja_" + outputDataBaris.RecId + "' IdDinilai='" + outputDataBaris.RecId + "'  type='radio' value='100' onblur='cek(this)'>" +
-                            "<label for='html'>Baik</label><br>" +
-                            "<input  kolom='BebanKerja' name='radionilai_BebanKerja_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "' type='radio'  value='99' onblur='cek(this)'>" +
-                            "<label for='css'>Cukup</label><br>" +
-                            "<input kolom='BebanKerja'  name='radionilai_BebanKerja_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='98' onblur='cek(this)'>" +
-                            "<label for='javascript'>Kurang</label><br>" +
-                            "<input  kolom='BebanKerja' name='radionilai_BebanKerja_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='0' onblur='cek(this)'>" +
-                            "<label for='javascript'>Tidak Relevan</label>",
+                            "<select kolom='BebanKerja' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
+
+                            "<select kolom='TanggungJawab' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
+
+                            "<select kolom='Disiplin' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
+
+                            "<select kolom='Profesionalitas' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
 
 
-                            "<input  kolom='TanggungJawab' name='radionilai_TanggungJawab_" + outputDataBaris.RecId + "' IdDinilai='" + outputDataBaris.RecId + "'  type='radio' value='100' onblur='cek(this)'>" +
-                            "<label for='html'>Baik</label><br>" +
-                            "<input  kolom='TanggungJawab' name='radionilai_TanggungJawab_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "' type='radio'  value='99' onblur='cek(this)'>" +
-                            "<label for='css'>Cukup</label><br>" +
-                            "<input kolom='TanggungJawab'  name='radionilai_TanggungJawab_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='98' onblur='cek(this)'>" +
-                            "<label for='javascript'>Kurang</label><br>" +
-                            "<input  kolom='TanggungJawab' name='radionilai_TanggungJawab_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='0' onblur='cek(this)'>" +
-                            "<label for='javascript'>Tidak Relevan</label>",
-
-                            "<input  kolom='Disiplin' name='radionilai_Disiplin_" + outputDataBaris.RecId + "' IdDinilai='" + outputDataBaris.RecId + "'  type='radio' value='100' onblur='cek(this)'>" +
-                            "<label for='html'>Baik</label><br>" +
-                            "<input  kolom='Disiplin' name='radionilai_Disiplin_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "' type='radio'  value='99' onblur='cek(this)'>" +
-                            "<label for='css'>Cukup</label><br>" +
-                            "<input kolom='Disiplin'  name='radionilai_Disiplin_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='98' onblur='cek(this)'>" +
-                            "<label for='javascript'>Kurang</label><br>" +
-                            "<input  kolom='Disiplin' name='radionilai_Disiplin_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='0' onblur='cek(this)'>" +
-                            "<label for='javascript'>Tidak Relevan</label>",
-
-
-                            "<input  kolom='Profesionalitas' name='radionilai_Profesionalitas_" + outputDataBaris.RecId + "' IdDinilai='" + outputDataBaris.RecId + "'  type='radio' value='100' onblur='cek(this)'>" +
-                            "<label for='html'>Baik</label><br>" +
-                            "<input  kolom='Profesionalitas' name='radionilai_Profesionalitas_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "' type='radio'  value='99' onblur='cek(this)'>" +
-                            "<label for='css'>Cukup</label><br>" +
-                            "<input kolom='Profesionalitas'  name='radionilai_Profesionalitas_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='98' onblur='cek(this)'>" +
-                            "<label for='javascript'>Kurang</label><br>" +
-                            "<input  kolom='Profesionalitas' name='radionilai_Profesionalitas_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='0' onblur='cek(this)'>" +
-                            "<label for='javascript'>Tidak Relevan</label>",
-
-
-                            "<input  kolom='KualitasKerja' name='radionilai_KualitasKerja_" + outputDataBaris.RecId + "' IdDinilai='" + outputDataBaris.RecId + "'  type='radio' value='100' onblur='cek(this)'>" +
-                            "<label for='html'>Baik</label><br>" +
-                            "<input  kolom='KualitasKerja' name='radionilai_KualitasKerja_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "' type='radio'  value='99' onblur='cek(this)'>" +
-                            "<label for='css'>Cukup</label><br>" +
-                            "<input kolom='KualitasKerja'  name='radionilai_KualitasKerja_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='98' onblur='cek(this)'>" +
-                            "<label for='javascript'>Kurang</label><br>" +
-                            "<input  kolom='KualitasKerja' name='radionilai_KualitasKerja_" + outputDataBaris.RecId + "'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='0' onblur='cek(this)'>" +
-                            "<label for='javascript'>Tidak Relevan</label>",
+                            "<select kolom='KualitasKerja' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
 
 
 
                         ]);
 
-                        $("input[kolom='BebanKerja'][name='radionilai_BebanKerja_" + outputDataBaris.RecId + "'][IdDinilai=" + outputDataBaris.RecId + "][value=" + outputDataBaris.Nilai.BebanKerja + "]").prop("checked", true)
-                        $("input[kolom='TanggungJawab'][name='radionilai_TanggungJawab_" + outputDataBaris.RecId + "'][IdDinilai=" + outputDataBaris.RecId + "][value=" + outputDataBaris.Nilai.TanggungJawab + "]").prop("checked", true)
-                        $("input[kolom='Disiplin'][name='radionilai_Disiplin_" + outputDataBaris.RecId + "'][IdDinilai=" + outputDataBaris.RecId + "][value=" + outputDataBaris.Nilai.Disiplin + "]").prop("checked", true)
-                        $("input[kolom='Profesionalitas'][name='radionilai_Profesionalitas_" + outputDataBaris.RecId + "'][IdDinilai=" + outputDataBaris.RecId + "][value=" + outputDataBaris.Nilai.Profesionalitas + "]").prop("checked", true)
-                        $("input[kolom='KualitasKerja'][name='radionilai_KualitasKerja_" + outputDataBaris.RecId + "'][IdDinilai=" + outputDataBaris.RecId + "][value=" + outputDataBaris.Nilai.Profesionalitas + "]").prop("checked", true)
-                    }
+                        $("select[kolom='BebanKerja'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.BebanKerja)
+                        $("select[kolom='TanggungJawab'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.TanggungJawab)
+                        $("select[kolom='Disiplin'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.Disiplin)
+                        $("select[kolom='Profesionalitas'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.Profesionalitas)
+                        $("select[kolom='KualitasKerja'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.KualitasKerja)
+                       }
                 } // End For
 
             },
