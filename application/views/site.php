@@ -280,6 +280,15 @@ if ($this->session->userdata('Email') == null)
                     </p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/monitoring_kegiatan" class="nav-link">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>
+                      Monitoring Kegiatan
+
+                    </p>
+                  </a>
+                </li>
 
               </ul>
             </li>

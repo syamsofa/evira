@@ -77,6 +77,35 @@ class Model_pekerjaan_bulanan extends CI_Model
         );
     }
 
+    public function read_pekerjaan_by_tahun_by_bulan($inputData)
+    {
+        $query = $this->db->query("select a.*,b.Satuan ,c.Nama,d.Status
+        from pekerjaan_bulanan a left join satuan b on a.SatuanId=b.RecId
+        left join pengguna c on c.RecId=a.CreatedBy
+        left join status_penugasan d on d.RecId=a.StatusPenugasanId
+        where (
+                  
+                
+                (MONTH(a.TanggalMulai)=? and YEAR(a.TanggalMulai)=?)
+                
+                or 
+                
+                (MONTH(a.TanggalSelesai)=? and YEAR(a.TanggalSelesai)=?));		", array( $inputData['Bulan'], $inputData['Tahun'], $inputData['Bulan'], $inputData['Tahun']));
+        $data = array();
+
+        foreach ($query->result_array() as $row) {
+            $row['TanggalSelesaiFormatted']=date('d F Y', strtotime($row['TanggalSelesai']));
+            
+            $data[] = $row;
+
+        }
+
+        return array(
+            'sukses' => true,
+            'data' => $data
+        );
+    }
+
     public function read_pekerjaan_by_id($dataInput)
     {
         $query = $this->db->query("select a.*,b.Satuan ,c.Nama as NamaPembuat,d.Status
