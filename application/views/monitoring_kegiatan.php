@@ -300,26 +300,34 @@
                         <p id="satuanPekerjaanDetail" class="text-muted">
                             TESTES
                         </p>
-                        <p style="color:black" id="jumlahTeralokasi" class="text-muted">
-                            TESTES
-                        </p>
-
-                        <hr>
-
-                        <hr>
+                      
                         <div class="table-responsive card-body p-0" style="display: block;">
 
-                            <table id="TabelPenugasanPekerjaan" class="table table-bordered table-striped">
+                            <table id="TabelPekerjaanSaya" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Penerima Pekerjaan</th>
-                                        <th>Volume Target</th>
-                                        <th>Volume Realisasi</th>
-                                        <th></th>
+                                        <th>Nama Kegiatan</th>
+                                        <th>Pemberi Tugas</th>
+                                        <th>Satuan</th>
+                                        <th>Target</th>
+                                        <th>Realisasi</th>
+                                        <th>Batas Waktu</th>
+                                        <th>Tanggal Penyelesaian/Penyerahan</th>
+                                        <th>Kepatuhan</th>
+                                        <th>Kuantitas (%)</th>
+                                        <th>Kualitas (%)</th>
+                                        <th>Aksi</th>
+
+
                                     </tr>
+
                                 </thead>
+                                <tfoot>
+
+                                </tfoot>
                                 <tbody></tbody>
                             </table>
+
                         </div>
 
                     </div>
@@ -373,13 +381,38 @@
 <script>
     function loadTabelPenugasanPekerjaan(RecId) {
 
-        var TabelPenugasanPekerjaan = $("#TabelPenugasanPekerjaan").dataTable({
-            "scrollCollapse": true,
+        var TabelPekerjaanSaya = $("#TabelPekerjaanSaya").dataTable({
             columns: [{
 
                     className: "text-center"
                 },
+                {
 
+                    className: "text-center"
+                }, {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
                 {
 
                     className: "text-center"
@@ -392,70 +425,66 @@
 
                     className: "text-center"
                 }
-            ],
-            fixedHeader: {
-                header: true
-            },
 
+            ],
             "responsive": true,
             destroy: true,
+
             "lengthChange": false,
             "autoWidth": false,
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
-            ]
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         })
-
         $.ajax({
             type: "POST",
             async: false,
-            url: '<?php echo base_url(); ?>/servicepekerjaanpengguna/read_pekerjaan_pengguna_by_pekerjaan',
+            url: '<?php echo base_url(); ?>/servicepekerjaanpengguna/read_pekerjaan_pengguna_by_id_kegiatan',
             dataType: 'json',
             data: {
-                RecId: RecId
+                RecId: RecId,
+                Tahun: $("#tahunPekerjaan").val(),
+                Bulan: $("#bulanPekerjaan").val()
+
 
             },
             success: function(output) {
-                console.log('output', output)
 
-                $("#jumlahTeralokasi").text('Sudah Teralokasi : ' + output.agregat.JumlahVolume)
-                TabelPenugasanPekerjaan.fnClearTable();
-
-                outputData = output.data
-
-                globalVolumeTotalDinamis = 0
+                TabelPekerjaanSaya.fnClearTable();
+                outputData = output.data.detail
                 for (var i = 0; i < outputData.length; i++) {
 
+                    console.log("GEGEGEG")
+
+                    console.log(outputData[i])
+                    console.log("GEGEGEG")
                     outputDataBaris = outputData[i]
+
+
                     j = i + 1
 
-
-                    TabelPenugasanPekerjaan.fnAddData([
-                        "" + outputDataBaris.NamaPenerimaPekerjaan + "",
-
+                    TabelPekerjaanSaya.fnAddData([
+                        "" + outputDataBaris.Deskripsi + "",
+                        "" + outputDataBaris.NamaPemberiPekerjaan + "",
+                        "" + outputDataBaris.Satuan + "",
                         "" + outputDataBaris.Volume + "",
+
+
                         "" + outputDataBaris.VolumeRealisasi + "",
-                        ""
+
+                        "" + outputDataBaris.TanggalSelesaiFormatted + "",
+                        // "" + outputDataBaris.KalimatSisaHari + "",
+                        "" + outputDataBaris.TanggalRealisasiFormatted + "",
+                        "" + outputDataBaris.KalimatSelisihRealisasiDanTarget + "",
+                        // "" + outputDataBaris.PenilaianTim.data.Rerata + " <button onclick=bukaModalLihatPenilaianTim(" + i + ")>Lihat</button>",
+                        "" + outputDataBaris.PersentaseRealisasiVolume + " ",
+                        " ",
+
+                        "<button type='button' onclick='bukaModalRealisasi(outputData," + i + ")' class='btn btn-primary  btn-sm'>Realisasi </button>"
+
+
+
                     ]);
-
-                    globalVolumeTotalDinamis = globalVolumeTotalDinamis + parseInt(outputDataBaris.Volume);
-
-                    console.log('globalVolumeTotalDinamis ' + globalVolumeTotalDinamis)
-
-
                 } // End For
-
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Sudah teralokasi ' + globalVolumeTotalDinamis + ' dari ' + globalVolumeTotal,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-
+                $('#loaderGif').hide();
             },
 
             error: function(e) {
@@ -707,7 +736,7 @@
                         " " + outputDataBaris.Satuan + "",
                         " " + outputDataBaris.TanggalSelesaiFormatted + "",
                         "" + outputDataBaris.Nama + "",
-                        "<button title='Tambah/edit penugasan' type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>"
+                        "<button title='Detail' type='button' onclick='bukaModalPenugasanPekerjaan(RecId=" + outputDataBaris.RecId + ",VolumeTotal=" + outputDataBaris.Volume + ")' class='btn btn-primary fa fa-tasks'>"
 
                     ]);
                 } // End For

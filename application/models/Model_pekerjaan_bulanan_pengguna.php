@@ -159,6 +159,139 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
 
         return   $this->read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput);
     }
+
+    public function read_pekerjaan_pengguna_by_id_kegiatan($dataInput)
+    {
+        // print_r($dataInput);
+        $query_tambahan = "";
+        $kolom_tambahan = "";
+        if (isset($dataInput['PenilaiId'])) {
+            $query_tambahan = "left join penilaian_tim f on f.IdPekerjaanPengguna=a.RecId
+            and f.IdPenilai=" . $dataInput['PenilaiId'];
+            $kolom_tambahan = ", f.Nilai";
+        }
+
+        if (isset($dataInput['OpsiTampil'])) {
+            if ($dataInput['OpsiTampil'] == 'darisaya')
+                $query_tambahan2 = "and a.PemberiPekerjaanId=" . $dataInput['PenilaiId'];
+            elseif ($dataInput['OpsiTampil'] == 'semua')
+                $query_tambahan2 = '';
+            else
+                $query_tambahan2 = '';
+        } else
+            $query_tambahan2 = "";
+
+        if (isset($dataInput['PekerjaanId']) and $dataInput['PekerjaanId'] <> '') {
+            $query_tambahan3 = " and a.PekerjaanId=" . $dataInput['PekerjaanId'];
+        } else
+            $query_tambahan3 = "";
+
+
+        $query = $this->db->query("select a.*,b.Nama as NamaPenerimaPekerjaan,c.Nama as NamaPemberiPekerjaan,
+        DATE(a.TanggalMulai) as TanggalMulai,DATE(a.TanggalSelesai) as TanggalSelesai,
+        d.Deskripsi,e.Satuan $kolom_tambahan
+         from pekerjaan_bulanan_pengguna a
+        left join pengguna b on b.RecId=a.PenerimaPekerjaanId
+        left join pengguna c on c.RecId=a.PemberiPekerjaanId
+        left join pekerjaan_bulanan d on d.RecId=a.PekerjaanId     
+        left join satuan e on d.SatuanId=e.RecId   
+        
+        $query_tambahan
+         where 
+         a.PekerjaanId=? and 
+(         MONTH(a.TanggalMulai)=?
+         or
+         MONTH(a.TanggalSelesai)=?
+       )
+       and YEAR(a.TanggalSelesai)=?
+       $query_tambahan2
+      $query_tambahan3
+       ;
+		", array($dataInput['RecId'], $dataInput['Bulan'], $dataInput['Bulan'], $dataInput['Tahun']));
+        $dataPerBaris = array();
+
+        $jumKegiatan = 0;
+        $jumPersentaseKetepatanWaktu = 0;
+
+        $jumPersentaseRealisasiVolume = 0;
+        $jumPersentasePenilaianAtasan = 0;
+        $urut = 0;
+
+        // print_r($query->result_array());
+
+        foreach ($query->result_array() as $row) {
+
+            $row['PenilaianTim'] = $this->model_penilaian_tim->read_nilai_by_id_pekerjaan_pengguna($row['RecId']);;
+            $row['SelisihHari'] = (new DateTime($row['TanggalSelesai']))->diff(new DateTime($row['TanggalMulai']))->days + 1;
+
+            $row['SisaHari'] = (new DateTime(date("Y-m-d")))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
+            if ($row['SisaHari'] < 0)
+                $row['KalimatSisaHari'] =  " sudah lewat " . abs($row['SisaHari']) . " hari";
+
+            else
+                $row['KalimatSisaHari'] = abs($row['SisaHari']) . " hari lagi";
+
+
+
+            if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null) {
+                $row['SelisihRealisasiDanTarget'] = 0;
+                $row['KalimatSelisihRealisasiDanTarget'] = $this::kalimatBelumAdaPenyerahan;
+            } else {
+                $row['SelisihRealisasiDanTarget'] = (new DateTime($row['TanggalRealisasi']))->diff(new DateTime($row['TanggalSelesai']))->format("%r%a");
+
+                if ($row['SelisihRealisasiDanTarget'] < 0)
+                    $row['KalimatSelisihRealisasiDanTarget'] = "Terlambat " . abs($row['SelisihRealisasiDanTarget']) . " hari";
+                else if ($row['SelisihRealisasiDanTarget'] > 0)
+
+                    $row['KalimatSelisihRealisasiDanTarget'] = abs($row['SelisihRealisasiDanTarget']) . " hari lebih cepat";
+                else
+                    $row['KalimatSelisihRealisasiDanTarget'] = " Tepat waktu";
+            }
+
+            if ($row['TanggalRealisasi'] == '0000-00-00 00:00:00' or $row['TanggalRealisasi'] == null)
+                $row['TanggalRealisasiFormatted'] = $this::kalimatBelumAdaPenyerahan;
+            else
+                $row['TanggalRealisasiFormatted'] = date('d F Y', strtotime($row['TanggalRealisasi']));
+
+            $row['TanggalSelesaiFormatted'] = date('d F Y', strtotime($row['TanggalSelesai']));
+            $row['PersentaseRealisasiVolume'] = number_format(100 * $row['VolumeRealisasi'] / $row['Volume'], 2);
+            // $row['PersentaseKetepatanWaktu'] = $row['SelisihRealisasiDanTarget'];
+            // ,
+            $urut++;
+            $jumKegiatan = $jumKegiatan + 1;
+            $jumPersentaseRealisasiVolume = $jumPersentaseRealisasiVolume + $row['PersentaseRealisasiVolume'];
+            $jumPersentasePenilaianAtasan = $jumPersentasePenilaianAtasan + $row['PenilaianAtasan'];
+            $jumPersentaseKetepatanWaktu = $jumPersentaseKetepatanWaktu + $row['SelisihRealisasiDanTarget'];
+            if ($row['PenilaianAtasan'] == 0)
+                $row['PenilaianAtasan'] = 'Belum dinilai';
+
+
+            $dataPerBaris[] = $row;
+        }
+        if ($urut == 0) {
+            $rerataPersentaseRealisasiVolume = 0;
+            $rerataPersentasePenilaianAtasan = 0;
+            $rerataPersentaseKetepatanWaktu = 0;
+        } else {
+            $rerataPersentaseRealisasiVolume = number_format($jumPersentaseRealisasiVolume / $urut, 2, ".", "");
+            $rerataPersentasePenilaianAtasan = number_format($jumPersentasePenilaianAtasan / $urut, 2, ".", "");
+            $rerataPersentaseKetepatanWaktu = number_format($jumPersentaseKetepatanWaktu / $urut, 2, ".", "");
+        }
+
+        return array(
+            'sukses' => true,
+            'data' => array(
+                "detail" => $dataPerBaris,
+                "ringkasan" => array(
+                    "rerataPersentaseRealisasiVolume" => $rerataPersentaseRealisasiVolume,
+                    "rerataPersentasePenilaianAtasan" => $rerataPersentasePenilaianAtasan,
+                    "rerataPersentaseKetepatanWaktu" => $rerataPersentaseKetepatanWaktu,
+                    "rerataPersentaseKinerja" => $rerataPersentaseKetepatanWaktu + $rerataPersentaseRealisasiVolume,
+                    "jumKegiatan" => $jumKegiatan
+                )
+            )
+        );
+    }
     public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan($dataInput)
     {
         $query_tambahan = "";

@@ -92,6 +92,14 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
+    public function read_pekerjaan_pengguna_by_id_kegiatan()
+    {
+        $dataInput = $this->input->post();
+
+        $output = $this->model_pekerjaan_bulanan_pengguna->read_pekerjaan_pengguna_by_id_kegiatan($dataInput);
+
+        echo json_encode($output);
+    }
     public function read_pekerjaan_pengguna_by_pengguna_tahun_bulan_2()
     {
         $dataInput = $this->input->post();
