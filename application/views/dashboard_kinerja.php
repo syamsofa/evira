@@ -500,12 +500,3 @@
   }, 1000);
 </script>
 
-<script>
-  function bukamodalQuote() {
-    $('#modalQuote').modal('show');
-  }
-
-  let pantun = "<?php echo $this->uri->segment(3); ?>"
-  // if (pantun == 'pantun')
-    // bukamodalQuote()
-</script>
