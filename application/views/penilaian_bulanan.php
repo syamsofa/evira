@@ -911,11 +911,11 @@
             $(element).css("background-color", "red");
         } else {
 
-            if (element.value == 99)
+            if (element.value == 100)
                 $(element).css("background-color", "#96FF33");
-            if (element.value == 98)
+            if (element.value == 99)
                 $(element).css("background-color", "#F6FF33");
-            if (element.value == 97)
+            if (element.value == 98)
                 $(element).css("background-color", "#FFDD33");
 
         }
@@ -1064,7 +1064,7 @@
 
         Toast.fire({
             icon: 'error',
-            title: 'Hanya boleh memasukkan 97,98,99'
+            title: 'Hanya boleh memasukkan 0,98,99,100'
         })
     }
 </script>

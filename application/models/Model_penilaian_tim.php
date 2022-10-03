@@ -55,13 +55,16 @@ class Model_penilaian_tim extends CI_Model
 
 				$dataMasukan["IdPenilai"] = $row['PenggunaId'];
 				$row['Nilai'] = $this->read_nilai_by_id_dinilai_id_penilai_tahun_bulan($dataMasukan);
-				$JumBaris++;
+
 				$JumNilaiKeseluruhan = $JumNilaiKeseluruhan + $row['Nilai']['NilaiKeseluruhan'];
 
 				$array[] = $row;
+
+				if ($row['Nilai']['NilaiKeseluruhan'] <> 0)
+					$JumBaris++;
 			}
 
-			$Rerata = $JumNilaiKeseluruhan / $JumBaris;
+			$Rerata = ($JumBaris == 0) ? 0 : $JumNilaiKeseluruhan / $JumBaris;
 			return array(
 				'sukses' => true,
 				'data' => $array,
@@ -107,12 +110,32 @@ class Model_penilaian_tim extends CI_Model
 		else
 			$dataNilai = $dataNilai[0];
 
+		$pengurang = 0;
 		$BebanKerja = (empty($dataNilai['BebanKerja'])) ?  0 : $dataNilai['BebanKerja'];
+		if ($BebanKerja == 0)
+			$pengurang++;
+
 		$TanggungJawab = (empty($dataNilai['TanggungJawab'])) ?  0 : $dataNilai['TanggungJawab'];
+		if ($TanggungJawab == 0)
+			$pengurang++;
+
 		$Disiplin = (empty($dataNilai['Disiplin'])) ?   0 : $dataNilai['Disiplin'];
+		if ($Disiplin == 0)
+			$pengurang++;
+
 		$Profesionalitas = (empty($dataNilai['Profesionalitas'])) ?   0 : $dataNilai['Profesionalitas'];
+		if ($Profesionalitas == 0)
+			$pengurang++;
+
 		$KualitasKerja = (empty($dataNilai['KualitasKerja'])) ?   0 : $dataNilai['KualitasKerja'];
-		$NilaiKeseluruhan = ($BebanKerja + $TanggungJawab + $Disiplin + $Profesionalitas + $KualitasKerja) / 5;
+		if ($KualitasKerja == 0)
+			$pengurang++;
+
+		$pembagi = 5 - $pengurang;
+
+		$NilaiKeseluruhan = ($pembagi == 0) ?  0 : ($BebanKerja + $TanggungJawab + $Disiplin + $Profesionalitas + $KualitasKerja) / ($pembagi);
+
+		// $NilaiKeseluruhan = ($BebanKerja + $TanggungJawab + $Disiplin + $Profesionalitas + $KualitasKerja) / (5 - $pengurang);
 
 		return array(
 			'BebanKerja' => $BebanKerja,

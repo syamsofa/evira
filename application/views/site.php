@@ -8,6 +8,7 @@ if ($this->session->userdata('Email') == null)
 <html lang="en">
 
 <head>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Evaluasi BPS Kabupaten Rembang</title>
@@ -306,7 +307,7 @@ if ($this->session->userdata('Email') == null)
                   </p>
                 </a>
               </li>
-            
+
             <?php
             }
             ?>
@@ -433,3 +434,21 @@ if ($this->session->userdata('Email') == null)
 <link rel="stylesheet" href="<?php echo base_url(); ?>AdminLTE-master/plugins/select2/css/select2.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
+
+<style>
+    table.dataTable td {
+        font-size: 1em;
+    }
+
+    table.dataTable th {
+        font-size: 1em;
+    }
+
+    html {
+        font-size: 70%;
+    }
+    h1 {
+        font-size: 30%;
+    }
+
+</style>

@@ -6,18 +6,6 @@
 </script>
 
 <style>
-    table.dataTable td {
-        font-size: 1em;
-    }
-
-    table.dataTable th {
-        font-size: 1em;
-    }
-
-    html {
-        font-size: 70%;
-    }
-
     .nilaiPegawai {
 
         width: 50%;
@@ -897,7 +885,7 @@
 </script>
 <script>
     function cek(element) {
-        
+
         let nilaiMasukan = parseInt(element.value)
         const rangeNilai = [97, 98, 99]
         if (!rangeNilai.includes(nilaiMasukan)) {
@@ -959,6 +947,25 @@
                 header: true,
                 footer: true
             },
+            columns: [{
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                }
+
+            ],
+
             "bPaginate": false,
             "responsive": true,
             destroy: true,
@@ -1056,7 +1063,7 @@
 
             // console.log(element)
 
-            $("#TabelPenilaianKetuaTim").append("<tr><td>" + element.Nama + "</td><td>" + element.Nilai.BebanKerja + "</td><td>" + element.Nilai.TanggungJawab + "</td><td>" + element.Nilai.Disiplin + "</td><td>" + element.Nilai.Profesionalitas + "</td><td>" + element.Nilai.KualitasKerja + "</td><td>" + element.Nilai.NilaiKeseluruhan + "</td></tr>");
+            $("#TabelPenilaianKetuaTim").append("<tr><td >" + element.Nama + "</td><td style='text-align: right;'>" + element.Nilai.BebanKerja + "</td><td style='text-align: right;'>" + element.Nilai.TanggungJawab + "</td><td style='text-align: right;'>" + element.Nilai.Disiplin + "</td><td style='text-align: right;'>" + element.Nilai.Profesionalitas + "</td><td style='text-align: right;'>" + element.Nilai.KualitasKerja + "</td><td style='text-align: right;'>" + element.Nilai.NilaiKeseluruhan + "</td></tr>");
         });
 
         $("#TabelPenilaianKetuaTim").append("<tr><td  colspan=6>NILAI KESELURUHAN </td><td>" + TabelNilai[i].NilaiDariKetuaTim.rerata + "</td></tr>")

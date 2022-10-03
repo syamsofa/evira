@@ -110,7 +110,7 @@ class Model_pengguna extends CI_Model
 		$bulan = $dataInput['BulanPekerjaan'];
 
 
-		$query = $this->db->query("select a.* from pengguna a order by a.Nama;", array());
+		$query = $this->db->query("select a.* from pengguna a where a.Email<>'teguhiman@bps.go.id' order by a.Nama;", array());
 		$data = array();
 
 		foreach ($query->result_array() as $row) {
@@ -141,7 +141,7 @@ class Model_pengguna extends CI_Model
 		$idPenilai = $dataInput['IdPenilai'];
 
 
-		$query = $this->db->query("select a.* from pengguna a order by a.Nama;", array());
+		$query = $this->db->query("select a.* from pengguna a where a.Email<>'teguhiman@bps.go.id' order by a.Nama;", array());
 		$data = array();
 
 		foreach ($query->result_array() as $row) {
