@@ -292,7 +292,7 @@ if ($this->session->userdata('Email') == null)
                 <a href="<?php echo base_url(); ?>site/penilaian_kepala" class="nav-link">
                   <i class="fas fa-save nav-icon"></i>
                   <p>
-                    Penilaian Kepala
+                    Penilaian Dari Kepala
 
                   </p>
                 </a>
@@ -334,7 +334,7 @@ if ($this->session->userdata('Email') == null)
             if ($this->session->userdata('RoleIdAktif') == 3) {
 
             ?>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="<?php echo base_url(); ?>site/penilaian_dari_saya" class="nav-link">
                   <i class="fa fa-gift nav-icon"></i>
                   <p>
@@ -342,12 +342,12 @@ if ($this->session->userdata('Email') == null)
 
                   </p>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="<?php echo base_url(); ?>site/penilaian_bulanan" class="nav-link">
                   <i class="fa fa-gift nav-icon"></i>
                   <p>
-                    Penilaian Saya untuk Pegawai 2
+                    Penilaian Saya untuk Pegawai
 
                   </p>
                 </a>

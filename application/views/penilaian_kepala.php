@@ -85,7 +85,6 @@
                             <th>Tahun-Bulan</th>
                             <th>Nilai Rerata dari Semua Ka Tim</th>
                             <th>Nilai Kepala/Akhir</th>
-                            <th>Nilai Kepala/Akhir</th>
 
                         </tr>
 
@@ -120,7 +119,7 @@
 
                                 <th rowspan="2">Nama Penilai</th>
                                 <th colspan="5">Unsur Penilaian</th>
-                                <th rowspan="2">Aksi</th>
+                                <th rowspan="2">Rerata</th>
                             </tr>
                             <tr>
                                 <th>beban Kerja</th>
@@ -1001,8 +1000,7 @@
                             "" + outputDataBaris.Nama + "",
                             "" + outputDataBaris.Tahun + "-" + outputDataBaris.Bulan,
                             "" + outputDataBaris.NilaiDariKetuaTim.rerata + " <button onclick='lihatDataKetuaTim(\"" + i + "\")'>Lihat Detail</button>",
-                            "<input onchange='cek(this)' kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.NilaiDariKepala.nilai + "' class='nilaiPegawai'  onblur='cek(this)'>",
-                            ""
+                            "<input onchange='cek(this)' kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.NilaiDariKepala.nilai + "' class='nilaiPegawai'  onblur='cek(this)'>"
 
                         ]);
                     }

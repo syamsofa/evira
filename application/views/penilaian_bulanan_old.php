@@ -3,17 +3,6 @@
     var TahunPekerjaan = null
     var BulanPekerjaan = null
 </script>
-<script>
-    var templateOptionPenilaian = "<input type='radio' id='oksigensi' name='fav_language' value='100'>" +
-        "<label for='html'>Baik</label><br>" +
-        "<input type='radio' id='oksigensi' name='fav_language' value='99'>" +
-        "<label for='css'>Cukup</label><br>" +
-        "<input type='radio' id='oksigensi' name='fav_language' value='98'>" +
-        "<label for='javascript'>Kurang</label><br>" +
-        "<input type='radio' id='oksigensi' name='fav_language' value='0'>" +
-        "<label for='javascript'>Tidak Relevan</label>"
-</script>
-
 
 <style>
     table.dataTable td {
@@ -41,7 +30,8 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-body">
-            
+
+
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Tahun</label>
                 <div class="col-sm-10">
@@ -93,7 +83,7 @@
                             <th rowspan="2">Nama Pegawai</th>
                             <th rowspan="2">Tahun-Bulan</th>
                             <th colspan="5">Unsur Penilaian</th>
-
+                            
                         </tr>
                         <tr>
                             <th>Beban Kerja</th>
@@ -904,7 +894,7 @@
 <script>
     function cek(element) {
         let nilaiMasukan = parseInt(element.value)
-        const rangeNilai = [0, 98, 99, 100]
+        const rangeNilai = [97, 98, 99]
         if (!rangeNilai.includes(nilaiMasukan)) {
             Alert979899()
             element.value = ''
@@ -1000,27 +990,19 @@
                     outputDataBaris = outputData[i]
                     j = i + 1
 
-                    if (outputDataBaris.Bulan != '' && outputDataBaris.Tahun != '') {
-                        let rerata = (parseInt(outputDataBaris.Nilai.BebanKerja) + parseInt(outputDataBaris.Nilai.TanggungJawab) + parseInt(outputDataBaris.Nilai.Disiplin) + parseInt(outputDataBaris.Nilai.Profesionalitas) + parseInt(outputDataBaris.Nilai.KualitasKerja)) / 5
+                    if (outputDataBaris.Bulan != '' && outputDataBaris.Tahun != '')
+                    {
+                        let rerata=(parseInt(outputDataBaris.Nilai.BebanKerja)+parseInt(outputDataBaris.Nilai.TanggungJawab)+parseInt(outputDataBaris.Nilai.Disiplin)+parseInt(outputDataBaris.Nilai.Profesionalitas)+parseInt(outputDataBaris.Nilai.KualitasKerja))/5
                         TabelPengguna.fnAddData([
                             "" + outputDataBaris.Nama + "",
                             "" + outputDataBaris.Tahun + "-" + outputDataBaris.Bulan,
-                            "<input  kolom='BebanKerja' name='radionilai_"+outputDataBaris.RecId+"' IdDinilai='" + outputDataBaris.RecId + "'  type='radio' value='100' onblur='cek(this)'>" +
-                            "<label for='html'>Baik</label><br>" +
-                            "<input  kolom='BebanKerja' name='radionilai_"+outputDataBaris.RecId+"'  IdDinilai='" + outputDataBaris.RecId + "' type='radio'  value='99' onblur='cek(this)'>" +
-                            "<label for='css'>Cukup</label><br>" +
-                            "<input kolom='BebanKerja'  name='radionilai_"+outputDataBaris.RecId+"'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='98' onblur='cek(this)'>" +
-                            "<label for='javascript'>Kurang</label><br>" +
-                            "<input  kolom='BebanKerja' name='radionilai_"+outputDataBaris.RecId+"'  IdDinilai='" + outputDataBaris.RecId + "'  type='radio'  value='0' onblur='cek(this)'>" +
-                            "<label for='javascript'>Tidak Relevan</label>",
+                            "<input kolom='BebanKerja' IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.BebanKerja + "' class='nilaiPegawai' onblur='cek(this)'>",
                             "<input kolom='TanggungJawab'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.TanggungJawab + "' class='nilaiPegawai'  onblur='cek(this)'>",
                             "<input kolom='Disiplin'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.Disiplin + "' class='nilaiPegawai'  onblur='cek(this)'>",
                             "<input kolom='Profesionalitas'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.Profesionalitas + "' class='nilaiPegawai'  onblur='cek(this)'>",
                             "<input kolom='KualitasKerja'  IdDinilai='" + outputDataBaris.RecId + "' value='" + outputDataBaris.Nilai.KualitasKerja + "' class='nilaiPegawai'  onblur='cek(this)'>"
-
+                          
                         ]);
-
-                        $("input[kolom='BebanKerja'][name='radionilai_"+outputDataBaris.RecId+"'][IdDinilai=" + outputDataBaris.RecId + "][value=" + outputDataBaris.Nilai.BebanKerja + "]").prop("checked", true)
                     }
                 } // End For
 
