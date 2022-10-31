@@ -15,7 +15,7 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Tahun Kegiatan</label>
                             <div class="col-sm-10">
-                                <select id="tahunPekerjaan" onchange="loadTabelPekerjaan()" required class="custom-select">
+                                <select id="tahunPekerjaan" required class="custom-select">
                                     <option value=''>--PILIH--</option>
                                     <?php
                                     foreach ($tahun['data'] as $rows) {
@@ -34,7 +34,7 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Bulan Kegiatan</label>
                             <div class="col-sm-10">
-                                <select onchange="loadTabelPekerjaan()" id="bulanPekerjaan" required class="custom-select">
+                                <select id="bulanPekerjaan" required class="custom-select">
                                     <option value=''>--PILIH--</option>
                                     <?php
                                     foreach ($bulan['data'] as $rows) {
@@ -49,9 +49,49 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Seksi/Fungsi</label>
+                            <div class="col-sm-10">
+                                <select onchange="getRo(this.value)" id="seksi" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($seksi['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['Seksi']; ?>'><?php echo $rows['Seksi']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">RO/Output</label>
+                            <div class="col-sm-10">
+                                <select id="kodeRo" required class="custom-select">
+                                    <option value=''>--PILIH--</option>
+                                </select>
+                            </div>
+                        </div>
                         <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left" onclick="loadTabelPekerjaan()">Tampilkan / Refresh</button>
                     </div>
                     <div class="card-body">
+                        <div class="table-responsive card-body p-0" style="display: block;">
+                            <table id="TabelRealisasiOutput" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Kode</th>
+                                        <th>Output</th>
+                                        <th>Pagu Revisi</th>
+                                        <th>Realisasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                        </div>
                         <div class="table-responsive card-body p-0" style="display: block;">
                             <table id="TabelPekerjaan" class="table table-bordered table-striped">
                                 <thead>
@@ -300,14 +340,14 @@
                         <p id="satuanPekerjaanDetail" class="text-muted">
                             TESTES
                         </p>
-                      
+
                         <div class="table-responsive card-body p-0" style="display: block;">
 
                             <table id="TabelPekerjaanSaya" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Nama Kegiatan</th>
-                                        <th>Pemberi Tugas</th>
+                                        <th>Nama Penerima Tugas</th>
                                         <th>Satuan</th>
                                         <th>Target</th>
                                         <th>Realisasi</th>
@@ -366,6 +406,38 @@
                     $('#pekerjaanId').append(`<option value="${element.RecId}">
                                        ${element.Deskripsi}
                                   </option>`);
+                });
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
+    }
+</script>
+
+<script>
+    function getRo(val) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicero/read_ro_by_seksi',
+            dataType: 'json',
+            data: {
+                Seksi: val
+
+            },
+            success: function(output) {
+
+                console.log(output);
+                $("#kodeRo").empty()
+                $("#kodeRo").append("<option>--Pilih Output--</option>")
+                output.data.forEach(element => {
+                    $("#kodeRo").append("<option value=" + element.Kode + ">" + element.Kode + " " + element.Ro + "</option>")
+
                 });
 
             },
@@ -463,7 +535,7 @@
 
                     TabelPekerjaanSaya.fnAddData([
                         "" + outputDataBaris.Deskripsi + "",
-                        "" + outputDataBaris.NamaPemberiPekerjaan + "",
+                        "" + outputDataBaris.NamaPenerimaPekerjaan + "",
                         "" + outputDataBaris.Satuan + "",
                         "" + outputDataBaris.Volume + "",
 
@@ -713,12 +785,14 @@
         $.ajax({
             type: "POST",
             async: false,
-            url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_tahun_by_bulan',
+            url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_tahun_by_bulan_by_ro',
             dataType: 'json',
             data: {
                 PenggunaId: <?php echo $this->session->userdata('RecId'); ?>,
                 Tahun: $("#tahunPekerjaan").val(),
-                Bulan: $("#bulanPekerjaan").val()
+                Bulan: $("#bulanPekerjaan").val(),
+                KodeRo: $("#kodeRo").val()
+
 
             },
             success: function(output) {
@@ -748,6 +822,69 @@
 
             }
         });
+
+        var TabelRealisasiOutput = $("#TabelRealisasiOutput").dataTable({
+            destroy: true,
+            "lengthChange": true,
+            "bPaginate": true,
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            columns: [{
+
+                    className: "text-left"
+                },
+
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                },
+                {
+
+                    className: "text-center"
+                }
+            ],
+
+        });
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicero/read_ro_by_kode',
+            dataType: 'json',
+            data: {
+                KodeRo: $("#kodeRo").val()
+            },
+            success: function(output) {
+                TabelRealisasiOutput.fnClearTable();
+
+                outputData = output.data
+                for (var i = 0; i < outputData.length; i++) {
+
+                    outputDataBaris = outputData[i]
+                    j = i + 1
+
+                    TabelRealisasiOutput.fnAddData([
+                        "" + outputDataBaris.Kode + "",
+                        "" + outputDataBaris.Ro + "",
+                        " " + outputDataBaris.PaguRevisiFormatted + "",
+                        " " + outputDataBaris.RealisasiFormatted + ""
+
+                    ]);
+                } // End For
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
     }
     $(document).ready(function() {
 

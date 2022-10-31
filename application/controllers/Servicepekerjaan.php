@@ -31,14 +31,21 @@ class Servicepekerjaan extends CI_Controller
 
         echo json_encode($output);
     }
+    
+    public function read_pekerjaan_by_tahun_by_bulan_by_ro()
+    {
+        $dataInput['Tahun'] = $this->input->post('Tahun');
+        $dataInput['Bulan'] = $this->input->post('Bulan');
+        $dataInput['KodeRo'] = $this->input->post('KodeRo');
+        $output = $this->model_pekerjaan_bulanan->read_pekerjaan_by_tahun_by_bulan_by_ro($dataInput);
+
+        echo json_encode($output);
+    }
     public function read_pekerjaan_by_tahun_by_bulan()
     {
         $dataInput['RecId'] = $this->input->post('PenggunaId');
         $dataInput['Tahun'] = $this->input->post('Tahun');
         $dataInput['Bulan'] = $this->input->post('Bulan');
-// 
-        // print_r($dataInput);
-
         $output = $this->model_pekerjaan_bulanan->read_pekerjaan_by_tahun_by_bulan($dataInput);
 
         echo json_encode($output);
@@ -82,6 +89,7 @@ class Servicepekerjaan extends CI_Controller
     public function create_pekerjaan()
     {
         $dataInput = $this->input->post();
+        // print_r($dataInput);
         $output = $this->model_pekerjaan_bulanan->create_pekerjaan($dataInput);
 
         echo json_encode($output);

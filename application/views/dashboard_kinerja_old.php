@@ -270,6 +270,74 @@
 
         });
 
+        Highcharts.chart('container_laporan_harian', {
+          chart: {
+            type: 'column'
+          },
+          title: {
+            text: 'Jumlah Upload Laporan Harian Bulan ' + $("#bulanPekerjaan").val() + ' Tahun ' + $("#tahunPekerjaan").val()
+          },
+          xAxis: {
+            categories: categories,
+            title: {
+              text: null
+            }
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: 'Jumlah',
+              align: 'high'
+            },
+            labels: {
+              overflow: 'justify'
+            }
+          },
+          tooltip: {
+            valueSuffix: ' laporan'
+          },
+          plotOptions: {
+            bar: {
+              dataLabels: {
+                enabled: true
+              }
+            }
+          },
+          // colors: warna,
+          legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+          },
+          credits: {
+            enabled: false
+          },
+          series: [{
+            name: 'Jumlah Laporan',
+            data: jumlahLaporanHarian,
+            dataLabels: {
+              enabled: true,
+
+              rotation: 0,
+              color: '#FFFAFF',
+              align: 'right',
+              format: '{point.y:.0f}', // one decimal
+              y: 10, // 10 pixels down from the top
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Verdana, sans-serif'
+              }
+
+            }
+
+          }]
+        });
 
         Highcharts.chart('container_persentase', {
           chart: {

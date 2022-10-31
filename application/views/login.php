@@ -141,7 +141,7 @@ include APPPATH . 'third_party/glogin/config.php';
         $.ajax({
             type: "POST",
             cache: false,
-            url: '<?php echo base_url(); ?>/servicepengguna/login_jatengklik',
+            url: '<?php echo base_url(); ?>/servicepengguna/login_jatengklik_2',
             dataType: 'json',
             data: {
                 username: $("#username").val(),

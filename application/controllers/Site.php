@@ -8,6 +8,9 @@ class Site extends CI_Controller
 	public $bulan;
 	public $roleByPengguna;
 	public $satker;
+	public $seksi;
+	public $ro;
+	public $komponen;
 	public $organisasi;
 	public $pekerjaan;
 	public $pekerjaanByPengguna;
@@ -21,6 +24,8 @@ class Site extends CI_Controller
 		$this->load->model('model_satker');
 		$this->load->model('model_organisasi');
 		$this->load->model('model_satuan');
+		$this->load->model('model_ro');
+		$this->load->model('model_komponen');
 		$this->load->model('model_pekerjaan_bulanan');
 		$this->load->model('model_tahun');
 
@@ -34,6 +39,9 @@ class Site extends CI_Controller
 		$this->organisasi = $this->model_organisasi->read_organisasi();
 		$this->opsiLogin = $this->model_opsi_login->read_opsi_login();
 		$this->satuan = $this->model_satuan->read_satuan();
+		$this->ro = $this->model_ro->read_ro();
+		$this->seksi = $this->model_ro->read_seksi();
+		$this->komponen = $this->model_komponen->read_komponen();
 		$this->pekerjaan = $this->model_pekerjaan_bulanan->read_pekerjaan();
 		$this->pekerjaanByPengguna = $this->model_pekerjaan_bulanan->read_pekerjaan_by_pengguna($this->session->userdata());
 		$this->tahun = $this->model_tahun->read_tahun();
@@ -169,6 +177,7 @@ class Site extends CI_Controller
 			'satker' => $this->satker,
 			'organisasi' => $this->organisasi,
 			'satuan' => $this->satuan,
+			'seksi' => $this->seksi,
 			'pengguna' => $this->pengguna,
 			'opsiLogin' => $this->opsiLogin,
 			'tahun' => $this->tahun,
@@ -223,6 +232,8 @@ class Site extends CI_Controller
 			'detailPengguna' => $this->detailPengguna,
 			'satker' => $this->satker,
 			'organisasi' => $this->organisasi,
+			'ro' => $this->ro,
+			'komponen' => $this->komponen,
 			'satuan' => $this->satuan,
 			'pengguna' => $this->pengguna,
 			'pekerjaan' => $this->pekerjaan,
@@ -240,6 +251,24 @@ class Site extends CI_Controller
 		$data = array(
 			'menu' => $this->uri->segment(2),
 			'judul' => 'Laporan Harian Saya',
+			'role_by_pengguna' => $this->roleByPengguna,
+			'detailPengguna' => $this->detailPengguna,
+			'satker' => $this->satker,
+			'organisasi' => $this->organisasi,
+			'satuan' => $this->satuan,
+			'pengguna' => $this->pengguna,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan,
+
+		);
+		$this->load->view('site', $data);
+		// echo json_encode($data);
+	}
+	public function upload_realisasi()
+	{
+		$data = array(
+			'menu' => $this->uri->segment(2),
+			'judul' => 'Realisasi Per Output',
 			'role_by_pengguna' => $this->roleByPengguna,
 			'detailPengguna' => $this->detailPengguna,
 			'satker' => $this->satker,

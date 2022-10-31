@@ -33,6 +33,25 @@ class Model_pengguna extends CI_Model
 
 			);
 	}
+		public function cek_pengguna_2($data)
+	{
+		$query = $this->db->query("select * from pengguna where Email=?  ", array($data['Email']));
+		if ($query->num_rows() > 0) {
+
+			$dataPengguna = $query->result_array()[0];
+			$dataRolePengguna = $this->model_role->read_role_pengguna_by_id_pengguna(array("PenggunaId" => $dataPengguna['RecId']));
+			$dataPengguna['RolePengguna'] = $dataRolePengguna;
+			return array(
+				'sukses' => true,
+				'data' => $dataPengguna
+			);
+		} else
+			return array(
+				'sukses' => false,
+				'data' => null
+
+			);
+	}
 	public function edit_url_picture($dataInput)
 	{
 		$this->db->query("update pengguna set UrlPicture=? where RecId=? ", array($dataInput['UrlPicture'], $dataInput['RecId']));

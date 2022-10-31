@@ -105,6 +105,35 @@ class Model_pekerjaan_bulanan extends CI_Model
             'data' => $data
         );
     }
+    public function read_pekerjaan_by_tahun_by_bulan_by_ro($inputData)
+    {
+        $query = $this->db->query("select a.*,b.Satuan ,c.Nama,d.Status
+        from pekerjaan_bulanan a left join satuan b on a.SatuanId=b.RecId
+        left join pengguna c on c.RecId=a.CreatedBy
+        left join status_penugasan d on d.RecId=a.StatusPenugasanId
+        where 
+        KodeRo=? and (
+                  
+                
+                (MONTH(a.TanggalMulai)=? and YEAR(a.TanggalMulai)=?)
+                
+                or 
+                
+                (MONTH(a.TanggalSelesai)=? and YEAR(a.TanggalSelesai)=?));		", array( $inputData['KodeRo'],$inputData['Bulan'], $inputData['Tahun'], $inputData['Bulan'], $inputData['Tahun']));
+        $data = array();
+
+        foreach ($query->result_array() as $row) {
+            $row['TanggalSelesaiFormatted']=date('d F Y', strtotime($row['TanggalSelesai']));
+            
+            $data[] = $row;
+
+        }
+
+        return array(
+            'sukses' => true,
+            'data' => $data
+        );
+    }
 
     public function read_pekerjaan_by_id($dataInput)
     {
@@ -140,6 +169,8 @@ class Model_pekerjaan_bulanan extends CI_Model
         $dataInput['TanggalSelesai'] = $this->fungsi->ubahFormatTanggal($arrTanggal[1]);
 
         $dataToSave = array(
+            $dataInput['KodeRo'],
+            $dataInput['KodeKomponen'],
             $dataInput['Deskripsi'],
             $dataInput['Volume'],
             $dataInput['SatuanId'],
@@ -151,7 +182,7 @@ class Model_pekerjaan_bulanan extends CI_Model
 
         );
         $query1 = $this->db->query(
-            "insert into pekerjaan_bulanan (Deskripsi,Volume,SatuanId,CreatedDate,ModifiedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?)  ",
+            "insert into pekerjaan_bulanan (KodeRo,KodeKomponen,Deskripsi,Volume,SatuanId,CreatedDate,ModifiedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?,?,?)  ",
             $dataToSave
         );
         $afftectedRows = $this->db->affected_rows();
@@ -181,6 +212,8 @@ class Model_pekerjaan_bulanan extends CI_Model
         $dataInput['TanggalSelesai'] = $this->fungsi->ubahFormatTanggal($arrTanggal[1]);
 
         $dataToSave = array(
+            $dataInput['KodeRo'],
+            $dataInput['KodeKomponen'],
             $dataInput['Deskripsi'],
             $dataInput['Volume'],
             $dataInput['SatuanId'],
@@ -194,7 +227,7 @@ class Model_pekerjaan_bulanan extends CI_Model
 
         );
         $query1 = $this->db->query(
-            "update pekerjaan_bulanan set Deskripsi=?,Volume=?,SatuanId=?,ModifiedDate=?,ModifiedBy=?,TanggalMulai=?,TanggalSelesai=? where RecId=? ",
+            "update pekerjaan_bulanan set KodeRo=?,KodeKomponen=?, Deskripsi=?,Volume=?,SatuanId=?,ModifiedDate=?,ModifiedBy=?,TanggalMulai=?,TanggalSelesai=? where RecId=? ",
             $dataToSave
         );
         $afftectedRows = $this->db->affected_rows();

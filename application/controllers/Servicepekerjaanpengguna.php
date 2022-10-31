@@ -69,8 +69,12 @@ class Servicepekerjaanpengguna extends CI_Controller
 
     public function create_pekerjaan_pengguna()
     {
-        $dataInput = $this->input->post();
 
+        // print_r($dataInput)
+
+
+        $dataInput = $this->input->post();
+        
         $output = $this->model_pekerjaan_bulanan_pengguna->create_pekerjaan_pengguna($dataInput);
 
         echo json_encode($output);
@@ -216,10 +220,13 @@ class Servicepekerjaanpengguna extends CI_Controller
         // $coPenilaianTim=0;
         // $sumPenilaianTim = 0;
 
-        $rerataKuantitas=0;
-        $rerataKualitas=0;
+        $rerataKuantitas = 0;
+        $rerataKualitas = 0;
         foreach ($outputPekerjaanPengguna['data']['detail'] as $rowPekerjaanPengguna) {
             $no = $indeks + 1;
+            $penilaianDariKepala = $rowPekerjaanPengguna['PenilaianKepala']['nilai'];
+            // $sumPenilaianTim = $sumPenilaianTim + $rowPekerjaanPengguna['PenilaianTim']['data']['Rerata'];
+            $cariKualitas=(2*$penilaianDariKepala)-100;
 
             $sheet->setCellValue('A' . $startBarisPekerjaanPengguna, $no);
             $sheet->setCellValue('B' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['Deskripsi']);
@@ -229,22 +236,31 @@ class Servicepekerjaanpengguna extends CI_Controller
 
             $sheet->setCellValue('D' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['Satuan']);
             $sheet->setCellValue('E' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['Volume']);
-            $sheet->setCellValue('F' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['VolumeRealisasi']);
-            $sheet->setCellValue('G' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PersentaseRealisasiVolume']);
-            $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PenilaianKepala']['nilai']);
+            $sheet->setCellValue('F' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['Volume']);
+            $sheet->setCellValue('G' . $startBarisPekerjaanPengguna, 100);
+            // $sheet->setCellValue('G' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PersentaseRealisasiVolume']);
+            // $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $rowPekerjaanPengguna['PenilaianKepala']['nilai']);
+            $sheet->setCellValue('H' . $startBarisPekerjaanPengguna,$cariKualitas);
+            
+            
             $sheet->getStyle("B:K")->getFont()->setItalic(false);
 
-            $penilaianDariKepala=$rowPekerjaanPengguna['PenilaianKepala']['nilai'];
-            // $sumPenilaianTim = $sumPenilaianTim + $rowPekerjaanPengguna['PenilaianTim']['data']['Rerata'];
-
+        
             $startBarisPekerjaanPengguna++;
             $indeks++;
         }
-        $startBarisPekerjaanPengguna=$startBarisPekerjaanPengguna+2;
+        $startBarisPekerjaanPenggunaCKP = $startBarisPekerjaanPengguna + 3;
+        $startBarisPekerjaanPenggunaRerata = $startBarisPekerjaanPengguna + 2;
         // $rerataPenilaianTim = $sumPenilaianTim / ($indeks + 1);
-        $sheet->setCellValue('G' . $startBarisPekerjaanPengguna, $outputPekerjaanPengguna['data']['ringkasan']['rerataPersentaseRealisasiVolume']);
-        $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $penilaianDariKepala);
-    
+        // $sheet->setCellValue('H' .$startBarisPekerjaanPenggunaRerata, $outputPekerjaanPengguna['data']['ringkasan']['rerataPersentaseRealisasiVolume']);
+
+        $sheet->setCellValue('G' .$startBarisPekerjaanPenggunaRerata,100);
+        // $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $penilaianDariKepala);
+
+        $sheet->setCellValue('G' . $startBarisPekerjaanPenggunaCKP, $penilaianDariKepala);
+        // $sheet->setCellValue('H' . $startBarisPekerjaanPengguna, $penilaianDariKepala);
+
+        $sheet->setCellValue('H' .$startBarisPekerjaanPenggunaRerata,$cariKualitas);
         $writer = new Xlsx($spreadsheet);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

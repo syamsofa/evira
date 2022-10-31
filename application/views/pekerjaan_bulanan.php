@@ -102,6 +102,33 @@
                     <div class="card-body">
                         <input type="hidden" class="form-control" id="recIdEdit" placeholder="Email">
                         <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">RO/Output</label>
+                            <div class="col-sm-10">
+                                <select onchange='getKomponenEdit(this.value)' id="kodeRoEdit" required class=" custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($ro['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['Kode']; ?>'><?php echo $rows['Kode'] . " " . $rows['Ro']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Komponen</label>
+                            <div class="col-sm-10">
+                                <select id="kodeKomponenEdit" required class=" custom-select">
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" required id="deskripsiEdit" placeholder="Deskripsi">
@@ -166,6 +193,33 @@
                     Silahkan lakukan penyesuaian/modifikasi untuk hasil data duplikasinya
                     <div class="card-body">
                         <input type="hidden" class="form-control" id="recIdDup" placeholder="Email">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">RO/Output</label>
+                            <div class="col-sm-10">
+                                <select onchange='getKomponenDup(this.value)' id="kodeRoDup" required class=" custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($ro['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['Kode']; ?>'><?php echo $rows['Kode'] . " " . $rows['Ro']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Komponen</label>
+                            <div class="col-sm-10">
+                                <select id="kodeKomponenDup" required class=" custom-select">
+
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi</label>
                             <div class="col-sm-10">
@@ -240,6 +294,33 @@
                 </div>
                 <div class="modal-body">
                     <div class="card-body">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">RO/Output</label>
+                            <div class="col-sm-10">
+                                <select onchange='getKomponen(this.value)' id="kodeRo" required class="select2 custom-select">
+                                    <option value=''>--PILIH--</option>
+                                    <?php
+                                    foreach ($ro['data'] as $rows) {
+
+                                    ?>
+
+                                        <option value='<?php echo $rows['Kode']; ?>'><?php echo $rows['Kode'] . " " . $rows['Ro']; ?></option>
+
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Komponen</label>
+                            <div class="col-sm-10">
+                                <select id="kodeKomponen" required class=" custom-select">
+
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Deskripsi</label>
                             <div class="col-sm-10">
@@ -694,9 +775,43 @@
 
                 $("#recIdEdit").val(data.RecId)
                 $("#satuanIdEdit").val(data.SatuanId)
+                $("#kodeRoEdit").val(data.KodeRo)
                 $("#deskripsiEdit").val(data.Deskripsi)
                 $("#volumeEdit").val(data.Volume)
                 $("#rangeTanggalEdit").val(data.RangeTanggal)
+
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: '<?php echo base_url(); ?>/servicekomponen/read_komponen_by_ro',
+                    data: {
+                        KodeRo: data.KodeRo
+                    },
+                    dataType: 'json',
+                    success: function(output) {
+
+                        console.log(output);
+
+                        $("#kodeKomponenEdit").empty()
+                        $("#kodeKomponenEdit").append("<option>--Pilih--</option>")
+                        output.data.forEach(element => {
+                            console.log(element)
+                            $("#kodeKomponenEdit").append("<option value=" + element.KodeKomponen + ">" + element.KodeKomponen + " " + element.Komponen + "</option>")
+                        });
+
+                        setTimeout(() => {
+                            $("#kodeKomponenEdit").val(data.KodeKomponen)
+
+                        }, 1000);
+
+                    },
+
+                    error: function(e) {
+                        console.log(e.responseText);
+
+                    }
+                });
+
 
             },
 
@@ -728,9 +843,45 @@
 
                 $("#recIdDup").val(data.RecId)
                 $("#satuanIdDup").val(data.SatuanId)
+                $("#kodeRoDup").val(data.KodeRo)
+                // $("#kodeKomponenDup").val(data.KodeKomponen)
                 $("#deskripsiDup").val(data.Deskripsi)
                 $("#volumeDup").val(data.Volume)
                 $("#rangeTanggalDup").val(data.RangeTanggal)
+
+
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: '<?php echo base_url(); ?>/servicekomponen/read_komponen_by_ro',
+                    data: {
+                        KodeRo: data.KodeRo
+                    },
+                    dataType: 'json',
+                    success: function(output) {
+
+                        console.log(output);
+
+                        $("#kodeKomponenDup").empty()
+                        $("#kodeKomponenDup").append("<option>--Pilih--</option>")
+                        output.data.forEach(element => {
+                            console.log(element)
+                            $("#kodeKomponenDup").append("<option value=" + element.KodeKomponen + ">" + element.KodeKomponen + " " + element.Komponen + "</option>")
+                        });
+
+                        setTimeout(() => {
+                            $("#kodeKomponenDup").val(data.KodeKomponen)
+
+                        }, 1000);
+
+                    },
+
+                    error: function(e) {
+                        console.log(e.responseText);
+
+                    }
+                });
+
 
             },
 
@@ -810,6 +961,8 @@
                 url: '<?php echo base_url(); ?>/servicepekerjaan/duplikasi_pekerjaan',
                 dataType: 'json',
                 data: {
+                    KodeRo: $('#kodeRoDup').val(),
+                    KodeKomponen: $('#kodeKomponenDup').val(),
                     Deskripsi: $('#deskripsiDup').val(),
                     SatuanId: $('#satuanIdDup').val(),
                     Volume: $('#volumeDup').val(),
@@ -864,6 +1017,8 @@
                 url: '<?php echo base_url(); ?>/servicepekerjaan/create_pekerjaan',
                 dataType: 'json',
                 data: {
+                    KodeRo: $('#kodeRo').val(),
+                    KodeKomponen: $('#kodeKomponen').val(),
                     Deskripsi: $('#deskripsi').val(),
                     SatuanId: $('#satuanId').val(),
                     Volume: $('#volume').val(),
@@ -900,6 +1055,8 @@
                 url: '<?php echo base_url(); ?>/servicepekerjaan/edit_pekerjaan',
                 dataType: 'json',
                 data: {
+                    KodeRo: $('#kodeRoEdit').val(),
+                    KodeKomponen: $('#kodeKomponenEdit').val(),
                     Deskripsi: $('#deskripsiEdit').val(),
                     SatuanId: $('#satuanIdEdit').val(),
                     Volume: $('#volumeEdit').val(),
@@ -1091,5 +1248,66 @@
                 Swal.fire('Changes are not saved', '', 'info')
             }
         })
+    }
+</script>
+
+<script>
+    function getKomponen(val) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicekomponen/read_komponen_by_ro',
+            dataType: 'json',
+            data: {
+                KodeRo: val
+
+            },
+            success: function(output) {
+
+                $("#kodeKomponen").empty()
+                $("#kodeKomponen").append("<option>--Pilih--</option>")
+                output.data.forEach(element => {
+                    console.log(element)
+                    $("#kodeKomponen").append("<option value=" + element.KodeKomponen + ">" + element.KodeKomponen + " " + element.Komponen + "</option>")
+                });
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
+    }
+</script>
+
+
+<script>
+    function getKomponenEdit(val) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicekomponen/read_komponen_by_ro',
+            dataType: 'json',
+            data: {
+                KodeRo: val
+
+            },
+            success: function(output) {
+
+                $("#kodeKomponenEdit").empty()
+                $("#kodeKomponenEdit").append("<option>--Pilih--</option>")
+                output.data.forEach(element => {
+                    console.log(element)
+                    $("#kodeKomponenEdit").append("<option value=" + element.KodeKomponen + ">" + element.KodeKomponen + " " + element.Komponen + "</option>")
+                });
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
     }
 </script>
