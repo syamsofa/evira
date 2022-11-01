@@ -1311,3 +1311,33 @@
 
     }
 </script>
+
+<script>
+    function getKomponenDup(val) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicekomponen/read_komponen_by_ro',
+            dataType: 'json',
+            data: {
+                KodeRo: val
+
+            },
+            success: function(output) {
+
+                $("#kodeKomponenDup").empty()
+                $("#kodeKomponenDup").append("<option>--Pilih--</option>")
+                output.data.forEach(element => {
+                    console.log(element)
+                    $("#kodeKomponenDup").append("<option value=" + element.KodeKomponen + ">" + element.KodeKomponen + " " + element.Komponen + "</option>")
+                });
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
+    }
+</script>

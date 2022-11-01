@@ -189,7 +189,8 @@ class Servicepengguna extends CI_Controller
             } else {
                 $output = $cekUser['data'];
                 //   print_r($resp);
-                $output['UrlPicture'] = "https://community.bps.go.id/images/avatar/340015499_20200407134325.jpg";
+                // $output['UrlPicture'] = "https://community.bps.go.id/images/avatar/340015499_20200407134325.jpg";
+                $output['UrlPicture'] = base_url()."aset/image/user.jpg";
                 $this->model_pengguna->edit_url_picture($output);
                 $this->session->set_userdata($output);
                 $this->session->set_userdata('RoleIdAktif', 2);
