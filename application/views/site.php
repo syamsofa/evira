@@ -293,6 +293,52 @@ if ($this->session->userdata('Email') == null)
 
               </ul>
             </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-book"></i>
+                <p>
+                  Regsosek 2022
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/regsosek_dashboard" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                      Dashboard
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/regsosek_rb" class="nav-link">
+                    <i class="fas fa-save nav-icon"></i>
+                    <p>
+                      Entri RB
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/regsosek_supervisor" class="nav-link">
+                    <i class="fas fa-save nav-icon"></i>
+                    <p>
+                      Entri Supervisor
+
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/monitoring_kegiatan" class="nav-link">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>
+                      Monitoring Kegiatan
+
+                    </p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
             <?php
 
             if ($this->session->userdata('RoleIdAktif') == 4) {
@@ -339,15 +385,15 @@ if ($this->session->userdata('Email') == null)
             <?php
             }
             ?>
-                          <li class="nav-item">
-                <a href="<?php echo base_url(); ?>site/upload_realisasi" class="nav-link">
-                  <i class="fas fa-users nav-icon"></i>
-                  <p>
-                    Realisasi Per Output
+            <li class="nav-item">
+              <a href="<?php echo base_url(); ?>site/upload_realisasi" class="nav-link">
+                <i class="fas fa-users nav-icon"></i>
+                <p>
+                  Realisasi Per Output
 
-                  </p>
-                </a>
-              </li>
+                </p>
+              </a>
+            </li>
 
             <?php
 
@@ -446,19 +492,19 @@ if ($this->session->userdata('Email') == null)
 <script src="<?php echo base_url(); ?>AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
 
 <style>
-    table.dataTable td {
-        font-size: 1em;
-    }
+  table.dataTable td {
+    font-size: 1em;
+  }
 
-    table.dataTable th {
-        font-size: 1em;
-    }
+  table.dataTable th {
+    font-size: 1em;
+  }
 
-    html {
-        font-size: 70%;
-    }
-    h1 {
-        font-size: 30%;
-    }
+  html {
+    font-size: 70%;
+  }
 
+  h1 {
+    font-size: 30%;
+  }
 </style>

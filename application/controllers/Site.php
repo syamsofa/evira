@@ -14,6 +14,7 @@ class Site extends CI_Controller
 	public $organisasi;
 	public $pekerjaan;
 	public $pekerjaanByPengguna;
+	public $kecamatan;
 
 	public function __construct()
 	{
@@ -28,10 +29,12 @@ class Site extends CI_Controller
 		$this->load->model('model_komponen');
 		$this->load->model('model_pekerjaan_bulanan');
 		$this->load->model('model_tahun');
+		$this->load->model('model_wilayah');
 
 		$this->load->model('model_bulan');
 		$this->load->library('fungsi');
 
+		$this->kecamatan=$this->model_wilayah->read_kecamatan();
 		$this->detailPengguna = $this->model_pengguna->read_pengguna_by_id($data = $this->session->userdata());
 		$this->roleByPengguna = $this->model_pengguna->read_role_by_pengguna($data = $this->session->userdata());
 		$this->pengguna = $this->model_pengguna->read_pengguna();
@@ -76,6 +79,28 @@ class Site extends CI_Controller
 		$data = array(
 			'menu' => $this->uri->segment(2),
 			'judul' => 'Dashboard Kinerja dan Kegiatan',
+			'role_by_pengguna' => $this->roleByPengguna,
+			'detailPengguna' => $this->detailPengguna,
+			'satker' => $this->satker,
+			'organisasi' => $this->organisasi,
+			'satuan' => $this->satuan,
+			'pengguna' => $this->pengguna,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan,
+
+
+
+		);
+		$this->load->view('site', $data);
+	}
+
+	public function regsosek_rb()
+	{
+		$data = array(
+			'menu' => $this->uri->segment(2),
+			'judul' => 'Entri Receiving Batching',
+			'kecamatan' => $this->kecamatan,
+			
 			'role_by_pengguna' => $this->roleByPengguna,
 			'detailPengguna' => $this->detailPengguna,
 			'satker' => $this->satker,
