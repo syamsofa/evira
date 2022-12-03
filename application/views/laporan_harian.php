@@ -506,6 +506,8 @@
 </script>
 <script>
     $("#formTambahLaporanHarian").submit(function(event) {
+
+        
         $("#buttonSubmit").html(" <i class='fa fa-refresh fa-spin'></i> Sedang Proses Upload ");
 
         const fileupload = $('#fileLaporan').prop('files')[0];

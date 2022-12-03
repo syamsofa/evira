@@ -115,7 +115,27 @@ class Site extends CI_Controller
 		);
 		$this->load->view('site', $data);
 	}
+	public function regsosek_supervisor()
+	{
+		$data = array(
+			'menu' => $this->uri->segment(2),
+			'judul' => 'Entri Supervisor',
+			'kecamatan' => $this->kecamatan,
+			
+			'role_by_pengguna' => $this->roleByPengguna,
+			'detailPengguna' => $this->detailPengguna,
+			'satker' => $this->satker,
+			'organisasi' => $this->organisasi,
+			'satuan' => $this->satuan,
+			'pengguna' => $this->pengguna,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan,
 
+
+
+		);
+		$this->load->view('site', $data);
+	}
 	public function profil()
 	{
 		$data = array(

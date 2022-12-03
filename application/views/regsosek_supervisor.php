@@ -6,17 +6,6 @@
 
 
 <script>
-    function edit(tes) {
-        console.log(tes)
-        // alert(tes.getAttribute('KeteranganSls'))
-
-        $("#KeteranganSls").val(tes.getAttribute('KeteranganSls'))
-        $("#IdData").val(tes.getAttribute('IdData'))
-
-        $("#modalTambahPekerjaan").modal('show')
-    }
-</script>
-<script>
     var globalTahun = new Date().getFullYear()
     var globalBulan = (new Date().getMonth())
 </script>
@@ -75,12 +64,16 @@
                             <table id="TabelRealisasi" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Kec</th>
-                                        <th>Desa</th>
-                                        <th>Yang Menyerahkan</th>
-                                        <th>Yang Menerima</th>
-                                        <th>Hasil Verifikasi</th>
-                                        <th>--</th>
+                                        <th>Kode SLS</th>
+                                        <th>Nama SLS</th>
+                                        <th>Hasil Verifikasi Keluarga</th>
+                                        <th>Dok XK</th>
+                                        <th>Operator Entri</th>
+                                        <th>Tanggal Penyerahan ke Operator Entri</th>
+                                        <th>Tanggal Penerimaan kembali dari  Operator Entri</th>
+                                        <th>Validator</th>
+                                        <th>Tanggal Penyerahan ke Operator Validasi</th>
+                                        <th>Tanggal Penerimaan Kembali dari Operator Validasi</th>
 
                                     </tr>
 
@@ -182,112 +175,6 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modalTambahPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="formTambahPekerjaan" class="form-horizontal">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Data RB</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="card-body">
-                        <input type="hidden" id="IdData" value="">
-                        <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Keterangan SLS</label>
-                            <div class="col-sm-10">
-                                <input readonly type="text" class="form-control" required id="KeteranganSls" name="SSS" placeholder="">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Nomor Batch</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" required id="NomorBatch" placeholder="">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Yang Menyerahkan</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="Supervisor form-control" required id="YangMenyerahkan" placeholder="">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Tanggal Receiving </label>
-                            <div class="col-sm-10">
-                                <input required type="text" class="tunggalTanggal form-control " id="TanggalReceiving" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Penerima </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="Supervisor form-control " id="Penerima" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">VK1 </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" onkeyup="onlySatuNol(this)" id="Vk1" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">VK2 </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control " onkeyup="onlySatuNol(this)" id="Vk2" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">K </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control " id="K" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">XK </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control " id="Xk" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">PSLS </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control " id="Psls" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">BANR </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control " id="Banr" value="" />
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Jumlah Keluarga </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control " id="HasilVerifikasi" value="" />
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 
 <script>
@@ -298,6 +185,10 @@
 
                     className: "text-center"
                 }, {
+
+                    className: "text-center"
+                },
+                {
 
                     className: "text-center"
                 },
@@ -316,8 +207,19 @@
                 {
 
                     className: "text-right"
-                }
-            ],
+                },
+                {
+
+                    className: "text-right"
+                },
+                {
+
+                    className: "text-right"
+                },
+                {
+
+                    className: "text-right"
+                }],
             paging: false,
             searching: true,
             "responsive": true,
@@ -350,13 +252,16 @@
                     j = i + 1
 
                     TabelRealisasi.fnAddData([
-                        "" + outputDataBaris.nama_kec + "",
-                        "" + outputDataBaris.nama_desa + "",
                         "" + outputDataBaris.KdSls + "",
                         "" + outputDataBaris.NmSls + "",
-                        "<input maxlength=4 size=4 value='" + outputDataBaris.HasilVerifikasi + "' type='text'>",
-                        "<button IdData=" + outputDataBaris.Id + " KeteranganSls='" + outputDataBaris.KdKec + " " + outputDataBaris.nama_kec + " " + outputDataBaris.KdDesa + " " + outputDataBaris.nama_desa + " " + outputDataBaris.KdSls + " " + outputDataBaris.NmSls + "' onclick='edit(this)'>Edit</button>"
-
+                        "" + outputDataBaris.HasilVerifikasi + "",
+                        "" + outputDataBaris.Xk + "",
+                        " <input targetkolom='Operator' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " value='" + outputDataBaris.Operator + "' class='Operator'>",
+                        "<input targetkolom='TanggalEntri' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " class='tunggalTanggal' value='" + outputDataBaris.TanggalEntri + "' type='text'>",
+                        "<input targetkolom='TanggalKembali' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " class='tunggalTanggal' value='" + outputDataBaris.TanggalKembali + "' type='text'>",
+                        " <input targetkolom='Validator' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " value='" + outputDataBaris.Validator + "' class='Operator'>",
+                        " <input targetkolom='TanggalValidasi' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " value='" + outputDataBaris.TanggalValidasi + "' class='tunggalTanggal'>",
+                        " <input targetkolom='TanggalValidasiKembali' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " value='" + outputDataBaris.TanggalValidasiKembali+ "' class='tunggalTanggal'>",
 
                     ]);
                 } // End For
@@ -368,33 +273,164 @@
 
                 $(".select2").select2()
 
-                var availableTags = [
-                    "Nanda Ilyas",
-                    "AppleScript",
-                    "Asp",
-                    "BASIC",
-                    "C",
-                    "C++",
-                    "Clojure",
-                    "COBOL",
-                    "ColdFusion",
-                    "Erlang",
-                    "Fortran",
-                    "Groovy",
-                    "Haskell",
-                    "Java",
-                    "JavaScript",
-                    "Lisp",
-                    "Perl",
-                    "PHP",
-                    "Python",
-                    "Ruby",
-                    "Scala",
-                    "Scheme"
+                var DaftarSupervisor = [
+                    'Adi Muntiardiyanto Umar',
+                    'Agus Susanto',
+                    'Amir Murtono',
+                    'Didik Permono',
+                    'Dinata Hindra Setiawan S.AP',
+                    'Drs. Sumitro',
+                    'Ekha Jaya Prianjani S.M.',
+                    'Erlinda S.ST, M.Ec.Dev',
+                    'Faisal Luthfi Arief SST',
+                    'Henri Wagiyanto S.Pt., M.Ec.Dev, M.A.',
+                    'Herhardana S.Si.',
+                    'Imam Mustofa S.Si.',
+                    'Khaerul Anwar SST',
+                    'Kristiyanti',
+                    'M. Dwi Priyanto S.E.',
+                    'Miyan Andi Irawan SST, M.S.E.',
+                    'Mochtar Rahmadi',
+                    'Moh. Asrori S.Si.',
+                    'Mohamad Achiruzaman S.ST, M.T',
+                    'Muhamad Bukhori S.E.',
+                    'Muncar Cahyono SST',
+                    'Murni SE',
+                    'Mustaqhwiroh S.Stat.',
+                    'Nanda Ilyas Syukur SST',
+                    'Nia Aprillyana, S.ST, M.Si.',
+                    'Raudlatul Jannah, SST',
+                    'Respati Adi Wicaksono S.Si.',
+                    'Roni Rijanto',
+                    'Senthir Bawono S.E.',
+                    'Slamet Purwoko',
+                    'Sophan Hidayatna',
+                    'Sri Rejeki SST, M.M.',
+                    'Sukaryo A.Md.',
+                    'Wahyu Sri Lestari SST, M.Stat',
+                    'Winarso SST',
+                    'Zakaria'
                 ];
-                $(".tags").autocomplete({
-                    source: availableTags
+                $(".Supervisor").autocomplete({
+                    source: DaftarSupervisor
                 });
+
+                var DaftarOperator = [
+                    'Abdul Kamid',
+                    'Afnizar zulfiani C',
+                    'Alfian Nur Rohmad',
+                    'Alvin Brilianjaya',
+                    'Andre Praditya Rosadi',
+                    'Andriawan Imam Santoso',
+                    'Biruwati Pratika S.',
+                    'Christina Ardyastuti',
+                    'Dimas Bagus Setiawan',
+                    'Dita Yuliana Sari',
+                    'Dwi Sulistyowati',
+                    'DYAN WAHYUDI RIA SAPUTRA',
+                    'Eka Laila Dindayani',
+                    'Eko Bagus Wibowo',
+                    'Pulung',
+                    'Fahrudin',
+                    'Farensha Aleyda Zahra',
+                    'Fitri Irawati',
+                    'Gita Suci Amaryl',
+                    'Imam Qusthalaani',
+                    'Islah Rakhadinda Akbar',
+                    'Kanti Triyani',
+                    'Khoirun Nisa',
+                    'Lailatul Khoiriyah',
+                    'Latifatul Azizah',
+                    'Lilik Tri Wahyuni',
+                    'MARDHA ATTHAARIQ ISYRAQI',
+                    'Mohammad Aris Bahagiawan',
+                    'Pracilia Ayu Yulia Savega',
+                    'Pratiwi Setyoningrum',
+                    'Rachmad Fajar Riandi',
+                    'Rian',
+                    'Ahmad Mijazi',
+                    'Alfian Roy Brucelee',
+                    'Aliyatus Zulfa',
+                    'Anang Erdyanto',
+                    'Any Endah Kuncahyani',
+                    'Awalin Nabila Wardatul Purwanto',
+                    'Dimas Poetra Dewa',
+                    'EKANANDA PUJI INDAH LESTARI',
+                    'Ikwana Yusro',
+                    'Imroatun Azizah',
+                    'Intan Purnama Sari',
+                    'Istiawan',
+                    'Jayanto',
+                    'M. Fajar Zahrul Fadli',
+                    'Marlina Yunita M',
+                    'Mubtadiul Khoeroh ',
+                    'Muhammad Fasikh',
+                    'Muhhamad Yusuf Syarifuddin',
+                    'Mustaqiim Bariklana',
+                    'NUR LELY SOFIA',
+                    'Putri Diyana Tush Sholihah',
+                    'Rizkyana Nur Safitri',
+                    'Salsabila asmasika',
+                    'Serri Diyah Kusumawiduri',
+                    'Silvi',
+                    'SISKA DIANA LOMBAN',
+                    'Siti Durrotul Manihah',
+                    'Slamet Tri Wibowo',
+                    'Tutwuri Handayani Oktavia',
+                    'Vikky Andian',
+                    'Yudika',
+                    'Ahmad Dhiyaus Syahidin',
+                    'Ajeng Setyorini',
+                    'Andre Haryanto',
+                    'Anisa Septianingrum',
+                    'Artilerianna Putri Sari Damayanti Suseno',
+                    'Dewi Maisaroh',
+                    'FATIHUL ILHAM MAULIDA',
+                    'Helvin Leo Atmaja',
+                    'Hidayatun Nikmah',
+                    'Juminem',
+                    'Khoirus',
+                    'Lukman Nur Hakim',
+                    'Mizan Asrori',
+                    'MUH CHOLID RIDWAN ARSADAL AKMA',
+                    'Muhammad Ibnu Pamungkas',
+                    'Nila Rifda Wachidatun Nabilah',
+                    'Nailul Ianah',
+                    'Nurul Khotimah',
+                    'Oktaviani Tiara Murti',
+                    'Pasya Eka Aprilia',
+                    'Putri Januar Puspa Adi Pradana',
+                    'Faham',
+                    'Septika Ayu Desintawati',
+                    'Setiyowati Ryski Anggraeni',
+                    'Siti Nur Karimah',
+                    'Sri Utami',
+                    'Ubaid',
+                    'Wilda Maesarotus Septina',
+                    'Ika Winda Febrianti',
+                    'MUHAMMAD KHOIRUL ANAM',
+                    'Tegar',
+                    'Dewi Gesang',
+                    'MUHAMMAD NAUFAL ARIQ',
+                    'YOSSI ANANTA',
+
+                ];
+                $(".Operator").autocomplete({
+                    source: DaftarOperator
+                });
+                // $('.tunggalTanggal').daterangepicker({
+                //     singleDatePicker: true,
+                //     showDropdowns: true,
+                //     minYear: 2021,
+                //     autoclose: true,
+                //     maxYear: parseInt(moment().format('YYYY'), 10)
+                // }, function(start, end, label) {
+                //     var years = moment().diff(start, 'years');
+
+                // });
+
+                $(".tunggalTanggal").datepicker();
+
             },
 
             error: function(e) {
@@ -451,7 +487,7 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script>
     $(function() {
-        var availableTags = [
+        var DaftarSupervisor = [
             "ActionScript",
             "AppleScript",
             "Asp",
@@ -475,97 +511,60 @@
             "Scala",
             "Scheme"
         ];
-        $("#tags").autocomplete({
-            source: availableTags
+        $("#Supervisor").autocomplete({
+            source: DaftarSupervisor
         });
     });
 </script>
+
 <script>
-    var DaftarSupervisor = [
-        'Adi Muntiardiyanto Umar',
-        'Agus Susanto',
-        'Amir Murtono',
-        'Didik Permono',
-        'Dinata Hindra Setiawan S.AP',
-        'Drs. Sumitro',
-        'Ekha Jaya Prianjani S.M.',
-        'Erlinda S.ST, M.Ec.Dev',
-        'Faisal Luthfi Arief SST',
-        'Henri Wagiyanto S.Pt., M.Ec.Dev, M.A.',
-        'Herhardana S.Si.',
-        'Imam Mustofa S.Si.',
-        'Khaerul Anwar SST',
-        'Kristiyanti',
-        'M. Dwi Priyanto S.E.',
-        'Miyan Andi Irawan SST, M.S.E.',
-        'Mochtar Rahmadi',
-        'Moh. Asrori S.Si.',
-        'Mohamad Achiruzaman S.ST, M.T',
-        'Muhamad Bukhori S.E.',
-        'Muncar Cahyono SST',
-        'Murni SE',
-        'Mustaqhwiroh S.Stat.',
-        'Nanda Ilyas Syukur SST',
-        'Nia Aprillyana, S.ST, M.Si.',
-        'Raudlatul Jannah, SST',
-        'Respati Adi Wicaksono S.Si.',
-        'Roni Rijanto',
-        'Senthir Bawono S.E.',
-        'Slamet Purwoko',
-        'Sophan Hidayatna',
-        'Sri Rejeki SST, M.M.',
-        'Sukaryo A.Md.',
-        'Wahyu Sri Lestari SST, M.Stat',
-        'Winarso SST',
-        'Zakaria'
-    ];
-    $(".Supervisor").autocomplete({
-        source: DaftarSupervisor,
-        appendTo: "#modalTambahPekerjaan"
+    $(function() {
+        $('.tunggalTanggal').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            minYear: 1901,
+            autoclose: true,
+            maxYear: parseInt(moment().format('YYYY'), 10)
+        }, function(start, end, label) {
+            var years = moment().diff(start, 'years');
+
+        });
     });
 </script>
 
 <script>
-    $(".tunggalTanggal").datepicker();
-</script>
+    function UpdateData(tes) {
 
-<script>
-    function onlySatuNol(input) {
-        let Angka = [0, 1]
-        let istrue = Angka.includes(parseInt(input.value))
+        console.log(tes.value)
+        console.log(tes.getAttribute('targetid'))
 
-
-
-        if (istrue == false) {
-            ii = input.getAttribute('id')
-            $("input[id='" + ii + "']").val('')
-        }
-
-
-        console.log(input.value)
-
-    }
-</script>
-
-<script>
-    $("#formTambahPekerjaan").submit(function(event) {
         $.ajax({
             type: "POST",
-            cache: false,
-            contentType: false,
-            processData: false,
-            url: '<?php echo base_url(); ?>/servicewilayah/edit_rb',
-            dataType: 'json',
+            async: false,
             data: {
-                Id: $("#IdData").val(),
-                Vk1: 99
+                Nilai: tes.value,
+                Id: tes.getAttribute('targetid'),
+                Kolom: tes.getAttribute('targetkolom')
+            },
+            url: '<?php echo base_url(); ?>/servicewilayah/update_data_sls',
+            dataType: 'json',
+            success: function(output) {
+
+
+
+
 
             },
-            success: function(output) {
-                console.log(output)
-            }
 
-        })
-        event.preventDefault();
-    });
+            error: function(e) {
+                console.log(e.responseText);
+                setTimeout(() => {
+                    $('#loaderGif').hide();
+                }, 2000);
+
+            }
+        });
+
+
+    }
 </script>

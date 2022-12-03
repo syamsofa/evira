@@ -17,6 +17,22 @@ class Servicewilayah extends CI_Controller
 
         echo json_encode($output);
     }
+    public function update_data_sls()
+    {
+        print_r($this->input->post());
+
+        $Id=$this->input->post('Id');
+        // $parts = explode('-', $this->input->post('Nilai'));
+        // print_r($parts);
+
+        $Nilai=$this->input->post('Nilai');
+        $Kolom=$this->input->post('Kolom');
+        
+        $output = $this->model_wilayah->update_data_sls($Id,$Nilai,$Kolom);
+
+        echo json_encode($output);
+    }
+    
     public function read_sls_by_kec_desa()
     {
 
@@ -26,5 +42,15 @@ class Servicewilayah extends CI_Controller
         $output = $this->model_wilayah->read_sls_by_kec_desa($KodeKec,$KodeDesa);
 
         echo json_encode($output);
+    }
+    public function edit_rb()
+    {
+
+        print_r($this->input->post());
+        // $KodeKec = $this->input->post('KodeKec');
+        // $KodeDesa = $this->input->post('KodeDesa');
+        // $output = $this->model_wilayah->read_sls_by_kec_desa($KodeKec,$KodeDesa);
+
+        // echo json_encode($output);
     }
 }

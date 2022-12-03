@@ -42,7 +42,14 @@ class Model_wilayah extends CI_Model
 	}
     public function read_sls_by_kec_desa($KodeKec,$KodeDesa)
 	{
-		$query = $this->db->query("select * from sls where KdKec=? and KdDesa=? ",[$KodeKec,$KodeDesa]);
+		$query = $this->db->query("select b.nama_kec,c.nama_desa, a.* from sls a
+		left join 
+		sensus_kec b 
+		on a.KdKec=b.kode_kec
+		left JOIN
+		sensus_desa c 
+		on a.KdKec=c.kode_kec and a.KdDesa=c.kode_desa
+		where a.KdKec=? and a.KdDesa=?",[$KodeKec,$KodeDesa]);
 		$data = array();
 
 		foreach ($query->result_array() as $row) {
@@ -53,5 +60,14 @@ class Model_wilayah extends CI_Model
 			'sukses' => true,
 			'data' => $data
 		);
+	}
+	public function update_data_sls($Id,$Nilai,$Kolom)
+	{
+		echo $Id.'d ';
+
+		$query = $this->db->query("update sls set ".$Kolom." = ? where Id=?  ",[$Nilai,$Id]);
+		// $data = array();
+
+
 	}
 }
