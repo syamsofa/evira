@@ -64,13 +64,14 @@
                             <table id="TabelRealisasi" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th>Nom Batch</th>
                                         <th>Kode SLS</th>
                                         <th>Nama SLS</th>
                                         <th>Hasil Verifikasi Keluarga</th>
                                         <th>Dok XK</th>
                                         <th>Operator Entri</th>
                                         <th>Tanggal Penyerahan ke Operator Entri</th>
-                                        <th>Tanggal Penerimaan kembali dari  Operator Entri</th>
+                                        <th>Tanggal Penerimaan kembali dari Operator Entri</th>
                                         <th>Validator</th>
                                         <th>Tanggal Penyerahan ke Operator Validasi</th>
                                         <th>Tanggal Penerimaan Kembali dari Operator Validasi</th>
@@ -184,6 +185,10 @@
             columns: [{
 
                     className: "text-center"
+                },
+                {
+
+                    className: "text-center"
                 }, {
 
                     className: "text-center"
@@ -219,7 +224,8 @@
                 {
 
                     className: "text-right"
-                }],
+                }
+            ],
             paging: false,
             searching: true,
             "responsive": true,
@@ -252,6 +258,7 @@
                     j = i + 1
 
                     TabelRealisasi.fnAddData([
+                        "" + outputDataBaris.NomorBatch + "",
                         "" + outputDataBaris.KdSls + "",
                         "" + outputDataBaris.NmSls + "",
                         "" + outputDataBaris.HasilVerifikasi + "",
@@ -261,7 +268,7 @@
                         "<input targetkolom='TanggalKembali' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " class='tunggalTanggal' value='" + outputDataBaris.TanggalKembali + "' type='text'>",
                         " <input targetkolom='Validator' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " value='" + outputDataBaris.Validator + "' class='Operator'>",
                         " <input targetkolom='TanggalValidasi' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " value='" + outputDataBaris.TanggalValidasi + "' class='tunggalTanggal'>",
-                        " <input targetkolom='TanggalValidasiKembali' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " value='" + outputDataBaris.TanggalValidasiKembali+ "' class='tunggalTanggal'>",
+                        " <input targetkolom='TanggalValidasiKembali' onchange='UpdateData(this)' targetid=" + outputDataBaris.Id + " value='" + outputDataBaris.TanggalValidasiKembali + "' class='tunggalTanggal'>",
 
                     ]);
                 } // End For
