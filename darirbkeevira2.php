@@ -4,15 +4,29 @@
 
 $url = "https://docs.google.com/spreadsheets/d/19STw8fAHIq6aR7wcefXQAdAqSk93BZXzu2bJf1WNIas/gviz/tq?tqx=out:csv&sheet=PENERIMAAN%20DOK%20REGSOSEK";
 
-$data = file_get_contents($url);
-file_put_contents('./jos.csv', $data);
-$rows = explode("\n",$data);
+
+$ch = curl_init();
+// setting option url target di curl
+curl_setopt($ch, CURLOPT_URL, $url);
+// setting option nama file hasil unduhan 
+$filename = ".\okedeh.csv";
+$fp = fopen($filename, 'wb');
+curl_setopt($ch, CURLOPT_FILE, $fp);
+// jalankan curl
+curl_exec($ch);
+// tutup curl
+curl_close($ch);
+// tutup file hasil unduhan
+fclose($fp);
+
+$data = file_get_contents($filename);
+$rows = explode("\n", $data);
 $array = array();
-foreach($rows as $row) {
+foreach ($rows as $row) {
     $array[] = str_getcsv($row);
 }
 
-// print_r($array[12]);
+// print_r($array);
 
 $servername = "localhost";
 $username = "root";
