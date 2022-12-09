@@ -319,10 +319,19 @@ if ($this->session->userdata('Email') == null)
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="<?php echo base_url(); ?>site/regsosek_supervisor" class="nav-link">
+                  <a href="<?php echo base_url(); ?>site/regsosek_supervisor_batch" class="nav-link">
                     <i class="fas fa-save nav-icon"></i>
                     <p>
-                      Entri Supervisor
+                      Entri Supervisor (by Batch)
+
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/regsosek_supervisor_wil" class="nav-link">
+                    <i class="fas fa-save nav-icon"></i>
+                    <p>
+                      Entri Supervisor (By Wilayah)
 
                     </p>
                   </a>

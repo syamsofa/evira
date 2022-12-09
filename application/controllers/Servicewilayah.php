@@ -43,6 +43,15 @@ class Servicewilayah extends CI_Controller
 
         echo json_encode($output);
     }
+    public function read_sls_by_batch()
+    {
+
+        // print_r($this->input->post());
+        $NomorBatch = $this->input->post('NomorBatch');
+        $output = $this->model_wilayah->read_sls_by_batch($NomorBatch);
+
+        echo json_encode($output);
+    }
     public function edit_rb()
     {
 

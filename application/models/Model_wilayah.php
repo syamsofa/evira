@@ -61,6 +61,41 @@ class Model_wilayah extends CI_Model
 			'data' => $data
 		);
 	}
+    public function read_sls_by_batch($NomorBatch)
+	{
+		$query = $this->db->query("select b.nama_kec,c.nama_desa, a.* from sls a
+		left join 
+		sensus_kec b 
+		on a.KdKec=b.kode_kec
+		left JOIN
+		sensus_desa c 
+		on a.KdKec=c.kode_kec and a.KdDesa=c.kode_desa
+		where a.NomorBatch=?",[$NomorBatch]);
+		$data = array();
+
+		foreach ($query->result_array() as $row) {
+			$data[] = $row;
+		}
+
+		return array(
+			'sukses' => true,
+			'data' => $data
+		);
+	}
+    public function read_batch()
+	{
+		$query = $this->db->query("SELECT DISTINCT(NomorBatch) FROM `sls` where NomorBatch<>'' order by NomorBatch");
+		$data = array();
+
+		foreach ($query->result_array() as $row) {
+			$data[] = $row;
+		}
+
+		return array(
+			'sukses' => true,
+			'data' => $data
+		);
+	}
 	public function update_data_sls($Id,$Nilai,$Kolom)
 	{
 		echo $Id.'d ';

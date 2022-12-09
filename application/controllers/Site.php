@@ -15,6 +15,7 @@ class Site extends CI_Controller
 	public $pekerjaan;
 	public $pekerjaanByPengguna;
 	public $kecamatan;
+	public $batch;
 
 	public function __construct()
 	{
@@ -35,6 +36,7 @@ class Site extends CI_Controller
 		$this->load->library('fungsi');
 
 		$this->kecamatan=$this->model_wilayah->read_kecamatan();
+		$this->batch=$this->model_wilayah->read_batch();
 		$this->detailPengguna = $this->model_pengguna->read_pengguna_by_id($data = $this->session->userdata());
 		$this->roleByPengguna = $this->model_pengguna->read_role_by_pengguna($data = $this->session->userdata());
 		$this->pengguna = $this->model_pengguna->read_pengguna();
@@ -115,12 +117,34 @@ class Site extends CI_Controller
 		);
 		$this->load->view('site', $data);
 	}
-	public function regsosek_supervisor()
+	public function regsosek_supervisor_wil()
 	{
 		$data = array(
 			'menu' => $this->uri->segment(2),
 			'judul' => 'Entri Supervisor',
 			'kecamatan' => $this->kecamatan,
+			
+			'role_by_pengguna' => $this->roleByPengguna,
+			'detailPengguna' => $this->detailPengguna,
+			'satker' => $this->satker,
+			'organisasi' => $this->organisasi,
+			'satuan' => $this->satuan,
+			'pengguna' => $this->pengguna,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan,
+
+
+
+		);
+		$this->load->view('site', $data);
+	}
+	public function regsosek_supervisor_batch()
+	{
+		$data = array(
+			'menu' => $this->uri->segment(2),
+			'judul' => 'Entri Supervisor By Batch',
+			'kecamatan' => $this->kecamatan,
+			'batch' => $this->batch,
 			
 			'role_by_pengguna' => $this->roleByPengguna,
 			'detailPengguna' => $this->detailPengguna,
