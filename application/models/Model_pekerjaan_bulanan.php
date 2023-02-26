@@ -178,11 +178,12 @@ class Model_pekerjaan_bulanan extends CI_Model
             date("Y-m-d G:i:s"),
             $this->session->userdata('RecId'),
             $dataInput['TanggalMulai'],
-            $dataInput['TanggalSelesai']
+            $dataInput['TanggalSelesai'],
+            $dataInput['HargaSatuan']
 
         );
         $query1 = $this->db->query(
-            "insert into pekerjaan_bulanan (KodeRo,KodeKomponen,Deskripsi,Volume,SatuanId,CreatedDate,ModifiedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?,?,?)  ",
+            "insert into pekerjaan_bulanan (KodeRo,KodeKomponen,Deskripsi,Volume,SatuanId,CreatedDate,ModifiedDate,CreatedBy,TanggalMulai,TanggalSelesai,HargaSatuan) values (?,?,?,?,?,?,?,?,?,?,?)  ",
             $dataToSave
         );
         $afftectedRows = $this->db->affected_rows();

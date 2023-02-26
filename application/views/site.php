@@ -295,6 +295,35 @@ if ($this->session->userdata('Email') == null)
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                  Manajemen Mitra
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/mitra_data" class="nav-link">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>
+                      Data Mitra
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo base_url(); ?>site/monitoring_kegiatan" class="nav-link">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>
+                      Rapot Mitra
+
+                    </p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-book"></i>
                 <p>
                   Regsosek 2022

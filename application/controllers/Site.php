@@ -160,6 +160,22 @@ class Site extends CI_Controller
 		);
 		$this->load->view('site', $data);
 	}
+	public function mitra_data()
+	{
+		$data = array(
+			'menu' => $this->uri->segment(2),
+			'judul' => 'Data Mitra',
+			'role_by_pengguna' => $this->roleByPengguna,
+			'detailPengguna' => $this->detailPengguna,
+			'satker' => $this->satker,
+			'organisasi' => $this->organisasi,
+			'satuan' => $this->satuan,
+			'pengguna' => $this->pengguna
+
+		);
+		$this->load->view('site', $data);
+		// echo json_encode($data);
+	}
 	public function profil()
 	{
 		$data = array(

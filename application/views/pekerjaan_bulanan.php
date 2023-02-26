@@ -27,6 +27,7 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Tahun Kegiatan</label>
                             <div class="col-sm-10">
+                                <select class="js-data-example-ajax custom-select"></select>
                                 <select id="tahunPekerjaan" onchange="loadTabelPekerjaan()" required class="custom-select">
                                     <option value=''>--PILIH--</option>
                                     <?php
@@ -358,7 +359,12 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Harga per 1 Satuan</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="hargaSatuan" placeholder="Volume">
+                            </div>
+                        </div>
 
                     </div>
 
@@ -479,6 +485,7 @@
                                     }
                                     ?>
                                 </select>
+
                             </div>
                         </div>
 
@@ -1022,6 +1029,7 @@
                     Deskripsi: $('#deskripsi').val(),
                     SatuanId: $('#satuanId').val(),
                     Volume: $('#volume').val(),
+                    HargaSatuan: $('#hargaSatuan').val(),
                     RangeTanggal: $('#rangeTanggal').val()
 
                 },
@@ -1214,6 +1222,25 @@
             dropdownParent: $("#modalTambahPenugasanPekerjaan")
         })
 
+        $('.js-data-example-ajax').select2({
+            ajax: {
+                url: '<?php echo base_url(); ?>/servicemitra/read_mitra_ajax',
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        searchTerm: params.term // search term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                },
+                cache: true
+            }
+        });
     });
 </script>
 
