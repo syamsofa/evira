@@ -1,7 +1,7 @@
 <?php
-if (($open = fopen("datas.csv", "r")) !== FALSE) {
+if (($open = fopen("dataoperator.csv", "r")) !== FALSE) {
 
-    while (($data = fgetcsv($open, 1000, ";")) !== FALSE) {
+    while (($data = fgetcsv($open, 1000, ",")) !== FALSE) {
         $array[] = $data;
     }
 
@@ -40,7 +40,7 @@ print_r($array[0]);
 
 foreach ($array as $arr) {
     print_r($arr);
-    // $conn->query("update sls set NomorBatch=".$arr[6]." ,Vk1=".$arr[7].",Vk2=".$arr[8].",K=".$arr[9].",Xk=".$arr[10].",Psls=".$arr[11].",PetaWs=".$arr[12].",Banr=".$arr[13].",HasilVerifikasi=".$arr[14].",IsPercepatan=".$arr[15]." where KdKec=".$arr[0]." and KdDesa=".$arr[1]." and KdSls=".$arr[2]."");
+    $conn->query("update sls set Operator=".$arr[3]." where KdKec=".$arr[0]." and KdDesa=".$arr[1]." and KdSls=".$arr[2]." and Operator=''");
     # code...
 }
 $conn->close();

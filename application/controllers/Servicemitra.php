@@ -29,6 +29,72 @@ class Servicemitra extends CI_Controller
 
         echo json_encode($output);
     }
+    public function import_mitra()
+    {
+       
+        $outputRespon = [];
+        $input = $this->input->post();
+        print_r($_FILES);
+        if ($_FILES) {
+            if ($_FILES['file']['size'] > 1000000) {
+                $outputRespon = ["sukses" => false, "pesan" => "File tidak boleh lebih dari 1MB"];
+            } elseif ($this->fungsi->isFileDiizinkan($_FILES['file']['type'])) {
+                $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
+                $namaFileToUpload = $input['TanggalPekerjaan'] . "_" . $dataPenggunaRinci['NipLama'] . "_" . $dataPenggunaRinci['Nama'] . " (" . $input['JenisKehadiran'] . ")." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+                date_default_timezone_set('Asia/Jakarta');
+
+                $dataInput = [
+                    "Tanggal" => $input['TanggalPekerjaan'],
+                    "NamaFile" => $namaFileToUpload,
+                    "CreatedDate" => $this->now,
+                    "JenisKehadiran" => $input['JenisKehadiran'],
+                    "Pengguna" => [
+                        "IdPengguna" => $input['IdPengguna'],
+                        "NipLama" => $dataPenggunaRinci['NipLama'],
+                        "Nama" => $dataPenggunaRinci['Nama']
+                    ],
+                    "CreatedBy" => $this->session->userdata('RecId'),
+                    "Ekstensi" => $_FILES['file']['type'],
+                    // "Base64" => base64_encode(file_get_contents($_FILES['file']['tmp_name']))
+                    "Base64" => ''
+
+                ];
+                // print_r($dataInput);
+                $output = $this->model_laporan_harian->create_laporan_harian($dataInput);
+                $outputRespon = $output;
+                if ($output['sukses'] == true) {
+                    move_uploaded_file($_FILES['file']['tmp_name'], $this->upload_dir . $namaFileToUpload);
+                    $outputRespon = $output;
+                } else
+                    $outputRespon = ["sukses" => false, "pesan" => "Tidak berhasil simpan/upload laporan"];
+            } else
+                $outputRespon = ["sukses" => false, "pesan" => "Ekstensi tidak diizinkan. Harus Xls/Xlsx"];
+        } else {
+            $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
+
+            $dataInput = [
+                "Tanggal" => $input['TanggalPekerjaan'],
+                "NamaFile" => '-',
+                "CreatedDate" => $this->now,
+                "JenisKehadiran" => $input['JenisKehadiran'],
+                "Pengguna" => [
+                    "IdPengguna" => $input['IdPengguna'],
+                    "NipLama" => $dataPenggunaRinci['NipLama'],
+                    "Nama" => $dataPenggunaRinci['Nama']
+                ],
+                "CreatedBy" => $this->session->userdata('RecId'),
+                "Ekstensi" => '-',
+                // "Base64" => base64_encode(file_get_contents($_FILES['file']['tmp_name']))
+                "Base64" => ''
+
+            ];
+            // print_r($dataInput);
+            $output = $this->model_laporan_harian->create_laporan_harian($dataInput);
+            $outputRespon = $output;
+        }
+        // print_r($dataInput);
+        echo json_encode($outputRespon);
+    }
     public function read_penilaian_kepala()
     {
         $dataInput = $this->input->post();

@@ -6,6 +6,8 @@
 
 
 
+            <button id="" onclick="bukaModalTambahExcel()" type="button" class="btn btn-success float-right">Import Using Excel</button>
+
             <button id="" onclick="bukaModalTambahPengguna()" type="button" class="btn btn-success float-right">Tambah</button>
 
         </div>
@@ -339,6 +341,66 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalTambahExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-file-text" aria-hidden="true"></i> Tambah Mitra Pakai Excel</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <form id="formTambahMitra" enctype="multipart/form-data" class="form-horizontal">
+
+
+                    <div class="modal-body">
+
+                        <input type="hidden" class="form-control" id="idPengguna" value="<?php echo $this->session->userdata('RecId');  ?>">
+
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Template</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <a href="<?php echo base_url();  ?>aset/template_import_mitra/templateMitra.xlsx"> Template</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">File</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input onchange="getKeteranganFile()" required type="file" class="custom-file-input" id="fileLaporan">
+                                        <label id="keteranganUpload" class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="buttonSubmit" type="submit" class="btn btn-primary"><i class="fa fa-paper-plane" aria-hidden="true"></i> Submit</button>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="modalRolePengguna" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -382,4 +444,67 @@
     function bukaModalTambahPengguna() {
         $('#modalTambahPengguna').modal('show');
     }
+</script>
+
+
+<script>
+    function bukaModalTambahExcel() {
+        $('#modalTambahExcel').modal('show');
+    }
+</script>
+
+<script>
+    function getKeteranganFile(varr) {
+        const fileupload = $('#fileLaporan').prop('files')[0];
+
+        console.log(fileupload)
+        $("#keteranganUpload").html(fileupload.name + ', ' + fileupload.size + ' bytes' + ', ' + fileupload.type)
+    }
+</script>
+
+<script>
+    $("#formTambahMitra").submit(function(event) {
+
+
+        $("#buttonSubmit").html(" <i class='fa fa-refresh fa-spin'></i> Sedang Proses Upload ");
+
+        const fileupload = $('#fileLaporan').prop('files')[0];
+        console.log(fileupload)
+        var form_data = new FormData();
+        form_data.append('file', fileupload);
+     
+        // console.log(form_data)
+
+
+
+        $.ajax({
+
+
+            type: "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            url: '<?php echo base_url(); ?>/servicemitra/import_mitra',
+            dataType: 'json',
+            data: form_data,
+            success: function(output) {
+                if (output.sukses == true) {
+                    Swal.fire(output.pesan, '', 'success')
+                    $('#formTambahMitra')[0].reset();
+                    $('#modalTambahExcel').modal('hide');
+                    $("#keteranganUpload").html('')
+                } else
+                    Swal.fire(output.pesan, '', 'error')
+                $("#buttonSubmit").html(" <i class='fa fa-paper-plane' aria-hidden='true'></i> Submit ");
+
+            }
+
+        })
+
+        event.preventDefault()
+
+
+
+
+    });
 </script>
