@@ -87,7 +87,7 @@ class Servicelaporanharian extends CI_Controller
     {
 
         $outputRespon = [];
-        $input = $this->input->post();
+        // $input = $this->input->post();
         if ($_FILES) {
             if ($_FILES['file']['size'] > 1000000) {
                 $outputRespon = ["sukses" => false, "pesan" => "File tidak boleh lebih dari 1MB"];

@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use phpDocumentor\Reflection\DocBlock\Tags\Throws;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Servicemitra extends CI_Controller
 {
     public $jatengAuthUrl = "http://112.78.134.179/auth/do_login";
@@ -31,69 +35,54 @@ class Servicemitra extends CI_Controller
     }
     public function import_mitra()
     {
-       
+
         $outputRespon = [];
         $input = $this->input->post();
-        print_r($_FILES);
-        if ($_FILES) {
-            if ($_FILES['file']['size'] > 1000000) {
-                $outputRespon = ["sukses" => false, "pesan" => "File tidak boleh lebih dari 1MB"];
-            } elseif ($this->fungsi->isFileDiizinkan($_FILES['file']['type'])) {
-                $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
-                $namaFileToUpload = $input['TanggalPekerjaan'] . "_" . $dataPenggunaRinci['NipLama'] . "_" . $dataPenggunaRinci['Nama'] . " (" . $input['JenisKehadiran'] . ")." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-                date_default_timezone_set('Asia/Jakarta');
+        // print_r($_FILES['file']['tmp_name']);
+        $file = $_FILES['file']['tmp_name'];
 
-                $dataInput = [
-                    "Tanggal" => $input['TanggalPekerjaan'],
-                    "NamaFile" => $namaFileToUpload,
-                    "CreatedDate" => $this->now,
-                    "JenisKehadiran" => $input['JenisKehadiran'],
-                    "Pengguna" => [
-                        "IdPengguna" => $input['IdPengguna'],
-                        "NipLama" => $dataPenggunaRinci['NipLama'],
-                        "Nama" => $dataPenggunaRinci['Nama']
-                    ],
-                    "CreatedBy" => $this->session->userdata('RecId'),
-                    "Ekstensi" => $_FILES['file']['type'],
-                    // "Base64" => base64_encode(file_get_contents($_FILES['file']['tmp_name']))
-                    "Base64" => ''
+        $spreadsheet = new Spreadsheet();
 
-                ];
-                // print_r($dataInput);
-                $output = $this->model_laporan_harian->create_laporan_harian($dataInput);
-                $outputRespon = $output;
-                if ($output['sukses'] == true) {
-                    move_uploaded_file($_FILES['file']['tmp_name'], $this->upload_dir . $namaFileToUpload);
-                    $outputRespon = $output;
-                } else
-                    $outputRespon = ["sukses" => false, "pesan" => "Tidak berhasil simpan/upload laporan"];
-            } else
-                $outputRespon = ["sukses" => false, "pesan" => "Ekstensi tidak diizinkan. Harus Xls/Xlsx"];
-        } else {
-            $dataPenggunaRinci = $this->model_pengguna->read_pengguna_by_id(["RecId" => $input['IdPengguna']])['data'];
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file);
 
-            $dataInput = [
-                "Tanggal" => $input['TanggalPekerjaan'],
-                "NamaFile" => '-',
-                "CreatedDate" => $this->now,
-                "JenisKehadiran" => $input['JenisKehadiran'],
-                "Pengguna" => [
-                    "IdPengguna" => $input['IdPengguna'],
-                    "NipLama" => $dataPenggunaRinci['NipLama'],
-                    "Nama" => $dataPenggunaRinci['Nama']
-                ],
-                "CreatedBy" => $this->session->userdata('RecId'),
-                "Ekstensi" => '-',
-                // "Base64" => base64_encode(file_get_contents($_FILES['file']['tmp_name']))
-                "Base64" => ''
+        $array_sheet = $spreadsheet->getSheetNames();
+        ##  DISPLAY ALL SHEETS
 
-            ];
-            // print_r($dataInput);
-            $output = $this->model_laporan_harian->create_laporan_harian($dataInput);
-            $outputRespon = $output;
+        $worksheet = $spreadsheet->getActiveSheet();
+        $rows = [];
+
+        $jumBaris = 0;
+        $jumKolom = 0;
+        foreach ($worksheet->getRowIterator($startRow = 3, $endRow = 100) as $row) {
+            $cellIterator = $row->getCellIterator($startColumn = 'A', $endColumn = 'C');
+            $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+            $cells = [];
+
+            $kolomIter = 0;
+            foreach ($cellIterator as $cell) {
+                $cells[] = $cell->getValue();
+
+
+                $kolomIter++;
+                if ($jumKolom <= $kolomIter) $jumKolom = $kolomIter;
+            }
+
+            echo json_encode($cells[0]);
+            $data = ["Nama" => $cells[1], "Nik" => $cells[0], "Gender" => $cells[2]];
+            if ($cells[1] <> null)
+                $this->model_mitra->create_mitra($data);
+            $rows[] = $cells;
+            // $jumBaris++;
+            // if ($jumBaris >= 100)
+            //     break;
         }
-        // print_r($dataInput);
-        echo json_encode($outputRespon);
+        $output = [
+            "JumBaris" => $jumBaris,
+            "JumKolom" => $jumKolom,
+            "Data" => $rows
+        ];
+
+        // echo json_encode($output);
     }
     public function read_penilaian_kepala()
     {

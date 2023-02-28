@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Servicepengguna extends CI_Controller
 {
-    public $jatengAuthUrl = "http://112.78.134.179/auth/do_login";
+    public $jatengAuthUrl = "https://webapps.bps.go.id/jateng/auth/do_login";
     public function __construct()
     {
         parent::__construct();
