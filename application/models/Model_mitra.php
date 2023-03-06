@@ -9,6 +9,8 @@ class Model_mitra extends CI_Model
         // $this->load->library('lib_security');
         $this->load->model('model_role');
         $this->load->model('model_penilaian_tim');
+        $this->load->library('fungsi');
+
         //call function
         // Your own constructor code
     }
@@ -70,23 +72,31 @@ class Model_mitra extends CI_Model
     }
     public function create_mitra($data)
     {
-        $this->db->query("insert into  mitra (Nama, Nik,Gender) values (?,?,?)  ", array($data['Nama'], $data['Nik'], $data['Gender']));
-        $afftectedRows = $this->db->affected_rows();
-        if ($afftectedRows == 1) {
-            // $this->db->query("insert into role_pengguna (RoleId, PenggunaId) values (?,?)  ", array(2, $this->db->insert_id()));
-            $data['RecId'] = $this->db->insert_id();
 
-            // $data['dataRolePengguna'] = $this->model_role->read_role_pengguna_by_id_pengguna(array("PenggunaId" => $data['RecId']));
-
-            return array(
-                'sukses' => true,
-                'data' => $data
-            );
-        } else
+        if ($this->db->query("select Id from mitra where Nik=?", [$data['Nik']])->num_rows() > 0)
             return array(
                 'sukses' => false,
-                'data' => $data
+                'data' => null
             );
+        else {
+            $this->db->query("insert into  mitra (Nama, Nik,Gender,AlamatKec,AlamatDesa,AlamatDetail,TanggalLahir,Agama,StatusKawin,Pendidikan,Pekerjaan,NomorTelepon) values (?,?,?,?,?,?,?,?,?,?,?,?)  ", array($data['Nama'], $data['Nik'], $data['Gender'], $data['AlamatKec'], $data['AlamatDesa'], $data['AlamatDetail'], $data['TanggalLahir'], $data['Agama'], $data['StatusKawin'], $data['Pendidikan'], $data['Pekerjaan'], $data['NomorTelepon']));
+            $afftectedRows = $this->db->affected_rows();
+            if ($afftectedRows == 1) {
+                // $this->db->query("insert into role_pengguna (RoleId, PenggunaId) values (?,?)  ", array(2, $this->db->insert_id()));
+                $data['RecId'] = $this->db->insert_id();
+
+                // $data['dataRolePengguna'] = $this->model_role->read_role_pengguna_by_id_pengguna(array("PenggunaId" => $data['RecId']));
+
+                return array(
+                    'sukses' => true,
+                    'data' => $data
+                );
+            } else
+                return array(
+                    'sukses' => false,
+                    'data' => $data
+                );
+        }
     }
     public function read_pengguna_search($search)
     {
@@ -103,16 +113,15 @@ class Model_mitra extends CI_Model
     }
     public function read_mitra_ajax($search)
     {
-        $query = $this->db->query("select * from mitra where Nama like '%".$search."%'", array());
+        $query = $this->db->query("select * from mitra where Nama like '%" . $search . "%'", array());
         $data = array();
 
         foreach ($query->result_array() as $row) {
-            $data[] = ["id"=>$row['Id'], "text"=>$row['Nama']];
+            $data[] = ["id" => $row['Id'], "text" => $row['Nama']];
             // $data[] = $row;
         }
 
         return $data;
-        
     }
     public function read_mitra()
     {
@@ -121,6 +130,10 @@ class Model_mitra extends CI_Model
 
         foreach ($query->result_array() as $row) {
             // $data[] = ["id"=>$row['Id'], "text"=>$row['Nama']];
+
+            $row['DeskripsiJenisKelamin'] = $this->fungsi->deskripsiJenisKelamin($row['Gender']);
+            $row['TanggalLahirIndonesia'] = $this->fungsi->tanggalIndonesia($row['TanggalLahir']);
+            // tanggalIndonesia
             $data[] = $row;
         }
 
@@ -128,7 +141,6 @@ class Model_mitra extends CI_Model
             'sukses' => true,
             'data' => $data
         );
-        
     }
 
     public function read_penilaian_kepala($dataInput)

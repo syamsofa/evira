@@ -8,7 +8,7 @@
 
             <button id="" onclick="bukaModalTambahExcel()" type="button" class="btn btn-success float-right">Import Using Excel</button>
 
-            <button id="" onclick="bukaModalTambahPengguna()" type="button" class="btn btn-success float-right">Tambah</button>
+            <button disabled id="" onclick="bukaModalTambahPengguna()" type="button" class="btn btn-success float-right">Tambah</button>
 
         </div>
 
@@ -19,10 +19,8 @@
                         <tr>
                             <th>Nama Mitra</th>
                             <th>NIK</th>
-                            <th>Email</th>
-                            <th>Opsi Login</th>
-                            <th>Satker</th>
-                            <th>Organisasi</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Tanggal Lahir</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -77,10 +75,8 @@
                         TabelMitra.fnAddData([
                             "" + outputDataBaris.Nama + "",
                             "" + outputDataBaris.Nik + "",
-                            "" + outputDataBaris.Email + "",
-                            "" + outputDataBaris.OpsiLogin + "",
-                            "" + outputDataBaris.NamaSatker + "",
-                            "" + outputDataBaris.NamaOrganisasi + "",
+                            "" + outputDataBaris.DeskripsiJenisKelamin + "",
+                            "" + outputDataBaris.TanggalLahirIndonesia + "",
                             "<button type='button' onclick='bukaFormEditPengguna(Id=" + outputDataBaris.Id + ")' class='btn btn-primary'>Edit"
 
                         ]);
@@ -184,6 +180,8 @@
                 $("#idEdit").val(output.Id)
                 $("#nikEdit").val(output.Nik)
                 $("#genderEdit").val(output.Gender)
+                $("#tanggalLahirEdit").val(output.TanggalLahir)
+                $("#alamatDetailEdit").val(output.AlamatDetail)
             },
 
             error: function(e) {
@@ -267,7 +265,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputPassword3" class="col-sm-2 col-form-label">Gender</label>
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Jenis Kelamin</label>
                             <div class="col-sm-10">
                                 <select id="genderEdit" class="custom-select">
                                     <option value=''>--Pilih Opsi--</option>
@@ -276,8 +274,18 @@
                                 </select>
                             </div>
                         </div>
-
-
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Tanggal Lahir</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="tanggalLahirEdit" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">Alamat Detail</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="alamatDetailEdit" placeholder="">
+                            </div>
+                        </div>
                     </div>
 
 
@@ -472,7 +480,7 @@
         console.log(fileupload)
         var form_data = new FormData();
         form_data.append('file', fileupload);
-     
+
         // console.log(form_data)
 
 
@@ -488,11 +496,13 @@
             dataType: 'json',
             data: form_data,
             success: function(output) {
+                console.log(output)
                 if (output.sukses == true) {
                     Swal.fire(output.pesan, '', 'success')
                     $('#formTambahMitra')[0].reset();
                     $('#modalTambahExcel').modal('hide');
                     $("#keteranganUpload").html('')
+                    loadTabelMitra()
                 } else
                     Swal.fire(output.pesan, '', 'error')
                 $("#buttonSubmit").html(" <i class='fa fa-paper-plane' aria-hidden='true'></i> Submit ");

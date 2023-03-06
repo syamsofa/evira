@@ -54,7 +54,7 @@ class Servicemitra extends CI_Controller
         $jumBaris = 0;
         $jumKolom = 0;
         foreach ($worksheet->getRowIterator($startRow = 3, $endRow = 100) as $row) {
-            $cellIterator = $row->getCellIterator($startColumn = 'A', $endColumn = 'C');
+            $cellIterator = $row->getCellIterator($startColumn = 'A', $endColumn = 'L');
             $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
             $cells = [];
 
@@ -67,22 +67,42 @@ class Servicemitra extends CI_Controller
                 if ($jumKolom <= $kolomIter) $jumKolom = $kolomIter;
             }
 
-            echo json_encode($cells[0]);
-            $data = ["Nama" => $cells[1], "Nik" => $cells[0], "Gender" => $cells[2]];
+            $data = [
+                "Nama" => $cells[1],
+                "Nik" => $cells[0],
+                "Gender" => $cells[2],
+                "AlamatKec" => $cells[3],
+                "AlamatDesa" => $cells[4],
+                "AlamatDetail" => $cells[5],
+                "TanggalLahir" => $cells[6],
+                "Agama" => $cells[7],
+                "StatusKawin" => $cells[8],
+                "Pendidikan" => $cells[9],
+                "Pekerjaan" => $cells[10],
+                "NomorTelepon" => $cells[11]
+
+            ];
             if ($cells[1] <> null)
                 $this->model_mitra->create_mitra($data);
+
+            // echo json_encode($data);
             $rows[] = $cells;
             // $jumBaris++;
             // if ($jumBaris >= 100)
             //     break;
         }
         $output = [
-            "JumBaris" => $jumBaris,
-            "JumKolom" => $jumKolom,
-            "Data" => $rows
+            "pesan" => "OK",
+            "sukses" => true,
+            "summary" => [
+                "JumBaris" => $jumBaris,
+                "JumKolom" => $jumKolom,
+                "Data" => $rows
+            ]
+
         ];
 
-        // echo json_encode($output);
+        echo json_encode($output);
     }
     public function read_penilaian_kepala()
     {
