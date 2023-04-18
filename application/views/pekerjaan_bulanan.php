@@ -1241,6 +1241,11 @@
                 cache: true
             }
         });
+
+        $('.js-data-example-ajax').on('select2:select', function(e) {
+            var data = e.params.data;
+            console.log(data.id);
+        });
     });
 </script>
 

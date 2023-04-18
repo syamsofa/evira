@@ -117,7 +117,7 @@ class Model_mitra extends CI_Model
         $data = array();
 
         foreach ($query->result_array() as $row) {
-            $data[] = ["id" => $row['Id'], "text" => $row['Nama']];
+            $data[] = ["id" => $row['Nik'], "text" => $row['Nama']];
             // $data[] = $row;
         }
 

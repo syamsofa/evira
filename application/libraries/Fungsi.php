@@ -27,7 +27,7 @@ class Fungsi
 
         $pecahkan = explode('-', $tanggal);
 
-     
+
 
         return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
@@ -44,9 +44,16 @@ class Fungsi
     }
     function deskripsiJenisKelamin($jk)
     {
-        $array = ["1" => "Laki-laki", "2" => "Perempuan"];
+        if ($jk == 1)
+            $output = "Laki-laki";
+        else if ($jk == 2)
+            $output = "Perempuan";
+        else
+            $output = "Tidak didefinisikan";
 
-        return $array[$jk];
+        // $array = ["1" => "Laki-laki", "2" => "Perempuan"];
+
+        return $output;
     }
     function bulanByNo($no)
     {
