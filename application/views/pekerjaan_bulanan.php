@@ -27,7 +27,6 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Tahun Kegiatan</label>
                             <div class="col-sm-10">
-                                <select class="js-data-example-ajax custom-select"></select>
                                 <select id="tahunPekerjaan" onchange="loadTabelPekerjaan()" required class="custom-select">
                                     <option value=''>--PILIH--</option>
                                     <?php
@@ -404,7 +403,7 @@
 
                         <hr>
 
-                        <strong><i class="fas fa-book mr-1"></i> Volume dan Satuan</strong>
+                        <strong><i class="fas fa-book mr-1"></i> Volume, Satuan, dan Harga Satuan</strong>
 
                         <p id="satuanPekerjaanDetail" class="text-muted">
                             TESTES
@@ -415,7 +414,7 @@
 
                         <hr>
                         <p class="text-muted">
-                            <button onclick="bukaModalTambahPenugasanPekerjaan()" type="button" class="btn btn-primary btn-sm"><i class="fa fa-address-card" aria-hidden="true"></i> Tambah Penugasan</button>
+                            <button onclick="bukaModalTambahPenugasanPekerjaan()" type="button" class="btn btn-primary btn-sm"><i class="fa fa-address-card" aria-hidden="true"></i> Tambah Penugasan (Organik/mitra)</button>
 
                         </p>
 
@@ -472,39 +471,23 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Untuk Siapa?</label>
                             <div class="col-sm-10">
-                                <select id="penerimaPekerjaanId" required class="select3 custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <?php
-                                    foreach ($pengguna['data'] as $rows) {
-
-                                    ?>
-
-                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Nama']; ?></option>
-
-                                    <?php
-                                    }
-                                    ?>
+                                <select id="penerimaPekerjaanId" required class="penggunaAjax select3 custom-select">
                                 </select>
+                                <!-- <select id="penerimaPekerjaanId" required class="select3 custom-select">
+                                    <option value=''>--PILIH--</option>
+                                </select> -->
 
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Pekerjaan?</label>
+
                             <div class="col-sm-10">
-                                <select id="pekerjaanId" required class="custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <?php
-                                    foreach ($pekerjaanByPengguna['data'] as $rows) {
+                                <input id="namaPekerjaanView" readonly type="text" class="form-control">
 
-                                    ?>
+                                <input type="hidden" id="pekerjaanId" required class="form-control">
 
-                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Deskripsi']; ?></option>
-
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -740,10 +723,11 @@
                 console.log(output);
                 data = output.data[0]
                 $("#namaPekerjaanDetail").html(data['Deskripsi'])
-                $("#satuanPekerjaanDetail").html(data['Volume'] + ' ' + data['Satuan'])
+                $("#satuanPekerjaanDetail").html(data['Volume'] + ' ' + data['Satuan'] + ', Rp. ' + data['HargaSatuan'] + ' per ' + data['Satuan'])
 
                 globalVolumeTotal = data['Volume']
                 $("#pekerjaanId").val(data['RecId'])
+                $("#namaPekerjaanView").val(data['Deskripsi'])
                 $("#rangeTanggalPenugasan").val(data['RangeTanggal'])
 
 
@@ -1222,9 +1206,10 @@
             dropdownParent: $("#modalTambahPenugasanPekerjaan")
         })
 
-        $('.js-data-example-ajax').select2({
+        $('.penggunaAjax').select2({
+            dropdownParent: $('#modalTambahPenugasanPekerjaan'),
             ajax: {
-                url: '<?php echo base_url(); ?>/servicemitra/read_mitra_ajax',
+                url: '<?php echo base_url(); ?>/servicepengguna/read_pengguna_ajax',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
@@ -1242,7 +1227,7 @@
             }
         });
 
-        $('.js-data-example-ajax').on('select2:select', function(e) {
+        $('.penggunaAjax').on('select2:select', function(e) {
             var data = e.params.data;
             console.log(data.id);
         });

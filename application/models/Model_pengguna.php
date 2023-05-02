@@ -101,6 +101,25 @@ class Model_pengguna extends CI_Model
 
 		return $list;
 	}
+	public function read_pengguna_ajax($search)
+    {
+        $query = $this->db->query("select * from pengguna where Nama like '%" . $search . "%'", array());
+        $data = array();
+
+        foreach ($query->result_array() as $row) {
+			if($row['IsOrganik']=='0')
+			$ket=' (Mitra)';
+            elseif($row['IsOrganik']=='1')
+			$ket=' (Organik BPS)';
+			else
+			$ket='-';
+            
+			$data[] = ["id" => $row['RecId'], "text" => $row['Nama'].$ket];
+            // $data[] = $row;
+        }
+
+        return $data;
+    }
 	public function read_pengguna()
 	{
 		$query = $this->db->query("select a.*,b.OpsiLogin,c.Nama as NamaSatker,d.Nama as NamaOrganisasi 

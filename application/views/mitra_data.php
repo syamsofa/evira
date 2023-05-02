@@ -77,7 +77,7 @@
                             "" + outputDataBaris.Nik + "",
                             "" + outputDataBaris.DeskripsiJenisKelamin + "",
                             "" + outputDataBaris.TanggalLahirIndonesia + "",
-                            "<button type='button' onclick='bukaFormEditPengguna(Id=" + outputDataBaris.Id + ")' class='btn btn-primary'>Edit"
+                            "<button type='button' onclick='bukaFormEditPengguna(Id=" + outputDataBaris.RecId + ")' class='btn btn-primary'>Edit"
 
                         ]);
                     } // End For

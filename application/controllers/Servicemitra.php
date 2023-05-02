@@ -53,7 +53,7 @@ class Servicemitra extends CI_Controller
 
         $jumBaris = 0;
         $jumKolom = 0;
-        foreach ($worksheet->getRowIterator($startRow = 3, $endRow = 100) as $row) {
+        foreach ($worksheet->getRowIterator($startRow = 3, $endRow = 1500) as $row) {
             $cellIterator = $row->getCellIterator($startColumn = 'A', $endColumn = 'L');
             $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
             $cells = [];
