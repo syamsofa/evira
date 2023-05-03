@@ -5,6 +5,7 @@ use phpDocumentor\Reflection\DocBlock\Tags\Throws;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+
 class Servicemitra extends CI_Controller
 {
     public $jatengAuthUrl = "http://112.78.134.179/auth/do_login";
@@ -423,5 +424,41 @@ class Servicemitra extends CI_Controller
 
         redirect(base_url());
         // echo json_encode($output);
+    }
+    public function import_template_penugasan()
+    {
+        $templateLaporan = "aset/template_import_penugasan_mitra/templatePenugasan.xlsx";
+
+        $dataMitra = $this->model_mitra->read_mitra();
+        // print_r($dataMitra['data']);
+
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($templateLaporan);
+
+        $spreadsheet->setActiveSheetIndex(1);
+        $sheet = $spreadsheet->getActiveSheet();
+        $noBaris = 2;
+        foreach ($dataMitra['data']  as $data) {
+            $sheet->setCellValue('A' . $noBaris, "" . $data['Nik']);
+            $spreadsheet->getActiveSheet()
+                ->getStyle('A' . $noBaris)
+                ->getNumberFormat()
+                ->setFormatCode(
+                    \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT
+                );
+            $sheet->setCellValue('B' . $noBaris,  $data['Nama']);
+
+            $noBaris++;
+        }
+
+        // $sheet->setCellValue('C4','OKOKOKOKOKOK');
+        $spreadsheet->setActiveSheetIndex(0);
+        
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . urlencode('Template_Penugasan_.xlsx') . '"');
+        $writer->save('php://output');
     }
 }

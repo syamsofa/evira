@@ -146,6 +146,54 @@ class Model_penilaian_tim extends CI_Model
 			'NilaiKeseluruhan' => $NilaiKeseluruhan
 		);
 	}
+	public function read_nilai_mitra_by_id_dinilai_id_penilai_tahun_bulan($dataMasukan)
+	{
+		// print_r($dataMasukan);
+		$dataNilai = $this->db->query("select * from penilaian_mitra where IdDinilai=? and IdPekerjaan=?", array($dataMasukan['IdDinilai'], $dataMasukan['IdPekerjaan']))->result_array();
+
+
+		if (empty($dataNilai[0]))
+			$kkkk = 1;
+		// $dataNilai = $dataNilai[0];
+
+		else
+			$dataNilai = $dataNilai[0];
+
+		$pengurang = 0;
+		$KetepatanWaktu = (empty($dataNilai['KetepatanWaktu'])) ?  0 : $dataNilai['KetepatanWaktu'];
+		if ($KetepatanWaktu == 0)
+			$pengurang++;
+
+		$Ketelitian = (empty($dataNilai['Ketelitian'])) ?  0 : $dataNilai['Ketelitian'];
+		if ($Ketelitian == 0)
+			$pengurang++;
+
+		$KualitasHasil = (empty($dataNilai['KualitasHasil'])) ?   0 : $dataNilai['KualitasHasil'];
+		if ($KualitasHasil == 0)
+			$pengurang++;
+
+		$Kerjasama = (empty($dataNilai['Kerjasama'])) ?   0 : $dataNilai['Kerjasama'];
+		if ($Kerjasama == 0)
+			$pengurang++;
+
+		$Loyalitas = (empty($dataNilai['Loyalitas'])) ?   0 : $dataNilai['Loyalitas'];
+		if ($Loyalitas == 0)
+			$pengurang++;
+
+		$pembagi = 5 - $pengurang;
+
+		$NilaiKeseluruhan = ($pembagi == 0) ?  0 : ($KetepatanWaktu + $Ketelitian + $KualitasHasil + $Kerjasama + $Loyalitas) / ($pembagi);
+
+		// $NilaiKeseluruhan = ($BebanKerja + $TanggungJawab + $Disiplin + $Profesionalitas + $KualitasKerja) / (5 - $pengurang);
+
+		return array(
+			'KetepatanWaktu' => $KetepatanWaktu,
+			'Ketelitian' => $Ketelitian,
+			'KualitasHasil' => $KualitasHasil,
+			'Kerjasama' => $Kerjasama,
+			'Loyalitas' => $Loyalitas
+		);
+	}
 
 	public function simpan_nilai_dari_kepala($dataMasukan)
 	{
@@ -188,6 +236,31 @@ class Model_penilaian_tim extends CI_Model
 			$this->db->query("update penilaian_kinerja set " . $Kolom . "=? where IdDinilai=? and IdPenilai=? and Tahun=? and Bulan=?", [$Nilai, $IdDinilai, $IdPenilai, $Tahun, $Bulan]);
 		} else
 			$this->db->query("insert into penilaian_kinerja (IdDinilai,IdPenilai,Tahun,Bulan," . $Kolom . ") values (?,?,?,?,?) ", [$IdDinilai, $IdPenilai, $Tahun, $Bulan, $Nilai]);
+
+		// return array(
+		// 	'BebanKerja' => (empty($dataNilai['BebanKerja'])) ?  0 : $dataNilai['BebanKerja'],
+		// 	'TanggungJawab' => (empty($dataNilai['TanggungJawab'])) ?  0 : $dataNilai['TanggungJawab'],
+		// 	'Disiplin' => (empty($dataNilai['Disiplin'])) ?   0 : $dataNilai['Disiplin'],
+		// 	'Profesionalitas' => (empty($dataNilai['Profesionalitas'])) ?   0 : $dataNilai['Profesionalitas'],
+		// 	'KualitasKerja' => (empty($dataNilai['KualitasKerja'])) ?   0 : $dataNilai['KualitasKerja']
+		// );
+	}
+	public function simpan_nilai_mitra($dataMasukan)
+	{
+		// print_r($dataMasukan);
+		
+		$IdDinilai = $dataMasukan['IdDinilai'];
+		$Kolom = $dataMasukan['Kolom'];
+		$Nilai = $dataMasukan['Nilai'];
+		
+		$IdPekerjaan = $dataMasukan['IdPekerjaan'];
+
+		$cek = $this->db->query("select * from penilaian_mitra where IdPekerjaan=? and IdDinilai=? ", array($IdPekerjaan,$IdDinilai));
+		if ($cek->num_rows() > 0) {
+
+			$this->db->query("update penilaian_mitra set " . $Kolom . "=? where IdDinilai=? and IdPekerjaan=?", [$Nilai, $IdDinilai,$IdPekerjaan]);
+		} else
+			$this->db->query("insert into penilaian_mitra (IdDinilai," . $Kolom . ",IdPekerjaan) values (?,?,?) ", [$IdDinilai, $Nilai, $IdPekerjaan]);
 
 		// return array(
 		// 	'BebanKerja' => (empty($dataNilai['BebanKerja'])) ?  0 : $dataNilai['BebanKerja'],

@@ -311,10 +311,10 @@ if ($this->session->userdata('Email') == null)
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="<?php echo base_url(); ?>site/monitoring_kegiatan" class="nav-link">
+                  <a href="<?php echo base_url(); ?>site/penilaian_mitra" class="nav-link">
                     <i class="fas fa-users nav-icon"></i>
                     <p>
-                      Rapot Mitra
+                      Penilaian Mitra
 
                     </p>
                   </a>

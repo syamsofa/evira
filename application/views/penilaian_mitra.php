@@ -1,15 +1,16 @@
 <script>
     var IdPenilai = <?php echo $this->session->userdata('RecId');  ?>
+    var IdPekerjaan = null
     var TahunPekerjaan = null
     var BulanPekerjaan = null
 </script>
 <script>
     var templateOptionPenilaian = "<input type='radio' id='oksigensi' name='fav_language' value='100'>" +
-        "<label for='html'>Baik</label><br>" +
+        "<label for='html'>Di Atas Ekspektasi</label><br>" +
         "<input type='radio' id='oksigensi' name='fav_language' value='99'>" +
-        "<label for='css'>Cukup</label><br>" +
+        "<label for='css'>Sesuai Ekspektasi</label><br>" +
         "<input type='radio' id='oksigensi' name='fav_language' value='98'>" +
-        "<label for='javascript'>Kurang</label><br>" +
+        "<label for='javascript'>Di Bawah Ekspektasi</label><br>" +
         "<input type='radio' id='oksigensi' name='fav_language' value='0'>" +
         "<label for='javascript'>Tidak Relevan</label>"
 </script>
@@ -45,7 +46,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Tahun</label>
                 <div class="col-sm-10">
-                    <select onchange="loadTabelPengguna()" id="tahunPekerjaan" required class="custom-select">
+                    <select id="tahunPekerjaan" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($tahun['data'] as $rows) {
@@ -64,7 +65,7 @@
             <div class="form-group row">
                 <label for="" class="col-sm-2 col-form-label">Bulan</label>
                 <div class="col-sm-10">
-                    <select onchange="loadTabelPengguna()" id="bulanPekerjaan" required class="custom-select">
+                    <select id="bulanPekerjaan" required class="custom-select">
                         <option value=''>--PILIH--</option>
                         <?php
                         foreach ($bulan['data'] as $rows) {
@@ -79,28 +80,58 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="" class="col-sm-2 col-form-label">Seksi/Fungsi</label>
+                <div class="col-sm-10">
+                    <select onchange="getRo(this.value)" id="seksi" required class="custom-select">
+                        <option value=''>--PILIH--</option>
+                        <?php
+                        foreach ($seksi['data'] as $rows) {
 
+                        ?>
+
+                            <option value='<?php echo $rows['Seksi']; ?>'><?php echo $rows['Seksi']; ?></option>
+
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-sm-2 col-form-label">Output</label>
+                <div class="col-sm-10">
+                    <select id="kodeRo" onchange="getPekerjaan()" required class="custom-select">
+                        <option value=''>--PILIH--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-sm-2 col-form-label">Pekerjaan</label>
+                <div class="col-sm-10">
+                    <select id="pekerjaanId" onchange="setPekerjaanId(this.value)" required class="custom-select">
+                        <option value=''>--PILIH--</option>
+                    </select>
+                </div>
+            </div>
             <button id="buttonTampilPekerjaan" type="button" class="btn btn-success float-left"> <i class="fa fa-desktop" aria-hidden="true"></i> REFRESH DATA</button>
-            <button id="buttonCetakCkpr" type="button" class="btn btn-success float-right">Cetak CKPR</button>
-            <button id="buttonCetakCkpt" type="button" class="btn btn-success float-right">Cetak CKPT</button>
-
+            
         </div>
         <div class="card-body">
             <div class="table-responsive card-body p-0" style="display: block;">
                 <table id="TabelPengguna" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th rowspan="2">Nama Pegawai</th>
-                            <th rowspan="2">Tahun-Bulan</th>
+                            <th rowspan="2">Nama Mitra</th>
                             <th colspan="5">Unsur Penilaian</th>
 
                         </tr>
                         <tr>
-                            <th>Beban Kerja</th>
-                            <th>Tanggung Jawab</th>
-                            <th>Disiplin Pegawai</th>
-                            <th>Profesionalitas</th>
-                            <th>Kualitas Kerja</th>
+                            <th>Ketepatan Waktu</th>
+                            <th>Ketelitian</th>
+                            <th>Kualitas Hasil</th>
+                            <th>Kerjasama </th>
+                            <th>Loyalitas</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -113,107 +144,6 @@
     </div>
 
 </section>
-
-<div class="modal fade" id="modalTambahPenugasanPekerjaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Penugasan Untuk Saya</h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-
-            </div>
-            <div class="modal-body">
-                <form id="formTambahPenugasanPekerjaan" class="form-horizontal">
-                    <div class="modal-body">
-
-                        <input type="hidden" class="form-control" id="recId" placeholder="Email">
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Volume</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" required id="volumePenugasan" placeholder="Volume">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Untuk Siapa?</label>
-                            <div class="col-sm-10">
-                                <select id="penerimaPekerjaanId" required class="custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <?php
-                                    foreach ($pengguna['data'] as $rows) {
-
-                                    ?>
-
-                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Nama']; ?></option>
-
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Pekerjaan?</label>
-                            <div class="col-sm-10">
-
-                                <select id="pekerjaanId" onchange="fungsiGetRangeTanggal(this.value)" required class="custom-select">
-                                    <option value=''>--PILIH--</option>
-                                    <?php
-                                    foreach ($pekerjaanByPengguna['data'] as $rows) {
-
-                                    ?>
-
-                                        <option value='<?php echo $rows['RecId']; ?>'><?php echo $rows['Deskripsi']; ?></option>
-
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Range Tanggal </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control rangeTanggal" id="rangeTanggalPenugasan" value="" />
-
-                            </div>
-                        </div>
-
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </form>
-
-            </div>
-            <div class="modal-footer">
-                <div class="table-responsive card-body p-0" style="display: block;">
-                    <table id="TabelPekerjaan" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Deskripsi</th>
-                                <th>Status</th>
-                                <th>Volume</th>
-                                <th>Satuan</th>
-                                <th>CreatedBy</th>
-                                <th>CreatedDate</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <div class="modal fade" id="modalLogPekerjaanBulananPengguna" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -927,15 +857,14 @@
 
 <script>
     function simpanNilai(element) {
+        console.log($(element).attr("IdDinilai"), $(element).attr("Kolom"), element.value)
         $.ajax({
             type: "POST",
             async: false,
-            url: '<?php echo base_url(); ?>/servicepenilaian/simpan_nilai',
+            url: '<?php echo base_url(); ?>/servicepenilaian/simpan_nilai_mitra',
             dataType: 'json',
             data: {
-                BulanPekerjaan: BulanPekerjaan,
-                TahunPekerjaan: TahunPekerjaan,
-                IdPenilai: IdPenilai,
+                IdPekerjaan: IdPekerjaan,
                 IdDinilai: $(element).attr("IdDinilai"),
                 Kolom: $(element).attr("Kolom"),
                 Nilai: element.value
@@ -956,9 +885,6 @@
 <script>
     function loadTabelPengguna() {
 
-        TahunPekerjaan = $("#tahunPekerjaan").val()
-        BulanPekerjaan = $("#bulanPekerjaan").val()
-        IdPenilai = <?php echo $this->session->userdata('RecId');  ?>
 
         // console.log(tahunPekerjaan, bulanPekerjaan)
         var TabelPengguna = $("#TabelPengguna").dataTable({
@@ -983,12 +909,11 @@
         $.ajax({
             type: "POST",
             async: false,
-            url: '<?php echo base_url(); ?>/servicepengguna/read_pengguna_organik_nilai',
+            url: '<?php echo base_url(); ?>/servicepengguna/read_pengguna_mitra_nilai',
             dataType: 'json',
             data: {
-                BulanPekerjaan: BulanPekerjaan,
-                TahunPekerjaan: TahunPekerjaan,
-                IdPenilai: IdPenilai
+                IdPekerjaan: IdPekerjaan,
+                IdPenilai: ''
 
             },
             success: function(output) {
@@ -1004,29 +929,28 @@
                         let rerata = (parseInt(outputDataBaris.Nilai.BebanKerja) + parseInt(outputDataBaris.Nilai.TanggungJawab) + parseInt(outputDataBaris.Nilai.Disiplin) + parseInt(outputDataBaris.Nilai.Profesionalitas) + parseInt(outputDataBaris.Nilai.KualitasKerja)) / 5
                         TabelPengguna.fnAddData([
                             "" + outputDataBaris.Nama + "",
-                            "" + outputDataBaris.Tahun + "-" + outputDataBaris.Bulan,
 
-                            "<select kolom='BebanKerja' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
+                            "<select kolom='KetepatanWaktu' IdDinilai='" + outputDataBaris.IdDinilai + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Di Atas Ekspektasi</option><option value=99>Sesuai Ekspektasi</option><option value=98>Di Bawah Ekspektasi</option><option value=0>Tidak Relevan</option></select>",
 
-                            "<select kolom='TanggungJawab' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
+                            "<select kolom='Ketelitian' IdDinilai='" + outputDataBaris.IdDinilai + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Di Atas Ekspektasi</option><option value=99>Sesuai Ekspektasi</option><option value=98>Di Bawah Ekspektasi</option><option value=0>Tidak Relevan</option></select>",
 
-                            "<select kolom='Disiplin' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
+                            "<select kolom='KualitasHasil' IdDinilai='" + outputDataBaris.IdDinilai + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Di Atas Ekspektasi</option><option value=99>Sesuai Ekspektasi</option><option value=98>Di Bawah Ekspektasi</option><option value=0>Tidak Relevan</option></select>",
 
-                            "<select kolom='Profesionalitas' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
+                            "<select kolom='Kerjasama' IdDinilai='" + outputDataBaris.IdDinilai + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Di Atas Ekspektasi</option><option value=99>Sesuai Ekspektasi</option><option value=98>Di Bawah Ekspektasi</option><option value=0>Tidak Relevan</option></select>",
 
 
-                            "<select kolom='KualitasKerja' IdDinilai='" + outputDataBaris.RecId + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Baik</option><option value=99>Cukup</option><option value=98>Kurang</option><option value=0>Tidak Relevan</option></select>",
+                            "<select kolom='Loyalitas' IdDinilai='" + outputDataBaris.IdDinilai + "'  onblur='cek(this)'><option>--Pilih--</option><option value=100>Di Atas Ekspektasi</option><option value=99>Sesuai Ekspektasi</option><option value=98>Di Bawah Ekspektasi</option><option value=0>Tidak Relevan</option></select>",
 
 
 
                         ]);
 
-                        $("select[kolom='BebanKerja'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.BebanKerja)
-                        $("select[kolom='TanggungJawab'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.TanggungJawab)
-                        $("select[kolom='Disiplin'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.Disiplin)
-                        $("select[kolom='Profesionalitas'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.Profesionalitas)
-                        $("select[kolom='KualitasKerja'][IdDinilai=" + outputDataBaris.RecId + "]").val(outputDataBaris.Nilai.KualitasKerja)
-                       }
+                        $("select[kolom='KetepatanWaktu'][IdDinilai=" + outputDataBaris.IdDinilai + "]").val(outputDataBaris.Nilai.KetepatanWaktu)
+                        $("select[kolom='Ketelitian'][IdDinilai=" + outputDataBaris.IdDinilai + "]").val(outputDataBaris.Nilai.Ketelitian)
+                        $("select[kolom='KualitasHasil'][IdDinilai=" + outputDataBaris.IdDinilai + "]").val(outputDataBaris.Nilai.KualitasHasil)
+                        $("select[kolom='Kerjasama'][IdDinilai=" + outputDataBaris.IdDinilai + "]").val(outputDataBaris.Nilai.Kerjasama)
+                        $("select[kolom='Loyalitas'][IdDinilai=" + outputDataBaris.IdDinilai + "]").val(outputDataBaris.Nilai.Loyalitas)
+                    }
                 } // End For
 
             },
@@ -1066,5 +990,76 @@
             icon: 'error',
             title: 'Hanya boleh memasukkan 0,98,99,100'
         })
+    }
+</script>
+
+<script>
+    function getRo(val) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicero/read_ro_by_seksi',
+            dataType: 'json',
+            data: {
+                Seksi: val
+
+            },
+            success: function(output) {
+
+                console.log(output);
+                $("#kodeRo").empty()
+                $("#kodeRo").append("<option>--Pilih Output--</option>")
+                output.data.forEach(element => {
+                    $("#kodeRo").append("<option value=" + element.Kode + ">" + element.Kode + " " + element.Ro + "</option>")
+
+                });
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
+    }
+</script>
+<script>
+    function getPekerjaan(val) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/servicepekerjaan/read_pekerjaan_by_tahun_by_bulan_by_ro',
+            dataType: 'json',
+            data: {
+                Tahun: $("#tahunPekerjaan").val(),
+                Bulan: $("#bulanPekerjaan").val(),
+                KodeRo: $("#kodeRo").val()
+
+
+            },
+            success: function(output) {
+
+                console.log(output);
+                $("#pekerjaanId").empty()
+                $("#pekerjaanId").append("<option>--Pilih Output--</option>")
+                output.data.forEach(element => {
+                    $("#pekerjaanId").append("<option value=" + element.RecId + ">" + element.RecId + " " + element.Deskripsi + "</option>")
+
+                });
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
+    }
+</script>
+<script>
+    function setPekerjaanId(val) {
+        IdPekerjaan = val
     }
 </script>

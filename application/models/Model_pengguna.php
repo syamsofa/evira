@@ -127,6 +127,7 @@ class Model_pengguna extends CI_Model
 		left join satker c on c.RecId=a.SatkerId
 		left join organisasi d on d.RecId=a.OrganisasiId
 		where a.Email<>'teguhiman@bps.go.id'
+		and a.isorganik='1'
 		order by a.Nama
 		;
 		", array());
@@ -172,7 +173,7 @@ class Model_pengguna extends CI_Model
 			'data' => $data
 		);
 	}
-	public function read_pengguna_nilai($dataInput)
+	public function read_pengguna_organik_nilai($dataInput)
 	{
 
 		$tahun = $dataInput['TahunPekerjaan'];
@@ -180,7 +181,7 @@ class Model_pengguna extends CI_Model
 		$idPenilai = $dataInput['IdPenilai'];
 
 
-		$query = $this->db->query("select a.* from pengguna a where a.Email<>'teguhiman@bps.go.id' order by a.Nama;", array());
+		$query = $this->db->query("select a.* from pengguna a where a.isorganik=1 and a.Email<>'teguhiman@bps.go.id' order by a.Nama;", array());
 		$data = array();
 
 		foreach ($query->result_array() as $row) {
@@ -194,6 +195,39 @@ class Model_pengguna extends CI_Model
 			$row['Tahun'] = $tahun;
 			$row['Bulan'] = $bulan;
 			$row['Nilai'] = $this->model_penilaian_tim->read_nilai_by_id_dinilai_id_penilai_tahun_bulan($dataMasukan);
+
+			$data[] = $row;
+		}
+
+		return array(
+			'sukses' => true,
+			'data' => $data
+		);
+	}
+	public function read_pengguna_mitra_nilai($dataInput)
+	{
+		// print_r($dataInput);
+
+		// $IdPenilai = $dataInput['IdPenilai'];
+		$IdPekerjaan = $dataInput['IdPekerjaan'];
+		
+
+		$query = $this->db->query("SELECT a.PekerjaanId as IdPekerjaan,a.PenerimaPekerjaanId as IdDinilai,b.Nama,b.IsOrganik FROM pekerjaan_bulanan_pengguna a 
+		LEFT JOIN pengguna b ON a.PenerimaPekerjaanId=b.RecId
+		 WHERE a.pekerjaanid=?
+		 AND b.isorganik=?
+		 order by b.Nama
+		 
+		", array($IdPekerjaan,'0'));
+		$data = array();
+
+		foreach ($query->result_array() as $row) {
+
+			$dataMasukan = [
+				"IdDinilai" => $row['IdDinilai'],
+				"IdPekerjaan" => $IdPekerjaan
+			];
+			$row['Nilai'] = $this->model_penilaian_tim->read_nilai_mitra_by_id_dinilai_id_penilai_tahun_bulan($dataMasukan);
 
 			$data[] = $row;
 		}

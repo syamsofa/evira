@@ -232,6 +232,27 @@ class Site extends CI_Controller
 		$this->load->view('site', $data);
 		// echo json_encode($data);
 	}
+	public function penilaian_mitra()
+	{
+		$data = array(
+			'menu' => $this->uri->segment(2),
+			'judul' => 'Penilaian Mitra',
+			'role_by_pengguna' => $this->roleByPengguna,
+			'detailPengguna' => $this->detailPengguna,
+			'satker' => $this->satker,
+			'organisasi' => $this->organisasi,
+			'satuan' => $this->satuan,
+			'pengguna' => $this->pengguna,
+			'opsiLogin' => $this->opsiLogin,
+			'tahun' => $this->tahun,
+			'bulan' => $this->bulan,
+			'seksi' => $this->seksi
+
+
+		);
+		$this->load->view('site', $data);
+		// echo json_encode($data);
+	}
 	public function penilaian_kepala()
 	{
 		$data = array(

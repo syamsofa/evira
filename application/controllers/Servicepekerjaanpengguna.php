@@ -58,6 +58,15 @@ class Servicepekerjaanpengguna extends CI_Controller
 
         echo json_encode($output);
     }
+    public function ubah_harga_satuan_pekerjaan_pengguna_by_id()
+    {
+        $dataInput = $this->input->post();
+
+        // print_r($dataInput);
+        $output = $this->model_pekerjaan_bulanan_pengguna->ubah_harga_satuan_pekerjaan_pengguna_by_id($dataInput);
+
+        echo json_encode($output);
+    }
     public function delete_pekerjaan_pengguna_by_id()
     {
         $dataInput = $this->input->post();

@@ -598,6 +598,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
             $this->session->userdata('RecId'),
             $dataInput['PekerjaanId'],
             $dataInput['Volume'],
+            $dataInput['HargaSatuan'],
             date("Y-m-d G:i:s"),
             $this->session->userdata('RecId'),
             $dataInput['TanggalMulai'],
@@ -608,7 +609,7 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
         // $cekDuplikat=0;
         // if ($cekDuplikat['data']['JumlahRecord'] == 0) {
         $this->db->query(
-            "insert into pekerjaan_bulanan_pengguna (PenerimaPekerjaanId,PemberiPekerjaanId,PekerjaanId,Volume,CreatedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?)  ",
+            "insert into pekerjaan_bulanan_pengguna (PenerimaPekerjaanId,PemberiPekerjaanId,PekerjaanId,Volume,HargaSatuan,CreatedDate,CreatedBy,TanggalMulai,TanggalSelesai) values (?,?,?,?,?,?,?,?,?)  ",
             $dataToSave
         );
         $afftectedRows = $this->db->affected_rows();
@@ -696,6 +697,15 @@ class Model_pekerjaan_bulanan_pengguna extends CI_Model
      set VolumeRealisasi=?    where RecId=?
 		", array($dataInput['Volume'], $dataInput['RecId']));
     }
+    
+    public function ubah_harga_satuan_pekerjaan_pengguna_by_id($dataInput)
+    {
+        // print_r($dataInput);
+        $this->db->query("update pekerjaan_bulanan_pengguna 
+     set HargaSatuan=?    where RecId=?
+		", array($dataInput['HargaSatuan'], $dataInput['RecId']));
+    }
+    
     public function ubah_tanggal_pekerjaan_pengguna_by_id($dataInput)
     {
         // print_r($dataInput);

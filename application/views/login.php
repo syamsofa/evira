@@ -54,7 +54,7 @@ include APPPATH . 'third_party/glogin/config.php';
                             <img src="https://rembangkab.bps.go.id/backend/images/Header-Frontend-Besar-ind.jpg" alt="Photo 1" class="img-fluid">
                             <div class="card card-outline card-primary">
                                 <div class="card-header text-center">
-                                    <a href="<?php echo base_url(); ?>" class="h3"><b>EVIRA + REGSOSEK</b> <br>BPS Kab. Rembang</a>
+                                    <a href="<?php echo base_url(); ?>" class="h3"><b>EVIRA + M-MITRA</b> <br>BPS Kab. Rembang</a>
                                 </div>
                                 <div class="card-body">
 

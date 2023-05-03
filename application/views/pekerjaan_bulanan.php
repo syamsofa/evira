@@ -415,6 +415,7 @@
                         <hr>
                         <p class="text-muted">
                             <button onclick="bukaModalTambahPenugasanPekerjaan()" type="button" class="btn btn-primary btn-sm"><i class="fa fa-address-card" aria-hidden="true"></i> Tambah Penugasan (Organik/mitra)</button>
+                            <button id="buttonImport" type="button" class="btn btn-success float-left"><i class="fa fa-download" aria-hidden="true"></i> DOWNLOAD TEMPLATE PENUGASAN</button>
 
                         </p>
 
@@ -427,6 +428,7 @@
                                         <th>Penerima Pekerjaan</th>
                                         <th>Volume Target</th>
                                         <th>Volume Realisasi</th>
+                                        <th>Harga Satuan</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -481,12 +483,13 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Pekerjaan?</label>
+                            <label for="" class="col-sm-2 col-form-label">Deskripsi Pekerjaan</label>
 
                             <div class="col-sm-10">
                                 <input id="namaPekerjaanView" readonly type="text" class="form-control">
 
                                 <input type="hidden" id="pekerjaanId" required class="form-control">
+                                <input type="hidden" id="hargaSatuan2" required class="form-control">
 
                             </div>
                         </div>
@@ -570,6 +573,10 @@
                 {
 
                     className: "text-center"
+                },
+                {
+
+                    className: "text-center"
                 }
             ],
             "responsive": true,
@@ -614,6 +621,7 @@
 
                         "<input onchange='ubahVolumePenugasan(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;' value='" + outputDataBaris.Volume + "'>",
                         "<input onchange='ubahVolumeRealisasi(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;'  value='" + outputDataBaris.VolumeRealisasi + "'>",
+                        "<input onchange='ubahHargaSatuan(this.value," + outputDataBaris.RecId + "," + outputDataBaris.PekerjaanId + ")' style='text-align:right;'  value='" + outputDataBaris.HargaSatuan + "'>",
                         "<button onclick='hapusPenugasan(" + outputDataBaris.RecId + "," + RecId + ")' class='btn btn-danger'>Hapus</button>"
                     ]);
 
@@ -700,6 +708,35 @@
 
     }
 </script>
+<script>
+    function ubahHargaSatuan(value, baris, pekerjaanId) {
+        // console.log(value, baris)
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '<?php echo base_url(); ?>/Servicepekerjaanpengguna/ubah_harga_satuan_pekerjaan_pengguna_by_id',
+            data: {
+                HargaSatuan: value,
+                RecId: baris
+            },
+            dataType: 'json',
+            success: function(output) {
+                loadTabelPenugasanPekerjaan(pekerjaanId)
+
+
+
+            },
+
+            error: function(e) {
+                console.log(e.responseText);
+
+            }
+        });
+
+
+
+    }
+</script>
 
 <script>
     function bukaModalPenugasanPekerjaan(RecId, VolumeTotal) {
@@ -728,6 +765,7 @@
                 globalVolumeTotal = data['Volume']
                 $("#pekerjaanId").val(data['RecId'])
                 $("#namaPekerjaanView").val(data['Deskripsi'])
+                $("#hargaSatuan2").val(data['HargaSatuan'])
                 $("#rangeTanggalPenugasan").val(data['RangeTanggal'])
 
 
@@ -1084,6 +1122,7 @@
             let PekerjaanId = $('#pekerjaanId').val()
             let PenerimaPekerjaanId = $('#penerimaPekerjaanId').val()
             let Volume = $('#volumePenugasan').val()
+            let HargaSatuan = $('#hargaSatuan2').val()
             let RangeTanggal = $('#rangeTanggalPenugasan').val()
 
             $.ajax({
@@ -1097,6 +1136,7 @@
                     PenerimaPekerjaanId: PenerimaPekerjaanId,
                     PekerjaanId: PekerjaanId,
                     Volume: Volume,
+                    HargaSatuan: HargaSatuan,
                     RangeTanggal: RangeTanggal
                 },
                 success: function(output) {
@@ -1357,4 +1397,13 @@
         });
 
     }
+</script>
+
+<script>
+    $("#buttonImport").click(function() {
+
+
+        window.open('<?php echo base_url(); ?>/servicemitra/import_template_penugasan?IdPekerjaan=' + $("#pekerjaanId").val())
+
+    });
 </script>
