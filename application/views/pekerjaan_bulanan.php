@@ -233,6 +233,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Harga Satuan</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required id="hargaSatuanDup" placeholder="Harga satuan">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Tanggal </label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control rangeTanggal" id="rangeTanggalDup" value="" />
@@ -876,6 +882,7 @@
                 // $("#kodeKomponenDup").val(data.KodeKomponen)
                 $("#deskripsiDup").val(data.Deskripsi)
                 $("#volumeDup").val(data.Volume)
+                $("#hargaSatuanDup").val(data.HargaSatuan)
                 $("#rangeTanggalDup").val(data.RangeTanggal)
 
 
@@ -995,6 +1002,7 @@
                     Deskripsi: $('#deskripsiDup').val(),
                     SatuanId: $('#satuanIdDup').val(),
                     Volume: $('#volumeDup').val(),
+                    HargaSatuan: $('#hargaSatuanDup').val(),
                     RangeTanggal: $('#rangeTanggalDup').val(),
                     RecId: $('#recIdDup').val(),
                     IsPenugasan: $('#isPenugasanDup').val()
